@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nawa — Medical Education</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0A1628;--ocean:#0D3B7A;--blue:#1560BD;--sky:#4AA8E8;--foam:#E2EDF8;--white:#FFFFFF;--off:#F4F8FC;--gray:#8A9BB5;--green:#1DB97A;--orange:#E87A1A;--red:#E84A4A;--purple:#8A2BE2;}
+*{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{font-family:'Montserrat',sans-serif;background:var(--white);color:var(--navy);overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,22,40,.96);backdrop-filter:blur(20px);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:64px;border-bottom:1px solid rgba(255,255,255,.06);}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.nav-logo-name{font-size:17px;font-weight:800;letter-spacing:6px;text-transform:uppercase;color:white;}
+.nav-links{display:flex;align-items:center;gap:24px;}
+.nav-links a{color:rgba(255,255,255,.45);font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;text-decoration:none;cursor:pointer;transition:color .2s;}
+.nav-links a:hover{color:var(–sky);}
+.nav-btns{display:flex;gap:8px;}
+.btn-nav-outline{background:transparent;color:white;padding:9px 20px;border-radius:8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(255,255,255,.25);cursor:pointer;transition:all .2s;font-family:‘Montserrat’,sans-serif;}
+.btn-nav-outline:hover{border-color:white;background:rgba(255,255,255,.05);}
+.btn-nav-solid{background:var(–sky);color:var(–navy);padding:9px 20px;border-radius:8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;transition:all .2s;font-family:‘Montserrat’,sans-serif;}
+.btn-nav-solid:hover{background:white;}
+.nav-hamburger{display:none;background:none;border:none;cursor:pointer;flex-direction:column;gap:5px;padding:4px;}
+.nav-hamburger span{width:22px;height:2px;background:white;border-radius:2px;display:block;}
+.nav-mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;background:var(–navy);padding:16px;z-index:199;border-bottom:1px solid rgba(255,255,255,.08);flex-direction:column;gap:4px;}
+.nav-mobile-menu.open{display:flex;}
+.nav-mobile-link{color:rgba(255,255,255,.6);font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:12px 16px;border-radius:10px;cursor:pointer;transition:all .2s;}
+.nav-mobile-link:hover{background:rgba(255,255,255,.06);color:white;}
+
+/* PAGES */
+.page{display:none;}.page.active{display:block;}
+
+/* MODALS */
+.modal-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(10,22,40,.75);backdrop-filter:blur(10px);align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:white;border-radius:24px;padding:36px;width:100%;max-width:520px;box-shadow:0 40px 100px rgba(10,22,40,.3);position:relative;animation:popIn .3s ease;margin:auto;}
+@keyframes popIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
+.modal-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;}
+.modal-logo-name{font-size:18px;font-weight:800;letter-spacing:6px;text-transform:uppercase;color:var(–navy);}
+.modal-title{font-size:20px;font-weight:800;color:var(–navy);margin-bottom:4px;}
+.modal-sub{font-size:12px;font-weight:300;color:var(–gray);margin-bottom:20px;}
+.form-group{margin-bottom:13px;}
+.form-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(–navy);margin-bottom:5px;display:block;}
+.form-input,.form-select{width:100%;padding:11px 13px;border:1.5px solid rgba(10,22,40,.12);border-radius:10px;font-family:‘Montserrat’,sans-serif;font-size:13px;color:var(–navy);background:white;outline:none;transition:border-color .2s;appearance:none;}
+.form-input:focus,.form-select:focus{border-color:var(–sky);}
+.form-select-wrap{position:relative;}.form-select-wrap::after{content:‘▾’;position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(–gray);pointer-events:none;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.phone-row{display:flex;gap:8px;}
+.phone-code-wrap{width:130px;flex-shrink:0;position:relative;}.phone-code-wrap::after{content:‘▾’;position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(–gray);pointer-events:none;}
+.phone-code{width:100%;padding:11px 28px 11px 13px;border:1.5px solid rgba(10,22,40,.12);border-radius:10px;font-family:‘Montserrat’,sans-serif;font-size:13px;color:var(–navy);background:white;outline:none;transition:border-color .2s;appearance:none;}
+.phone-code:focus{border-color:var(–sky);}
+.phone-input{flex:1;}
+.form-submit{width:100%;padding:13px;background:var(–navy);color:white;border:none;border-radius:10px;font-family:‘Montserrat’,sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:6px;}
+.form-submit:hover{background:var(–ocean);}
+.form-switch{text-align:center;margin-top:13px;font-size:12px;color:var(–gray);}
+.form-switch span{color:var(–sky);font-weight:700;cursor:pointer;}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;font-size:18px;cursor:pointer;color:var(–gray);}
+
+/* modules display in form */
+.modules-box{background:var(–foam);border-radius:10px;padding:12px 14px;font-size:11px;color:var(–navy);line-height:1.8;font-weight:300;max-height:160px;overflow-y:auto;}
+.modules-box strong{font-weight:700;color:var(–ocean);}
+
+/* HERO */
+.hero{min-height:100vh;background:var(–navy);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding-top:64px;}
+.hero::before{content:’’;position:absolute;inset:0;background-image:linear-gradient(rgba(74,168,232,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,168,232,.04) 1px,transparent 1px);background-size:60px 60px;}
+.hero::after{content:’’;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(600px,90vw);height:min(600px,90vw);border-radius:50%;background:radial-gradient(circle,rgba(74,168,232,.08) 0%,transparent 65%);}
+.hero-content{position:relative;z-index:2;text-align:center;padding:40px 24px;max-width:800px;width:100%;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,168,232,.1);border:1px solid rgba(74,168,232,.2);color:var(–sky);padding:8px 20px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:28px;}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(–sky);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-logo-big{display:flex;justify-content:center;margin-bottom:24px;}
+.hero-title{font-size:clamp(34px,6vw,68px);font-weight:800;color:white;line-height:1.05;letter-spacing:-2px;margin-bottom:18px;}
+.hero-title span{color:var(–sky);}
+.hero-sub{font-size:clamp(13px,2vw,15px);font-weight:300;color:rgba(255,255,255,.5);line-height:1.8;margin-bottom:36px;max-width:520px;margin-left:auto;margin-right:auto;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:var(–sky);color:var(–navy);padding:14px 32px;border-radius:10px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;transition:all .25s;font-family:‘Montserrat’,sans-serif;}
+.btn-primary:hover{background:white;transform:translateY(-2px);}
+.btn-secondary{background:transparent;color:white;padding:14px 32px;border-radius:10px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(255,255,255,.2);cursor:pointer;transition:all .25s;font-family:‘Montserrat’,sans-serif;}
+.btn-secondary:hover{border-color:rgba(255,255,255,.5);}
+.hero-stats{display:flex;gap:clamp(20px,4vw,48px);justify-content:center;margin-top:52px;padding-top:36px;border-top:1px solid rgba(255,255,255,.06);flex-wrap:wrap;}
+.stat-item{text-align:center;}
+.stat-num{font-size:clamp(22px,3vw,30px);font-weight:800;color:white;letter-spacing:-1px;}
+.stat-label{font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;}
+
+/* SECTIONS */
+.section-wrap{max-width:1100px;margin:0 auto;}
+.section-header{text-align:center;margin-bottom:52px;}
+.section-tag{font-size:10px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:var(–sky);margin-bottom:12px;}
+.section-title{font-size:clamp(26px,4vw,42px);font-weight:800;color:var(–navy);letter-spacing:-1px;line-height:1.1;}
+.section-sub{font-size:14px;font-weight:300;color:var(–gray);margin-top:12px;max-width:440px;margin-left:auto;margin-right:auto;line-height:1.7;}
+
+/* FEATURES */
+.features{background:var(–off);padding:80px 40px;}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;}
+.feature-card{background:white;border-radius:16px;padding:26px;box-shadow:0 4px 20px rgba(10,22,40,.05);border:1px solid rgba(10,22,40,.04);transition:all .3s;position:relative;overflow:hidden;}
+.feature-card::before{content:’’;position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,var(–ocean),var(–sky));opacity:0;transition:opacity .3s;}
+.feature-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(10,22,40,.1);}
+.feature-card:hover::before{opacity:1;}
+.feat-icon{width:42px;height:42px;border-radius:11px;background:var(–foam);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;}
+.feat-title{font-size:13px;font-weight:700;color:var(–navy);margin-bottom:7px;}
+.feat-body{font-size:12px;font-weight:300;color:var(–gray);line-height:1.7;}
+.soon-badge{font-size:8px;background:var(–sky);color:white;padding:2px 7px;border-radius:100px;font-weight:700;margin-left:6px;vertical-align:middle;}
+
+/* LB SECTION */
+.lb-section{background:var(–navy);padding:80px 40px;position:relative;overflow:hidden;}
+.lb-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.lb-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:24px;}
+.lb-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.lb-title-t{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);}
+.lb-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;margin-bottom:4px;}
+.lb-row.gold{background:rgba(255,200,50,.06);}
+.lb-row.silver{background:rgba(200,210,220,.04);}
+.lb-row.bronze{background:rgba(200,130,80,.04);}
+.lb-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;}
+.lb-info{flex:1;}
+.lb-name2{font-size:12px;font-weight:600;color:white;}
+.lb-univ2{font-size:9px;color:rgba(255,255,255,.3);margin-top:2px;}
+.lb-score2{font-size:13px;font-weight:700;color:var(–sky);}
+
+/* PRICING */
+.pricing{padding:80px 40px;background:white;}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;max-width:920px;margin:0 auto;}
+.price-card{border-radius:20px;padding:32px 26px;border:1px solid rgba(10,22,40,.08);position:relative;transition:all .3s;}
+.price-card:hover{transform:translateY(-4px);}
+.price-card.popular{background:var(–navy);border-color:var(–navy);box-shadow:0 32px 80px rgba(10,22,40,.2);}
+.popular-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(–sky);color:var(–navy);font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;padding:5px 14px;border-radius:100px;white-space:nowrap;}
+.price-name{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(–gray);margin-bottom:16px;}
+.price-card.popular .price-name{color:rgba(255,255,255,.4);}
+.price-amount{font-size:38px;font-weight:800;color:var(–navy);letter-spacing:-2px;line-height:1;}
+.price-card.popular .price-amount{color:white;}
+.price-per{font-size:11px;color:var(–gray);font-weight:300;margin-top:3px;}
+.price-card.popular .price-per{color:rgba(255,255,255,.35);}
+.price-divider{height:1px;background:rgba(10,22,40,.08);margin:20px 0;}
+.price-card.popular .price-divider{background:rgba(255,255,255,.1);}
+.price-features{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px;}
+.price-features li{font-size:12px;font-weight:300;color:var(–navy);display:flex;align-items:center;gap:9px;}
+.price-card.popular .price-features li{color:rgba(255,255,255,.7);}
+.price-features li::before{content:‘✓’;color:var(–sky);font-weight:800;font-size:11px;flex-shrink:0;}
+.price-btn{width:100%;padding:12px;border-radius:9px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .25s;border:none;font-family:‘Montserrat’,sans-serif;}
+.price-btn-outline{background:transparent;color:var(–navy);border:1.5px solid rgba(10,22,40,.15);}
+.price-btn-outline:hover{border-color:var(–navy);}
+.price-btn-solid{background:var(–sky);color:var(–navy);}
+.price-btn-solid:hover{background:white;}
+
+/* PAYMENT */
+.payment-section{background:var(–off);padding:60px 40px;}
+.payment-methods{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:32px;}
+.pay-method{background:white;border-radius:14px;padding:18px 24px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 16px rgba(10,22,40,.06);border:1px solid rgba(10,22,40,.05);}
+.pay-icon{font-size:26px;}
+.pay-name{font-size:13px;font-weight:700;color:var(–navy);}
+.pay-sub{font-size:10px;color:var(–gray);font-weight:300;}
+
+/* CTA */
+.cta-section{background:var(–navy);padding:80px 40px;text-align:center;position:relative;overflow:hidden;}
+.cta-section::before{content:’’;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(74,168,232,.07) 0%,transparent 65%);}
+.cta-title{font-size:clamp(30px,5vw,52px);font-weight:800;color:white;letter-spacing:-2px;margin-bottom:14px;position:relative;z-index:1;}
+.cta-title span{color:var(–sky);}
+.cta-sub{font-size:14px;font-weight:300;color:rgba(255,255,255,.4);margin-bottom:36px;position:relative;z-index:1;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1;}
+
+/* FOOTER */
+footer{background:var(–navy);padding:60px 40px 0;}
+.footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;padding-bottom:48px;}
+.footer-brand .footer-name{font-size:17px;font-weight:800;letter-spacing:6px;text-transform:uppercase;color:white;margin:12px 0 8px;}
+.footer-brand .footer-tag{font-size:10px;color:rgba(255,255,255,.25);letter-spacing:2px;font-weight:300;}
+.footer-col h4{font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:16px;}
+.footer-col a{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:300;color:rgba(255,255,255,.45);text-decoration:none;margin-bottom:9px;cursor:pointer;transition:color .2s;}
+.footer-col a:hover{color:var(–sky);}
+.footer-bottom{padding:18px 0;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.footer-copy{font-size:11px;color:rgba(255,255,255,.2);}
+.footer-slogan{font-size:11px;color:rgba(255,255,255,.2);letter-spacing:3px;text-transform:uppercase;font-style:italic;}
+
+/* DASHBOARD */
+.dash-layout{display:flex;min-height:100vh;padding-top:64px;background:var(–off);}
+.sidebar{width:220px;flex-shrink:0;background:var(–navy);position:fixed;top:64px;left:0;bottom:0;overflow-y:auto;padding:20px 0;z-index:100;transition:transform .3s;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;}
+.sidebar-section{padding:0 14px;margin-bottom:22px;}
+.sidebar-label{font-size:8px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:7px;padding:0 8px;}
+.sidebar-item{display:flex;align-items:center;gap:9px;padding:9px 8px;border-radius:9px;cursor:pointer;font-size:11px;font-weight:600;color:rgba(255,255,255,.4);transition:all .2s;margin-bottom:1px;}
+.sidebar-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);}
+.sidebar-item.active{background:rgba(74,168,232,.15);color:var(–sky);}
+.si-icon{font-size:14px;width:18px;text-align:center;}
+.sidebar-upgrade{margin:12px;padding:14px;background:rgba(74,168,232,.08);border:1px solid rgba(74,168,232,.15);border-radius:10px;}
+.sidebar-upgrade p{font-size:10px;font-weight:300;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:9px;}
+.sidebar-upgrade button{width:100%;padding:8px;background:var(–sky);color:var(–navy);border:none;border-radius:7px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:‘Montserrat’,sans-serif;}
+
+.dash-main{margin-left:220px;flex:1;padding:24px;min-width:0;transition:margin .3s;}
+.dash-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:10px;}
+.dash-greeting{font-size:clamp(16px,2vw,20px);font-weight:800;color:var(–navy);}
+.dash-greeting span{color:var(–sky);}
+.dash-date{font-size:10px;color:var(–gray);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+
+.welcome-banner{background:linear-gradient(135deg,var(–ocean),var(–blue));border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:14px;position:relative;overflow:hidden;}
+.welcome-banner::after{content:’’;position:absolute;right:-30px;top:-30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.05);}
+.wb-text h2{font-size:16px;font-weight:800;color:white;margin-bottom:3px;}
+.wb-text p{font-size:12px;font-weight:300;color:rgba(255,255,255,.6);}
+.wb-btn{background:white;color:var(–navy);padding:10px 20px;border-radius:9px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;font-family:‘Montserrat’,sans-serif;white-space:nowrap;flex-shrink:0;position:relative;z-index:1;}
+
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px;}
+.stat-card{background:white;border-radius:13px;padding:18px;box-shadow:0 2px 12px rgba(10,22,40,.05);border:1px solid rgba(10,22,40,.04);position:relative;overflow:hidden;}
+.stat-card::after{content:’’;position:absolute;top:0;left:0;right:0;height:3px;}
+.stat-card.blue::after{background:linear-gradient(to right,var(–ocean),var(–sky));}
+.stat-card.green::after{background:linear-gradient(to right,#0D7A4A,var(–green));}
+.stat-card.orange::after{background:linear-gradient(to right,#B85A0D,var(–orange));}
+.stat-card.purple::after{background:linear-gradient(to right,#5A0D7A,var(–purple));}
+.sc-icon{position:absolute;top:14px;right:14px;font-size:18px;opacity:.2;}
+.sc-label{font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(–gray);margin-bottom:7px;}
+.sc-value{font-size:26px;font-weight:800;color:var(–navy);letter-spacing:-1px;line-height:1;}
+.sc-sub{font-size:10px;color:var(–gray);margin-top:4px;font-weight:300;}
+
+.dash-grid{display:grid;grid-template-columns:1fr 310px;gap:16px;}
+.dash-right{display:flex;flex-direction:column;gap:14px;}
+
+.card{background:white;border-radius:16px;box-shadow:0 4px 20px rgba(10,22,40,.06);border:1px solid rgba(10,22,40,.04);overflow:hidden;}
+.card-header{padding:16px 20px;border-bottom:1px solid rgba(10,22,40,.05);display:flex;justify-content:space-between;align-items:center;}
+.card-title{font-size:13px;font-weight:700;color:var(–navy);}
+.card-sub{font-size:9px;color:var(–gray);letter-spacing:1px;margin-top:2px;}
+.card-badge{background:var(–foam);color:var(–ocean);font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:100px;}
+.card-body{padding:18px;}
+.card-footer{padding:13px 18px;border-top:1px solid rgba(10,22,40,.05);display:flex;justify-content:space-between;align-items:center;}
+
+/* QUIZ */
+.q-progress-label{display:flex;justify-content:space-between;font-size:9px;font-weight:600;letter-spacing:1px;color:var(–gray);text-transform:uppercase;margin-bottom:6px;}
+.q-progress-bar{height:4px;background:var(–foam);border-radius:4px;overflow:hidden;margin-bottom:16px;}
+.q-progress-fill{height:100%;background:linear-gradient(to right,var(–ocean),var(–sky));border-radius:4px;transition:width .5s;}
+.q-text{font-size:14px;font-weight:600;color:var(–navy);line-height:1.6;margin-bottom:14px;}
+.q-options{display:flex;flex-direction:column;gap:8px;}
+.q-opt{padding:11px 13px;border-radius:10px;font-size:12px;font-weight:500;cursor:pointer;border:1.5px solid rgba(10,22,40,.08);color:var(–navy);transition:all .2s;display:flex;align-items:center;gap:10px;}
+.q-opt:hover{border-color:var(–sky);background:var(–foam);}
+.q-opt.selected{border-color:var(–sky);background:rgba(74,168,232,.08);color:var(–ocean);}
+.q-opt.correct{border-color:var(–green);background:rgba(29,185,122,.08);color:#0D7A4A;}
+.q-opt.wrong{border-color:var(–red);background:rgba(232,74,74,.06);color:#B83030;}
+.q-opt-letter{width:22px;height:22px;border-radius:6px;flex-shrink:0;background:var(–foam);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(–gray);}
+.q-opt.selected .q-opt-letter{background:var(–sky);color:white;}
+.q-opt.correct .q-opt-letter{background:var(–green);color:white;}
+.q-opt.wrong .q-opt-letter{background:var(–red);color:white;}
+.q-explanation{margin-top:12px;padding:12px;background:rgba(29,185,122,.06);border:1px solid rgba(29,185,122,.2);border-radius:10px;font-size:11px;font-weight:300;color:var(–navy);line-height:1.6;}
+.q-explanation strong{color:#0D7A4A;font-weight:700;}
+.q-video-btn{margin-top:8px;display:flex;align-items:center;gap:6px;background:rgba(10,22,40,.06);border:none;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:600;color:var(–navy);cursor:pointer;font-family:‘Montserrat’,sans-serif;}
+.q-timer{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(–navy);}
+.q-timer-dot{width:7px;height:7px;border-radius:50%;background:var(–orange);animation:pulse 1s infinite;}
+.q-submit{background:var(–navy);color:white;padding:10px 20px;border-radius:9px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;font-family:‘Montserrat’,sans-serif;transition:all .2s;}
+.q-submit:hover{background:var(–ocean);}
+.q-actions{display:flex;gap:8px;align-items:center;}
+.q-bookmark{background:var(–foam);color:var(–navy);padding:10px;border-radius:9px;font-size:14px;border:none;cursor:pointer;}
+
+/* RIGHT PANEL */
+.profile-card{background:var(–navy);border-radius:16px;padding:20px;box-shadow:0 4px 20px rgba(10,22,40,.15);position:relative;overflow:hidden;}
+.profile-card::after{content:‘NAWA’;position:absolute;bottom:-12px;right:-4px;font-size:56px;font-weight:800;letter-spacing:6px;color:rgba(255,255,255,.03);pointer-events:none;}
+.profile-top{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.profile-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(–ocean),var(–sky));display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:white;flex-shrink:0;}
+.profile-name{font-size:14px;font-weight:700;color:white;}
+.profile-info{font-size:8px;color:rgba(255,255,255,.35);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+.profile-bar-label{display:flex;justify-content:space-between;font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:5px;}
+.profile-bar{height:2px;background:rgba(255,255,255,.08);border-radius:2px;}
+.profile-fill{height:100%;background:linear-gradient(to right,var(–sky),#7EC8F0);border-radius:2px;}
+.profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:14px;}
+.ps-item{text-align:center;background:rgba(255,255,255,.04);border-radius:8px;padding:9px 5px;}
+.ps-num{font-size:16px;font-weight:800;color:var(–sky);line-height:1;}
+.ps-label{font-size:6px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-top:2px;}
+.badges-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.badge-item{display:flex;align-items:center;gap:4px;padding:4px 9px;border-radius:100px;font-size:8px;font-weight:700;letter-spacing:1px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.45);}
+.badge-item.earned{background:rgba(74,168,232,.15);color:var(–sky);}
+
+.streak-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.streak-title{font-size:12px;font-weight:700;color:var(–navy);}
+.streak-nums{display:flex;gap:14px;}
+.streak-num-val{font-size:15px;font-weight:800;color:var(–sky);}
+.streak-num-label{font-size:7px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(–gray);}
+.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:5px;}
+.cal-day-label{font-size:7px;font-weight:700;color:var(–gray);text-align:center;}
+.cal-day{height:11px;border-radius:2px;background:var(–foam);}
+.cal-day.done{background:var(–sky);opacity:.65;}
+.cal-day.done.high{opacity:1;}
+
+.exam-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(10,22,40,.05);}
+.exam-item:last-child{border:none;}
+.exam-date-box{width:38px;height:38px;border-radius:8px;background:var(–foam);display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;}
+.exam-date-num{font-size:14px;font-weight:800;color:var(–navy);line-height:1;}
+.exam-date-mon{font-size:7px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(–gray);}
+.exam-name{font-size:11px;font-weight:600;color:var(–navy);}
+.exam-sub{font-size:9px;color:var(–gray);margin-top:1px;}
+.exam-days{font-size:10px;font-weight:700;color:var(–sky);}
+
+.activity-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(10,22,40,.04);}
+.activity-item:last-child{border:none;}
+.activity-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+.activity-name{font-size:11px;font-weight:600;color:var(–navy);}
+.activity-time{font-size:9px;color:var(–gray);margin-top:1px;}
+
+.mini-lb-row{display:flex;align-items:center;gap:9px;padding:8px 0;border-bottom:1px solid rgba(10,22,40,.04);}
+.mini-lb-row:last-child{border:none;}
+.mini-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0;}
+.mini-name{font-size:11px;font-weight:600;color:var(–navy);}
+.mini-score-sub{font-size:9px;color:var(–gray);}
+.mini-pts{font-size:11px;font-weight:700;color:var(–sky);}
+
+.subj-item{margin-bottom:11px;}
+.subj-label{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(–navy);margin-bottom:5px;}
+.subj-pct{color:var(–gray);font-weight:400;}
+.subj-bar{height:4px;background:var(–foam);border-radius:4px;overflow:hidden;}
+.subj-fill{height:100%;border-radius:4px;}
+
+/* CHART */
+.perf-tabs{display:flex;gap:6px;margin-bottom:12px;}
+.perf-tab{padding:5px 13px;border-radius:100px;font-size:9px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;border:none;font-family:‘Montserrat’,sans-serif;}
+.perf-tab.active{background:var(–navy);color:white;}
+.perf-tab:not(.active){background:var(–foam);color:var(–gray);}
+.chart-wrap{height:100px;}
+.chart-bars{display:flex;align-items:flex-end;gap:4px;height:100%;}
+.chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%;justify-content:flex-end;}
+.chart-label{font-size:7px;font-weight:600;color:var(–gray);letter-spacing:1px;}
+
+/* NOTES + TASKS */
+.notes-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid rgba(10,22,40,.05);cursor:pointer;}
+.notes-item:last-child{border:none;}
+.notes-title{font-size:12px;font-weight:600;color:var(–navy);}
+.notes-date{font-size:9px;color:var(–gray);margin-top:1px;}
+.tasks-tabs{display:flex;gap:5px;margin-bottom:13px;flex-wrap:wrap;}
+.task-tab{padding:5px 11px;border-radius:100px;font-size:9px;font-weight:700;cursor:pointer;border:1.5px solid transparent;transition:all .2s;}
+.task-tab.active{background:var(–navy);color:white;}
+.task-tab:not(.active){border-color:rgba(10,22,40,.1);color:var(–gray);}
+.task-add{width:100%;padding:9px;background:var(–foam);border:1.5px dashed rgba(10,22,40,.15);border-radius:9px;font-size:11px;font-weight:600;color:var(–gray);cursor:pointer;font-family:‘Montserrat’,sans-serif;transition:all .2s;}
+.task-add:hover{border-color:var(–sky);color:var(–sky);}
+
+/* AI CARD */
+.ai-card{background:linear-gradient(135deg,#0A1628,#0D3B7A);border-radius:16px;padding:20px;position:relative;overflow:hidden;}
+.ai-card::before{content:’’;position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(74,168,232,.1);}
+.ai-title{font-size:12px;font-weight:700;color:white;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.ai-sub{font-size:11px;font-weight:300;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:14px;}
+.ai-btn{background:var(–sky);color:var(–navy);padding:9px 16px;border-radius:8px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;font-family:‘Montserrat’,sans-serif;}
+
+/* PEER SCORE */
+.peer-score-card{background:white;border-radius:12px;padding:14px;border:1px solid rgba(10,22,40,.06);margin-top:12px;}
+.peer-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(–gray);margin-bottom:8px;}
+.peer-bar-wrap{display:flex;align-items:center;gap:8px;}
+.peer-bar{flex:1;height:6px;background:var(–foam);border-radius:6px;overflow:hidden;}
+.peer-fill{height:100%;background:linear-gradient(to right,var(–ocean),var(–sky));border-radius:6px;}
+.peer-you{font-size:10px;font-weight:700;color:var(–sky);}
+.peer-avg{font-size:10px;color:var(–gray);}
+
+/* LB PAGE */
+.page-content{padding:24px;max-width:1200px;margin:0 auto;}
+.page-title{font-size:20px;font-weight:800;color:var(–navy);margin-bottom:3px;}
+.page-sub{font-size:12px;color:var(–gray);font-weight:300;margin-bottom:22px;}
+.lb-page-grid{display:grid;grid-template-columns:1fr 270px;gap:18px;}
+.lb-filters{display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap;}
+.lb-filter-btn{padding:7px 16px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:1.5px solid transparent;transition:all .2s;font-family:‘Montserrat’,sans-serif;}
+.lb-filter-btn.active{background:var(–navy);color:white;border-color:var(–navy);}
+.lb-filter-btn:not(.active){border-color:rgba(10,22,40,.1);color:var(–gray);background:white;}
+.lb-info-badge{background:var(–foam);border:1px solid rgba(10,22,40,.08);border-radius:10px;padding:9px 14px;font-size:11px;color:var(–navy);margin-bottom:16px;}
+.module-lb-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:14px;}
+.module-tab{padding:5px 11px;border-radius:100px;font-size:9px;font-weight:700;cursor:pointer;border:1.5px solid transparent;transition:all .2s;font-family:‘Montserrat’,sans-serif;}
+.module-tab.active{background:var(–sky);color:white;border-color:var(–sky);}
+.module-tab:not(.active){border-color:rgba(10,22,40,.1);color:var(–gray);background:white;}
+.lb-table{width:100%;border-collapse:collapse;background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(10,22,40,.06);}
+.lb-table th{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(–gray);padding:10px 14px;text-align:left;border-bottom:1px solid rgba(10,22,40,.06);}
+.lb-table td{padding:11px 14px;border-bottom:1px solid rgba(10,22,40,.04);font-size:12px;font-weight:500;color:var(–navy);}
+.lb-table tr:hover td{background:rgba(10,22,40,.02);}
+.lb-table tr.me td{background:rgba(74,168,232,.05);}
+.lb-table tr.top1 td{background:rgba(255,200,50,.03);}
+.lb-table tr.top2 td{background:rgba(192,200,208,.03);}
+.lb-table tr.top3 td{background:rgba(200,130,80,.03);}
+.lb-rank-change{font-size:9px;font-weight:700;margin-left:4px;}
+.lb-rank-change.up{color:var(–green);}
+.lb-rank-change.down{color:var(–red);}
+.your-rank-card{background:var(–navy);border-radius:16px;padding:22px;color:white;margin-bottom:14px;}
+.yr-title{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:12px;}
+.yr-rank{font-size:44px;font-weight:800;color:var(–sky);line-height:1;margin-bottom:6px;}
+.yr-sub{font-size:11px;color:rgba(255,255,255,.4);font-weight:300;}
+.yr-prog-label{display:flex;justify-content:space-between;font-size:8px;color:rgba(255,255,255,.3);margin:14px 0 5px;font-weight:600;text-transform:uppercase;letter-spacing:2px;}
+.yr-prog-bar{height:3px;background:rgba(255,255,255,.08);border-radius:3px;}
+.yr-prog-fill{height:100%;background:linear-gradient(to right,var(–sky),#7EC8F0);border-radius:3px;}
+
+/* CREATE QUIZ */
+.cq-section{margin-bottom:24px;}
+.cq-section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.cq-section-title{font-size:14px;font-weight:700;color:var(–navy);}
+.cq-name-input{width:100%;padding:13px 16px;border:1.5px solid rgba(10,22,40,.1);border-radius:12px;font-family:‘Montserrat’,sans-serif;font-size:14px;color:var(–navy);outline:none;transition:border-color .2s;}
+.cq-name-input:focus{border-color:var(–sky);}
+.cq-toggles{display:flex;gap:20px;flex-wrap:wrap;}
+.cq-toggle{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.toggle-switch{width:38px;height:20px;border-radius:10px;background:rgba(10,22,40,.12);position:relative;transition:background .2s;flex-shrink:0;}
+.toggle-switch.on{background:var(–sky);}
+.toggle-thumb{width:14px;height:14px;border-radius:50%;background:white;position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.toggle-switch.on .toggle-thumb{left:21px;}
+.toggle-label{font-size:13px;font-weight:600;color:var(–navy);}
+.cq-banks{display:flex;gap:10px;flex-wrap:wrap;}
+.bank-option{display:flex;align-items:center;gap:10px;padding:13px 16px;border-radius:12px;border:1.5px solid rgba(10,22,40,.1);cursor:pointer;transition:all .2s;background:white;}
+.bank-option.selected{border-color:var(–sky);background:rgba(74,168,232,.05);}
+.bank-radio{width:16px;height:16px;border-radius:50%;border:2px solid rgba(10,22,40,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;}
+.bank-option.selected .bank-radio{border-color:var(–sky);background:var(–sky);}
+.bank-radio::after{content:’’;width:5px;height:5px;border-radius:50%;background:white;display:none;}
+.bank-option.selected .bank-radio::after{display:block;}
+.bank-name{font-size:13px;font-weight:600;color:var(–navy);}
+.bank-gem{font-size:10px;background:var(–foam);color:var(–ocean);padding:2px 7px;border-radius:100px;font-weight:700;margin-left:5px;}
+.cq-modes{display:flex;gap:7px;flex-wrap:wrap;}
+.mode-option{padding:6px 15px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:1.5px solid rgba(10,22,40,.1);color:var(–gray);background:white;transition:all .2s;font-family:‘Montserrat’,sans-serif;}
+.mode-option.selected{border-color:var(–sky);background:rgba(74,168,232,.08);color:var(–ocean);}
+.difficulty-opts{display:flex;gap:7px;flex-wrap:wrap;}
+.diff-opt{padding:6px 15px;border-radius:100px;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid rgba(10,22,40,.1);color:var(–gray);background:white;transition:all .2s;font-family:‘Montserrat’,sans-serif;}
+.diff-opt.selected{border-color:var(–orange);background:rgba(232,122,26,.08);color:var(–orange);}
+.blocks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+.block-card{border-radius:12px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:all .2s;position:relative;}
+.block-card.selected{border-color:var(–sky);}
+.block-img{height:90px;display:flex;align-items:center;justify-content:center;font-size:30px;}
+.block-footer{padding:9px 11px;background:rgba(10,22,40,.85);}
+.block-name{font-size:10px;font-weight:700;color:white;}
+.block-count{font-size:9px;color:rgba(255,255,255,.45);margin-top:1px;}
+.block-check{position:absolute;top:7px;right:7px;width:20px;height:20px;border-radius:50%;background:var(–sky);display:none;align-items:center;justify-content:center;color:white;font-size:10px;font-weight:700;}
+.block-card.selected .block-check{display:flex;}
+.cq-num{padding:11px 14px;border:1.5px solid rgba(10,22,40,.1);border-radius:10px;font-family:‘Montserrat’,sans-serif;font-size:14px;font-weight:700;color:var(–navy);width:90px;outline:none;}
+.cq-presets{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
+.cq-preset{padding:6px 14px;border-radius:100px;font-size:10px;font-weight:700;cursor:pointer;border:1.5px solid rgba(10,22,40,.1);color:var(–gray);background:white;font-family:‘Montserrat’,sans-serif;transition:all .2s;}
+.cq-preset.active{border-color:var(–sky);background:rgba(74,168,232,.08);color:var(–ocean);}
+.cq-generate-btn{width:100%;padding:15px;background:var(–navy);color:white;border:none;border-radius:12px;font-family:‘Montserrat’,sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;margin-top:8px;}
+.cq-generate-btn:hover{background:var(–ocean);}
+
+/* PREV QUIZZES */
+.pq-search{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.pq-search-input{flex:1;padding:11px 14px;border:1.5px solid rgba(10,22,40,.1);border-radius:11px;font-family:‘Montserrat’,sans-serif;font-size:13px;color:var(–navy);outline:none;transition:border-color .2s;background:white;}
+.pq-search-input:focus{border-color:var(–sky);}
+.pq-tabs{display:flex;gap:7px;margin-bottom:16px;}
+.pq-tab{padding:6px 16px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;border:1.5px solid transparent;transition:all .2s;font-family:‘Montserrat’,sans-serif;}
+.pq-tab.active{background:var(–navy);color:white;}
+.pq-tab:not(.active){border-color:rgba(10,22,40,.1);color:var(–gray);background:white;}
+.pq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:13px;}
+.pq-card{background:white;border-radius:13px;padding:16px;border:1px solid rgba(10,22,40,.06);box-shadow:0 2px 12px rgba(10,22,40,.05);cursor:pointer;transition:all .2s;}
+.pq-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,22,40,.1);}
+.pq-card-name{font-size:13px;font-weight:700;color:var(–navy);}
+.pq-card-date{font-size:10px;color:var(–gray);margin-top:2px;}
+.pq-status{padding:3px 9px;border-radius:100px;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.pq-status.finished{background:rgba(29,185,122,.1);color:#0D7A4A;}
+.pq-status.unfinished{background:rgba(232,122,26,.1);color:#B85A0D;}
+.pq-card-stats{display:flex;gap:14px;margin-top:12px;}
+.pq-stat-val{font-size:18px;font-weight:800;color:var(–navy);}
+.pq-stat-label{font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(–gray);}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.dash-grid{grid-template-columns:1fr;}.dash-right{display:grid;grid-template-columns:1fr 1fr;}.stats-row{grid-template-columns:1fr 1fr;}.lb-inner{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr 1fr;}.lb-page-grid{grid-template-columns:1fr;}}
+@media(max-width:768px){nav{padding:0 16px;}.nav-links{display:none;}.nav-btns{display:none;}.nav-hamburger{display:flex;}.sidebar{transform:translateX(-100%);}.sidebar.open{transform:translateX(0);}.sidebar-overlay.open{display:block;}.dash-main{margin-left:0;padding:16px;}.dash-right{grid-template-columns:1fr;}.features{padding:60px 20px;}.lb-section{padding:60px 20px;}.pricing{padding:60px 20px;}.payment-section{padding:50px 20px;}.cta-section{padding:60px 20px;}footer{padding:48px 20px 0;}.footer-grid{grid-template-columns:1fr;gap:24px;}.form-row{grid-template-columns:1fr;}.welcome-banner{flex-direction:column;align-items:flex-start;}.blocks-grid{grid-template-columns:repeat(2,1fr);}.pq-grid{grid-template-columns:1fr;}}
+@media(max-width:480px){.stats-row{grid-template-columns:1fr 1fr;gap:10px;}.sc-value{font-size:22px;}.hero-stats{gap:18px;}.modal-box{padding:24px 16px;}.pricing-grid{grid-template-columns:1fr;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-content>*{animation:fadeUp .6s ease both;}
+.hero-badge{animation-delay:.1s}.hero-logo-big{animation-delay:.2s}.hero-title{animation-delay:.3s}.hero-sub{animation-delay:.4s}.hero-btns{animation-delay:.5s}.hero-stats{animation-delay:.6s}
+</style>
+
+</head>
+<body>
+
+<!-- NAV -->
+
+<nav>
+  <div class="nav-logo" onclick="showPage('landing')">
+    <svg width="32" height="32" viewBox="0 0 100 100" fill="none"><defs><clipPath id="n0"><path d="M 4 50 L 20 50 L 23 54 L 28 22 L 33 50 L 38 50 L 42 58 L 50 50 L 58 42 L 62 50 L 67 50 L 72 68 L 77 50 L 96 50 A 46 46 0 0 1 4 50 Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#n0)"/><path d="M 4 50 L 20 50 L 23 54 L 28 22 L 33 50 L 38 50 L 42 58 L 50 50 L 58 42 L 62 50 L 67 50 L 72 68 L 77 50 L 96 50" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="50" r="46" stroke="white" stroke-width="2.5" fill="none"/><circle cx="50" cy="50" r="4" fill="white"/><circle cx="50" cy="50" r="2" fill="#0A1628"/></svg>
+    <span class="nav-logo-name">Nawa</span>
+  </div>
+  <div class="nav-links">
+    <a onclick="ss('features')">Features</a>
+    <a onclick="ss('lboard')">Leaderboard</a>
+    <a onclick="ss('pricing')">Pricing</a>
+  </div>
+  <div class="nav-btns">
+    <button class="btn-nav-outline" onclick="openModal('login')">Sign In</button>
+    <button class="btn-nav-solid" onclick="openModal('register')">Sign Up</button>
+  </div>
+  <button class="nav-hamburger" id="hamburger" onclick="onHamburger()"><span></span><span></span><span></span></button>
+</nav>
+<div class="nav-mobile-menu" id="mobileMenu">
+  <div class="nav-mobile-link" onclick="cm();ss('features')">Features</div>
+  <div class="nav-mobile-link" onclick="cm();ss('lboard')">Leaderboard</div>
+  <div class="nav-mobile-link" onclick="cm();ss('pricing')">Pricing</div>
+  <div class="nav-mobile-link" onclick="cm();openModal('login')" style="color:rgba(255,255,255,.7)">Sign In</div>
+  <div class="nav-mobile-link" onclick="cm();openModal('register')" style="color:#4AA8E8;font-weight:800;">Sign Up →</div>
+</div>
+
+<!-- REGISTER MODAL -->
+
+<div class="modal-overlay" id="modal-register">
+<div class="modal-box">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <div class="modal-logo">
+    <svg width="24" height="24" viewBox="0 0 100 100" fill="none"><defs><clipPath id="nr"><path d="M 4 50 L 20 50 L 23 54 L 28 22 L 33 50 L 38 50 L 42 58 L 50 50 L 58 42 L 62 50 L 67 50 L 72 68 L 77 50 L 96 50 A 46 46 0 0 1 4 50 Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="#0A1628"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#nr)"/><path d="M 4 50 L 20 50 L 23 54 L 28 22 L 33 50 L 38 50 L 42 58 L 50 50 L 58 42 L 62 50 L 67 50 L 72 68 L 77 50 L 96 50" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="50" r="46" stroke="#0A1628" stroke-width="2.5" fill="none"/><circle cx="50" cy="50" r="4" fill="white"/><circle cx="50" cy="50" r="2" fill="#0A1628"/></svg>
+    <span class="modal-logo-name">NAWA</span>
+  </div>
+  <div class="modal-title">Create your account</div>
+  <div class="modal-sub">Join 8,400+ medical students on Nawa</div>
+  <div class="form-row">
+    <div class="form-group"><label class="form-label">First Name</label><input class="form-input" type="text" placeholder="Ahmed"></div>
+    <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" type="text" placeholder="Hassan"></div>
+  </div>
+  <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="ahmed@gmail.com"></div>
+  <div class="form-group">
+    <label class="form-label">Phone Number</label>
+    <div class="phone-row">
+      <div class="phone-code-wrap">
+        <select class="phone-code">
+          <option value="+20">🇪🇬 +20</option>
+          <option value="+966">🇸🇦 +966</option>
+          <option value="+971">🇦🇪 +971</option>
+          <option value="+965">🇰🇼 +965</option>
+          <option value="+974">🇶🇦 +974</option>
+          <option value="+973">🇧🇭 +973</option>
+          <option value="+968">🇴🇲 +968</option>
+          <option value="+962">🇯🇴 +962</option>
+          <option value="+961">🇱🇧 +961</option>
+          <option value="+963">🇸🇾 +963</option>
+          <option value="+964">🇮🇶 +964</option>
+          <option value="+218">🇱🇾 +218</option>
+          <option value="+216">🇹🇳 +216</option>
+          <option value="+213">🇩🇿 +213</option>
+          <option value="+212">🇲🇦 +212</option>
+          <option value="+249">🇸🇩 +249</option>
+          <option value="+44">🇬🇧 +44</option>
+          <option value="+1">🇺🇸 +1</option>
+          <option value="+49">🇩🇪 +49</option>
+          <option value="+33">🇫🇷 +33</option>
+          <option value="+7">🇷🇺 +7</option>
+          <option value="+91">🇮🇳 +91</option>
+        </select>
+      </div>
+      <input class="form-input phone-input" type="tel" placeholder="01xxxxxxxxx">
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">University</label>
+    <div class="form-select-wrap">
+      <select class="form-select">
+        <option value="">Select your university</option>
+        <optgroup label="🏛️ الحكومية — Government">
+          <option>Ain Shams University – جامعة عين شمس</option>
+          <option>Al-Azhar University – جامعة الأزهر</option>
+          <option>Alexandria University – جامعة الإسكندرية</option>
+          <option>Aswan University – جامعة أسوان</option>
+          <option>Assiut University – جامعة أسيوط</option>
+          <option>Beni Suef University – جامعة بني سويف</option>
+          <option>Benha University – جامعة بنها</option>
+          <option>Cairo University (Kasr Al Ainy) – جامعة القاهرة</option>
+          <option>Damietta University – جامعة دمياط</option>
+          <option>Fayoum University – جامعة الفيوم</option>
+          <option>Kafrelsheikh University – جامعة كفر الشيخ</option>
+          <option>Mansoura University – جامعة المنصورة</option>
+          <option>Menoufia University – جامعة المنوفية</option>
+          <option>Minia University – جامعة المنيا</option>
+          <option>Port Said University – جامعة بورسعيد</option>
+          <option>Suez Canal University – جامعة قناة السويس</option>
+          <option>South Valley University – جامعة جنوب الوادي</option>
+          <option>Sohag University – جامعة سوهاج</option>
+          <option>Suez University – جامعة السويس</option>
+          <option>Tanta University – جامعة طنطا</option>
+          <option>Zagazig University – جامعة الزقازيق</option>
+          <option>Zagazig University (Faqous) – جامعة الزقازيق فرع فاقوس</option>
+          <option>Helwan University – جامعة حلوان</option>
+          <option>New Valley University – جامعة الوادي الجديد</option>
+          <option>Arish University – جامعة العريش</option>
+          <option>Hurghada / Cairo Faculty of Medicine</option>
+          <option>City of Sadat University – جامعة مدينة السادات</option>
+          <option>Military Medical College – كلية الطب العسكرية</option>
+          <option>Luxor University – جامعة الأقصر</option>
+        </optgroup>
+        <optgroup label="🏢 الخاصة — Private">
+          <option>6th of October University (O6U) – جامعة 6 أكتوبر</option>
+          <option>Delta University – جامعة الدلتا</option>
+          <option>Horus University – جامعة حورس</option>
+          <option>Misr International University (MIU)</option>
+          <option>Misr University for Science & Technology (MUST)</option>
+          <option>Modern University for Technology (MTI)</option>
+          <option>Nahda University – جامعة النهضة</option>
+          <option>New Giza University (NGU)</option>
+          <option>Sinai University – جامعة سيناء</option>
+          <option>Badr University in Cairo (BUC)</option>
+          <option>Future University in Egypt – جامعة المستقبل</option>
+          <option>Alamein International University</option>
+          <option>Arab Academy for Science & Technology</option>
+          <option>Meruit University – جامعة ميريت</option>
+          <option>Badya University – جامعة باديا</option>
+          <option>Mansoura New University – جامعة المنصورة الجديدة</option>
+        </optgroup>
+        <optgroup label="🏛️ الأهلية — National">
+          <option>Ain Shams National University – جامعة عين شمس الأهلية</option>
+          <option>Alexandria National University – جامعة الإسكندرية الأهلية</option>
+          <option>Asyut National University – جامعة أسيوط الأهلية</option>
+          <option>Benha National University – جامعة بنها الأهلية</option>
+          <option>Beni Suef National University – جامعة بني سويف الأهلية</option>
+          <option>Cairo National University – جامعة القاهرة الأهلية</option>
+          <option>Fayoum National University – جامعة الفيوم الأهلية</option>
+          <option>Helwan National University – جامعة حلوان الأهلية</option>
+          <option>Ismailia New National University – جامعة الإسماعيلية الجديدة الأهلية</option>
+          <option>Kafrelsheikh National University – جامعة كفر الشيخ الأهلية</option>
+          <option>King Salman International University – جامعة الملك سلمان</option>
+          <option>Mansoura National University – جامعة المنصورة الأهلية</option>
+          <option>Minya National University – جامعة المنيا الأهلية</option>
+          <option>Port Said East National University – جامعة شرق بورسعيد الأهلية</option>
+          <option>Sohag National University – جامعة سوهاج الأهلية</option>
+          <option>South Valley National University – جامعة جنوب الوادي الأهلية</option>
+          <option>Tanta National University – جامعة طنطا الأهلية</option>
+          <option>Zagazig National University – جامعة الزقازيق الأهلية</option>
+        </optgroup>
+        <option value="other">🌍 Other / أخرى</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="form-label">Academic Year</label>
+    <div class="form-select-wrap">
+      <select class="form-select" id="yearSelectReg" onchange="updateModulesReg()">
+        <option value="">Select your year</option>
+        <option value="1">1st Year</option>
+        <option value="2">2nd Year</option>
+        <option value="3">3rd Year</option>
+        <option value="4">4th Year</option>
+        <option value="5">5th Year</option>
+        <option value="intern">Intern (House Officer)</option>
+      </select>
+    </div>
+  </div>
+  <div id="modulesGroupReg" style="display:none;" class="form-group">
+    <label class="form-label">Your Modules</label>
+    <div class="modules-box" id="modulesDisplayReg"></div>
+  </div>
+  <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="••••••••"></div>
+  <button class="form-submit" onclick="closeModal();showPage('dashboard')">Create Account</button>
+  <div class="form-switch">Already have an account? <span onclick="switchModal('login')">Sign in</span></div>
+</div>
+</div>
+
+<!-- LOGIN MODAL -->
+
+<div class="modal-overlay" id="modal-login">
+<div class="modal-box">
+  <button class="modal-close" onclick="closeModal()">✕</button>
+  <div class="modal-logo">
+    <svg width="24" height="24" viewBox="0 0 100 100" fill="none"><defs><clipPath id="nl"><path d="M 4 50 L 20 50 L 23 54 L 28 22 L 33 50 L 38 50 L 42 58 L 50 50 L 58 42 L 62 50 L 67 50 L 72 68 L 77 50 L 96 50 A 46 46 0 0 1 4 50 Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="#0A1628"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#nl)"/><path d="M 4 50 L 20 50 L 23 54 L 28 22 L 33 50 L 38 50 L 42 58 L 50 50 L 58 42 L 62 50 L 67 50 L 72 68 L 77 50 L 96 50" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="50" r="46" stroke="#0A1628" stroke-width="2.5" fill="none"/><circle cx="50" cy="50" r="4" fill="white"/><circle cx="50" cy="50" r="2" fill="#0A1628"/></svg>
+    <span class="modal-logo-name">NAWA</span>
+  </div>
+  <div class="modal-title">Welcome back!</div>
+  <div class="modal-sub">Sign in to continue your journey</div>
+  <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="ahmed@gmail.com"></div>
+  <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="••••••••"></div>
+  <div style="text-align:right;margin-bottom:13px;margin-top:-5px;"><span style="font-size:12px;color:var(--sky);font-weight:600;cursor:pointer;">Forgot Password?</span></div>
+  <button class="form-submit" onclick="closeModal();showPage('dashboard')">Sign In</button>
+  <div class="form-switch">Don't have an account? <span onclick="switchModal('register')">Create one</span></div>
+</div>
+</div>
+
+<!-- ════════════ LANDING ════════════ -->
+
+<div id="page-landing" class="page active">
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge"><div class="hero-badge-dot"></div>Medical Education Platform — Egypt</div>
+    <div class="hero-logo-big">
+      <svg width="72" height="72" viewBox="0 0 100 100" fill="none"><defs><clipPath id="nh"><path d="M 4 50 L 20 50 L 23 54 L 28 22 L 33 50 L 38 50 L 42 58 L 50 50 L 58 42 L 62 50 L 67 50 L 72 68 L 77 50 L 96 50 A 46 46 0 0 1 4 50 Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.06)"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#nh)"/><path d="M 4 50 L 20 50 L 23 54 L 28 22 L 33 50 L 38 50 L 42 58 L 50 50 L 58 42 L 62 50 L 67 50 L 72 68 L 77 50 L 96 50" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="50" r="46" stroke="white" stroke-width="2" fill="none"/><circle cx="50" cy="50" r="4.5" fill="white"/><circle cx="50" cy="50" r="2.2" fill="#0A1628"/></svg>
+    </div>
+    <h1 class="hero-title">The Nucleus of<br><span>Medical Excellence</span></h1>
+    <p class="hero-sub">Master medicine through smart MCQs, AI-powered analytics, exam simulations, streak tracking, and dual leaderboards. Built for Egyptian medical students.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="openModal('register')">Sign Up</button>
+      <button class="btn-secondary" onclick="openModal('login')">Sign In</button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num">12,000+</div><div class="stat-label">Questions</div></div>
+      <div class="stat-item"><div class="stat-num">8,400+</div><div class="stat-label">Students</div></div>
+      <div class="stat-item"><div class="stat-num">94%</div><div class="stat-label">Pass Rate</div></div>
+      <div class="stat-item"><div class="stat-num">60+</div><div class="stat-label">Universities</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-tag">Why Nawa</div>
+      <h2 class="section-title">Everything You Need to Excel</h2>
+      <p class="section-sub">AI-powered analytics, exam simulation, dual leaderboards, and 5 types of flashcards — one platform for serious medical students.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feat-icon">🧠</div><div class="feat-title">Smart Question Bank</div><div class="feat-body">12,000+ MCQs across all specialties. Filter by module, block, difficulty, and type (Unused/Incorrect/Bookmarked/Omitted).</div></div>
+      <div class="feature-card"><div class="feat-icon">📝</div><div class="feat-title">Practice (Tutor) Mode</div><div class="feat-body">Immediate feedback after each answer with full explanation, key takeaway, and a short video solution for every question.</div></div>
+      <div class="feature-card"><div class="feat-icon">🎯</div><div class="feat-title">Exam Mode</div><div class="feat-body">Full timed exam simulation. No hints during the exam. Complete review with all explanations and video solutions after submission.</div></div>
+      <div class="feature-card"><div class="feat-icon">⚡</div><div class="feat-title">Quick Practice</div><div class="feat-body">Fast daily 10-question sessions. Perfect for keeping your streak alive. Minimal interface, maximum focus.</div></div>
+      <div class="feature-card"><div class="feat-icon">🤖</div><div class="feat-title">AI Test Analysis</div><div class="feat-body">AI analyzes ALL your quizzes, identifies weak spots by System/Subject/Topic, and builds a custom Study Plan to boost your score.</div></div>
+      <div class="feature-card"><div class="feat-icon">📅</div><div class="feat-title">AI Study Planner</div><div class="feat-body">Set your exam date and available schedule. The AI builds a personalized revision timetable down to the daily level automatically.</div></div>
+      <div class="feature-card"><div class="feat-icon">🃏</div><div class="feat-title">5-Type Flashcards <span class="soon-badge">PRO</span></div><div class="feat-body">Per-lecture cards, ready decks, custom cards, AI-generated from text, and AI-generated from your wrong answers. Spaced repetition built in.</div></div>
+      <div class="feature-card"><div class="feat-icon">📊</div><div class="feat-title">Deep Analytics</div><div class="feat-body">Track performance by module, block, and topic. Peer Score shows how you compare to colleagues after every quiz. Know exactly where to focus.</div></div>
+      <div class="feature-card"><div class="feat-icon">🏆</div><div class="feat-title">Dual Leaderboard</div><div class="feat-body">Global ranking + per-module leaderboards. Fair scoring = Accuracy × Questions. Anti-abuse minimum threshold. Anonymous mode available.</div></div>
+      <div class="feature-card"><div class="feat-icon">🎖️</div><div class="feat-title">Badges & Titles</div><div class="feat-body">Earn badges per medical module. Special titles for top performers. Showcase your strongest specialty on your profile.</div></div>
+      <div class="feature-card"><div class="feat-icon">🔥</div><div class="feat-title">Streak Calendar</div><div class="feat-body">GitHub-style daily activity calendar. Current and longest streak tracking. Build unstoppable momentum.</div></div>
+      <div class="feature-card"><div class="feat-icon">📋</div><div class="feat-title">Tasks, Notes & Exams</div><div class="feat-body">Study tasks with deadlines. Personal notes linked to modules. Upcoming exam countdowns. Organized in one place.</div></div>
+      <div class="feature-card"><div class="feat-icon">📚</div><div class="feat-title">Medical Library</div><div class="feat-body">Curated resources, textbooks, and reference materials organized by system and module. Everything in one place.</div></div>
+      <div class="feature-card"><div class="feat-icon">🤝</div><div class="feat-title">Custom Quiz (Co-op)</div><div class="feat-body">You and your study buddy answer the same questions in the same order from different devices. Study together, compete together.</div></div>
+      <div class="feature-card"><div class="feat-icon">🎬</div><div class="feat-title">Video Solutions</div><div class="feat-body">Short video explanation for every single question. Linked directly to the question — watch instantly after answering.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="lb-section" id="lboard">
+  <div class="lb-inner">
+    <div>
+      <div class="section-tag">Compete & Win</div>
+      <h2 class="section-title" style="color:white;margin-bottom:14px;">Rise to the Top of Your Generation</h2>
+      <p class="section-sub">Global rankings + per-module leaderboards. Fair scoring. Top 3 highlighted. Anonymous mode available.</p>
+      <div style="margin-top:28px;display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="openModal('register')">Sign Up</button>
+        <button class="btn-secondary" onclick="openModal('login')">Sign In</button>
+      </div>
+    </div>
+    <div class="lb-card">
+      <div class="lb-header"><div class="lb-title-t">🏆 This Week — Global</div><div style="font-size:9px;color:var(--sky);font-weight:700;">Week 17</div></div>
+      <div class="lb-row gold"><div style="font-size:13px;font-weight:800;color:#FFD700;width:20px">1</div><div class="lb-av" style="background:linear-gradient(135deg,#B8860B,#FFD700)">Y</div><div class="lb-info"><div class="lb-name2">Yassmine Abouzaid</div><div class="lb-univ2">Alexandria · Y4 · 95.25% · 421 Qs</div></div><div class="lb-score2">92.2</div></div>
+      <div class="lb-row silver"><div style="font-size:13px;font-weight:800;color:#C0C8D0;width:20px">2</div><div class="lb-av" style="background:linear-gradient(135deg,#555,#999)">Z</div><div class="lb-info"><div class="lb-name2">Zeyad M. Etman</div><div class="lb-univ2">Alexandria · Y4 · 92.3% · 935 Qs</div></div><div class="lb-score2">90.1</div></div>
+      <div class="lb-row bronze"><div style="font-size:13px;font-weight:800;color:#CD9B6A;width:20px">3</div><div class="lb-av" style="background:linear-gradient(135deg,#0D3B7A,#4AA8E8)">M</div><div class="lb-info"><div class="lb-name2">Moneim Tarek</div><div class="lb-univ2">Alexandria · Y4 · 85.42% · 847 Qs</div></div><div class="lb-score2">87.8</div></div>
+      <div class="lb-row"><div style="font-size:13px;font-weight:800;color:#8A9BB5;width:20px">4</div><div class="lb-av" style="background:rgba(255,255,255,.1)">?</div><div class="lb-info"><div class="lb-name2">Anonymous</div><div class="lb-univ2">· 88.3% · 171 Qs</div></div><div class="lb-score2">79.6</div></div>
+      <div class="lb-row"><div style="font-size:13px;font-weight:800;color:#8A9BB5;width:20px">5</div><div class="lb-av" style="background:rgba(255,255,255,.1)">?</div><div class="lb-info"><div class="lb-name2">Anonymous</div><div class="lb-univ2">· 86.44% · 494 Qs</div></div><div class="lb-score2">78.1</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-tag">Pricing</div>
+      <h2 class="section-title">Simple, Transparent Pricing</h2>
+      <p class="section-sub">Start with a basic plan. Upgrade when you're ready.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Basic</div>
+        <div class="price-amount">0<span style="font-size:17px">EGP</span></div>
+        <div class="price-per">/month</div>
+        <div class="price-divider"></div>
+        <ul class="price-features"><li>50 questions/day</li><li>Practice Mode</li><li>Streak tracking</li><li>Leaderboard</li><li>Tasks & Notes</li></ul>
+        <button class="price-btn price-btn-outline" onclick="openModal('register')">Get Started</button>
+      </div>
+      <div class="price-card popular">
+        <div class="popular-badge">Most Popular</div>
+        <div class="price-name">Pro</div>
+        <div class="price-amount" style="color:white">149<span style="font-size:17px">EGP</span></div>
+        <div class="price-per">/month</div>
+        <div class="price-divider"></div>
+        <ul class="price-features"><li>Unlimited questions</li><li>All modules unlocked</li><li>Exam + Quick Mode</li><li>AI Test Analysis</li><li>AI Study Planner</li><li>5-Type Flashcards</li><li>Video solutions</li><li>Module leaderboards</li></ul>
+        <button class="price-btn price-btn-solid" onclick="openModal('register')">Start Pro</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Elite</div>
+        <div class="price-amount">349<span style="font-size:17px">EGP</span></div>
+        <div class="price-per">/month</div>
+        <div class="price-divider"></div>
+        <ul class="price-features"><li>Everything in Pro</li><li>1-on-1 mentoring</li><li>Custom study plan</li><li>Private competitions</li><li>Medical Library access</li><li>Early access features</li></ul>
+        <button class="price-btn price-btn-outline">Contact Us</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="payment-section">
+  <div class="section-wrap">
+    <div class="section-header" style="margin-bottom:0">
+      <div class="section-tag">Payment</div>
+      <h2 class="section-title">Easy & Secure Payment</h2>
+      <p class="section-sub">Multiple payment methods for your convenience.</p>
+    </div>
+    <div class="payment-methods">
+      <div class="pay-method"><div class="pay-icon">💳</div><div><div class="pay-name">Visa / Mastercard</div><div class="pay-sub">Credit & Debit Cards</div></div></div>
+      <div class="pay-method"><div class="pay-icon">📱</div><div><div class="pay-name">Vodafone Cash</div><div class="pay-sub">Mobile Wallet</div></div></div>
+      <div class="pay-method"><div class="pay-icon">🏦</div><div><div class="pay-name">InstaPay</div><div class="pay-sub">Bank Transfer</div></div></div>
+      <div class="pay-method"><div class="pay-icon">💚</div><div><div class="pay-name">Fawry</div><div class="pay-sub">Fawry Points</div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2 class="cta-title">Root Deep.<br><span>Reach Far.</span></h2>
+  <p class="cta-sub">Join 8,400+ medical students already on Nawa.</p>
+  <div class="cta-btns">
+    <button class="btn-primary" onclick="openModal('register')">Sign Up</button>
+    <button class="btn-secondary" onclick="openModal('login')">Sign In</button>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <svg width="32" height="32" viewBox="0 0 100 100" fill="none"><defs><clipPath id="nfoot"><path d="M 4 50 L 20 50 L 23 54 L 28 22 L 33 50 L 38 50 L 42 58 L 50 50 L 58 42 L 62 50 L 67 50 L 72 68 L 77 50 L 96 50 A 46 46 0 0 1 4 50 Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#nfoot)"/><path d="M 4 50 L 20 50 L 23 54 L 28 22 L 33 50 L 38 50 L 42 58 L 50 50 L 58 42 L 62 50 L 67 50 L 72 68 L 77 50 L 96 50" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="50" cy="50" r="46" stroke="white" stroke-width="2.5" fill="none"/><circle cx="50" cy="50" r="4" fill="white"/><circle cx="50" cy="50" r="2" fill="#0A1628"/></svg>
+      <div class="footer-name">NAWA</div>
+      <div class="footer-tag">Root Deep. Reach Far.</div>
+    </div>
+    <div class="footer-col"><h4>Platform</h4><a>Question Bank</a><a>Practice Mode</a><a>Exam Mode</a><a>Leaderboard</a><a>AI Analysis</a></div>
+    <div class="footer-col"><h4>Features</h4><a>Flashcards</a><a>Study Planner</a><a>Video Solutions</a><a>Medical Library</a><a>Custom Quiz</a></div>
+    <div class="footer-col">
+      <h4>Contact Us</h4>
+      <a href="https://wa.me/201002429528" target="_blank"><span>💬</span> WhatsApp: 01002429528</a>
+      <a href="https://t.me/201002429528" target="_blank"><span>✈️</span> Telegram: 01002429528</a>
+      <a onclick="openModal('register')"><span>👤</span> Sign Up</a>
+      <a onclick="openModal('login')"><span>🔑</span> Sign In</a>
+      <a><span>📄</span> Privacy Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Nawa Medical Education. All rights reserved.</div>
+    <div class="footer-slogan">Root Deep. Reach Far.</div>
+  </div>
+</footer>
+</div>
+
+<!-- ════════════ DASHBOARD ════════════ -->
+
+<div id="page-dashboard" class="page">
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-section">
+    <div class="sidebar-label">Menu</div>
+    <div class="sidebar-item active" onclick="sa(this);sd('home')"><span class="si-icon">🏠</span>Home</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Quiz</div>
+    <div class="sidebar-item" onclick="sa(this);sd('createquiz')"><span class="si-icon">✏️</span>Create Quiz</div>
+    <div class="sidebar-item" onclick="sa(this);sd('prevquizzes')"><span class="si-icon">🕐</span>Previous Quizzes</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Performance</div>
+    <div class="sidebar-item" onclick="sa(this)"><span class="si-icon">📈</span>Overview</div>
+    <div class="sidebar-item" onclick="sa(this)"><span class="si-icon">📊</span>Analysis</div>
+    <div class="sidebar-item" onclick="sa(this);sd('leaderboard')"><span class="si-icon">🏆</span>Leaderboard</div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">More</div>
+    <div class="sidebar-item" onclick="sa(this)"><span class="si-icon">📝</span>My Notes</div>
+    <div class="sidebar-item" onclick="sa(this)"><span class="si-icon">📚</span>Medical Library</div>
+    <div class="sidebar-item" onclick="sa(this)"><span class="si-icon">🃏</span>Flashcards <span style="font-size:7px;background:rgba(74,168,232,.2);color:#4AA8E8;padding:2px 5px;border-radius:4px;margin-left:3px;">PRO</span></div>
+    <div class="sidebar-item" onclick="sa(this)"><span class="si-icon">🤖</span>AI Analysis <span style="font-size:7px;background:rgba(74,168,232,.2);color:#4AA8E8;padding:2px 5px;border-radius:4px;margin-left:3px;">PRO</span></div>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Help</div>
+    <div class="sidebar-item" onclick="sa(this)"><span class="si-icon">💬</span>Contact Us</div>
+    <div class="sidebar-item" onclick="showPage('landing')"><span class="si-icon">🚪</span>Back to Home</div>
+  </div>
+  <div class="sidebar-upgrade"><p>Upgrade to enjoy unlimited MCQs, AI Analysis, and all premium features.</p><button>Upgrade ✦</button></div>
+</aside>
+
+<main class="dash-main" id="dashMain">
+
+  <!-- HOME -->
+
+  <div id="dash-home">
+    <div class="dash-topbar">
+      <div><div class="dash-greeting">Welcome, <span>Moneim</span>! 🔥</div><div class="dash-date">Thursday · April 23, 2026</div></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:34px;height:34px;border-radius:9px;background:white;border:1px solid rgba(10,22,40,.08);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;">🔔</div>
+        <button class="btn-primary" style="font-size:10px;padding:9px 16px;" onclick="sa(document.querySelector('[onclick*=createquiz]'));sd('createquiz')">✦ Create Quiz</button>
+      </div>
+    </div>
+    <div class="welcome-banner">
+      <div class="wb-text"><h2>Good morning, Moneim! 👋</h2><p>14-day streak! Keep going strong.</p></div>
+      <button class="wb-btn" onclick="sa(document.querySelector('[onclick*=createquiz]'));sd('createquiz')">✦ Create Quiz</button>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card blue"><div class="sc-icon">📝</div><div class="sc-label">Questions Done</div><div class="sc-value">847</div><div class="sc-sub">+23 today</div></div>
+      <div class="stat-card green"><div class="sc-icon">✅</div><div class="sc-label">Accuracy</div><div class="sc-value">92%</div><div class="sc-sub">↑ 3% this week</div></div>
+      <div class="stat-card orange"><div class="sc-icon">🔥</div><div class="sc-label">Day Streak</div><div class="sc-value">14</div><div class="sc-sub">Keep it going!</div></div>
+      <div class="stat-card purple"><div class="sc-icon">🏆</div><div class="sc-label">Global Rank</div><div class="sc-value">#3</div><div class="sc-sub">Top 0.1%</div></div>
+    </div>
+    <div class="dash-grid">
+      <div style="display:flex;flex-direction:column;gap:14px;">
+
+```
+    <!-- PERFORMANCE CHART -->
+    <div class="card">
+      <div class="card-header"><div><div class="card-title">📊 Performance Overview</div><div class="card-sub">Correct vs Incorrect per day</div></div></div>
+      <div class="card-body">
+        <div class="perf-tabs"><div class="perf-tab active" onclick="setPerfTab(this,'week')">Last Week</div><div class="perf-tab" onclick="setPerfTab(this,'month')">Last Month</div></div>
+        <div style="display:flex;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:5px;font-size:9px;font-weight:600;color:var(--gray);"><div style="width:8px;height:8px;border-radius:50%;background:var(--sky)"></div>Correct</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:9px;font-weight:600;color:var(--gray);"><div style="width:8px;height:8px;border-radius:50%;background:rgba(232,74,74,.4)"></div>Incorrect</div>
+        </div>
+        <div class="chart-wrap"><div class="chart-bars" id="chartBars"></div></div>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-title">Today's Quiz</div><div class="card-sub" id="qModeSub">MED431 Cardiopulmonary · Practice Mode</div></div>
+        <div style="display:flex;align-items:center;gap:7px;">
+          <span style="background:rgba(29,185,122,.1);color:#0D7A4A;font-size:8px;font-weight:700;padding:4px 9px;border-radius:100px;letter-spacing:1px;">PRACTICE</span>
+          <div class="card-badge" id="qBadge">Q 1/4</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="q-progress-label"><span>Progress</span><span id="qPct">25%</span></div>
+        <div class="q-progress-bar"><div class="q-progress-fill" id="qFill" style="width:25%"></div></div>
+        <div class="q-text" id="qText"></div>
+        <div class="q-options" id="qOptions"></div>
+        <div id="qExplanation" style="display:none;"></div>
+      </div>
+      <div class="card-footer">
+        <div class="q-timer"><div class="q-timer-dot"></div><span id="timer">01:30</span></div>
+        <div class="q-actions">
+          <button class="q-bookmark" title="Bookmark">🔖</button>
+          <button class="q-submit" onclick="nextQ()">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PEER SCORE (after quiz) -->
+    <div class="card">
+      <div class="card-body">
+        <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:10px;">📊 After Last Quiz — Peer Score</div>
+        <div class="peer-score-card">
+          <div class="peer-label">Your Score vs Colleagues Average</div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+            <span class="peer-you">You: 90%</span>
+            <span class="peer-avg">Class avg: 74%</span>
+          </div>
+          <div class="peer-bar-wrap">
+            <div class="peer-bar"><div class="peer-fill" style="width:90%"></div></div>
+          </div>
+          <div style="font-size:10px;color:var(--green);font-weight:700;margin-top:8px;">🎉 You scored above 89% of your classmates!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI CARD -->
+    <div class="ai-card">
+      <div class="ai-title">🤖 AI Test Analysis <span style="font-size:8px;background:rgba(74,168,232,.2);color:#4AA8E8;padding:2px 7px;border-radius:100px;font-weight:700;">PRO</span></div>
+      <div class="ai-sub">Your AI has analyzed 847 questions. Weak areas detected: <strong style="color:var(--sky)">Arrhythmias (62%)</strong> and <strong style="color:var(--sky)">Heart Failure mechanisms (68%)</strong>. Study plan ready.</div>
+      <button class="ai-btn">View AI Study Plan →</button>
+    </div>
+
+    <!-- TASKS -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">☑️ My Tasks</div><button style="width:26px;height:26px;border-radius:7px;background:var(--foam);border:none;cursor:pointer;font-size:14px;">+</button></div>
+      <div class="card-body">
+        <div class="tasks-tabs"><div class="task-tab active">All (0)</div><div class="task-tab">Upcoming</div><div class="task-tab">Overdue</div><div class="task-tab">Done</div></div>
+        <div style="text-align:center;padding:14px;font-size:12px;color:var(--gray);font-weight:300;">No tasks yet</div>
+        <button class="task-add">+ Click to add a task</button>
+      </div>
+    </div>
+
+    <!-- NOTES -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">📝 My Notes</div><button style="width:26px;height:26px;border-radius:7px;background:var(--foam);border:none;cursor:pointer;font-size:14px;">+</button></div>
+      <div class="card-body" style="padding:12px 18px;">
+        <div class="notes-item"><div style="font-size:16px;">📄</div><div><div class="notes-title">Cardiology — Heart Failure</div><div class="notes-date">Apr 20</div></div></div>
+        <div class="notes-item"><div style="font-size:16px;">📄</div><div><div class="notes-title">Pharmacology — Beta Blockers</div><div class="notes-date">Apr 18</div></div></div>
+        <div class="notes-item"><div style="font-size:16px;">📄</div><div><div class="notes-title">Anatomy — Brachial Plexus</div><div class="notes-date">Apr 15</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="dash-right">
+    <!-- PROFILE -->
+    <div class="profile-card">
+      <div class="profile-top"><div class="profile-avatar">M</div><div><div class="profile-name">Moneim Tarek</div><div class="profile-info">4th Year · Alexandria Uni</div></div></div>
+      <div class="profile-bar-label"><span>Weekly Goal</span><span>72%</span></div>
+      <div class="profile-bar"><div class="profile-fill" style="width:72%"></div></div>
+      <div class="profile-stats">
+        <div class="ps-item"><div class="ps-num">847</div><div class="ps-label">Questions</div></div>
+        <div class="ps-item"><div class="ps-num">92%</div><div class="ps-label">Accuracy</div></div>
+        <div class="ps-item"><div class="ps-num">#3</div><div class="ps-label">Rank</div></div>
+      </div>
+      <div class="badges-row">
+        <div class="badge-item earned">❤️ Cardio</div>
+        <div class="badge-item earned">🧠 Neuro</div>
+        <div class="badge-item">💊 Pharma</div>
+      </div>
+    </div>
+
+    <!-- STREAK -->
+    <div class="card"><div class="card-body">
+      <div class="streak-header">
+        <div class="streak-title">🔥 Activity Streak</div>
+        <div class="streak-nums">
+          <div class="streak-num"><div class="streak-num-val">14</div><div class="streak-num-label">Current</div></div>
+          <div class="streak-num"><div class="streak-num-val">21</div><div class="streak-num-label">Longest</div></div>
+        </div>
+      </div>
+      <div class="calendar-grid" id="calGrid"></div>
+      <div style="display:flex;justify-content:space-between;font-size:8px;color:var(--gray);margin-top:4px;"><span>Feb</span><span>Mar</span><span>Apr</span></div>
+    </div></div>
+
+    <!-- UPCOMING EXAMS -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">📅 Upcoming Exams</div><button style="width:26px;height:26px;border-radius:7px;background:var(--foam);border:none;cursor:pointer;font-size:14px;">+</button></div>
+      <div class="card-body" style="padding:10px 18px;">
+        <div class="exam-item"><div class="exam-date-box"><div class="exam-date-num">28</div><div class="exam-date-mon">Apr</div></div><div style="flex:1;"><div class="exam-name">Cardiology Final</div><div class="exam-sub">MED431 · Year 4</div></div><div class="exam-days">5d</div></div>
+        <div class="exam-item"><div class="exam-date-box"><div class="exam-date-num">15</div><div class="exam-date-mon">May</div></div><div style="flex:1;"><div class="exam-name">Pharmacology</div><div class="exam-sub">MED430</div></div><div class="exam-days">22d</div></div>
+      </div>
+    </div>
+
+    <!-- RECENT ACTIVITY -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">🕐 Recent Activity</div><span style="font-size:9px;color:var(--sky);font-weight:700;cursor:pointer;">See All</span></div>
+      <div class="card-body" style="padding:10px 18px;">
+        <div class="activity-item"><div class="activity-icon" style="background:rgba(29,185,122,.1)">📝</div><div style="flex:1;"><div class="activity-name">Cardiology — 20 Qs · Practice</div><div class="activity-time">2 hours ago</div></div><span style="font-size:11px;font-weight:700;color:var(--green)">90%</span></div>
+        <div class="activity-item"><div class="activity-icon" style="background:rgba(232,122,26,.08)">📝</div><div style="flex:1;"><div class="activity-name">Pharmacology — 15 Qs · Exam</div><div class="activity-time">Yesterday</div></div><span style="font-size:11px;font-weight:700;color:var(--orange)">73%</span></div>
+        <div class="activity-item"><div class="activity-icon" style="background:rgba(74,168,232,.1)">📝</div><div style="flex:1;"><div class="activity-name">Anatomy — 10 Qs · Quick</div><div class="activity-time">2 days ago</div></div><span style="font-size:11px;font-weight:700;color:var(--green)">95%</span></div>
+      </div>
+    </div>
+
+    <!-- MINI LB -->
+    <div class="card">
+      <div class="card-header"><div class="card-title">🏆 Top This Week</div><span style="font-size:9px;color:var(--sky);font-weight:700;cursor:pointer;" onclick="sa(document.querySelector('[onclick*=leaderboard]'));sd('leaderboard')">See All</span></div>
+      <div class="card-body" style="padding:10px 18px;">
+        <div class="mini-lb-row"><div style="font-size:11px;font-weight:800;color:#FFD700;width:16px;">1</div><div class="mini-av" style="background:linear-gradient(135deg,#B8860B,#FFD700)">Y</div><div style="flex:1;"><div class="mini-name">Yassmine Abouzaid</div><div class="mini-score-sub">Alex · 92.2</div></div><div class="mini-pts">421 Qs</div></div>
+        <div class="mini-lb-row"><div style="font-size:11px;font-weight:800;color:#C0C8D0;width:16px;">2</div><div class="mini-av" style="background:linear-gradient(135deg,#555,#999)">Z</div><div style="flex:1;"><div class="mini-name">Zeyad Etman</div><div class="mini-score-sub">Alex · 90.1</div></div><div class="mini-pts">935 Qs</div></div>
+        <div class="mini-lb-row" style="background:rgba(74,168,232,.06);border-radius:8px;padding:7px 6px;margin:0 -6px;"><div style="font-size:11px;font-weight:800;color:#CD9B6A;width:16px;">3</div><div class="mini-av" style="background:linear-gradient(135deg,#0D3B7A,#4AA8E8)">M</div><div style="flex:1;"><div class="mini-name" style="color:var(--blue)">Moneim (You)</div><div class="mini-score-sub">Alex · 87.8</div></div><div class="mini-pts">847 Qs</div></div>
+      </div>
+    </div>
+
+    <!-- SUBJECTS -->
+    <div class="card"><div class="card-header"><div class="card-title">📚 Module Progress</div></div>
+      <div class="card-body">
+        <div class="subj-item"><div class="subj-label">MED431 Cardiopulmonary <span class="subj-pct">88%</span></div><div class="subj-bar"><div class="subj-fill" style="width:88%;background:linear-gradient(to right,var(--ocean),var(--sky))"></div></div></div>
+        <div class="subj-item"><div class="subj-label">MED430 Medicine <span class="subj-pct">74%</span></div><div class="subj-bar"><div class="subj-fill" style="width:74%;background:linear-gradient(to right,#0D7A4A,var(--green))"></div></div></div>
+        <div class="subj-item"><div class="subj-label">MED432 Investigative <span class="subj-pct">61%</span></div><div class="subj-bar"><div class="subj-fill" style="width:61%;background:linear-gradient(to right,#7A4A0D,var(--orange))"></div></div></div>
+        <div class="subj-item"><div class="subj-label">MED436 Neuropsychiatry <span class="subj-pct">45%</span></div><div class="subj-bar"><div class="subj-fill" style="width:45%;background:linear-gradient(to right,#5A0D7A,var(--purple))"></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+  </div>
+
+  <!-- CREATE QUIZ -->
+
+  <div id="dash-createquiz" style="display:none;">
+    <div class="dash-topbar"><div><div class="dash-greeting">✏️ Create <span>Quiz</span></div><div class="dash-date">Set up your quiz session</div></div></div>
+    <div style="max-width:840px;">
+      <div class="cq-section">
+        <div class="cq-section-header"><div style="font-size:12px;color:var(--gray);">▾</div><div class="cq-section-title">Quiz Name</div></div>
+        <input class="cq-name-input" type="text" placeholder="e.g. Cardiology Revision — Week 3">
+      </div>
+      <div class="cq-section">
+        <div class="cq-section-header"><div style="font-size:12px;color:var(--gray);">▾</div><div class="cq-section-title">Quiz Settings <span style="font-size:13px;color:var(--gray)">ⓘ</span></div></div>
+        <div class="cq-toggles">
+          <div class="cq-toggle" onclick="toggleSw(this)"><div class="toggle-switch"><div class="toggle-thumb"></div></div><span class="toggle-label">Timed</span></div>
+          <div class="cq-toggle" onclick="toggleSw(this)"><div class="toggle-switch"><div class="toggle-thumb"></div></div><span class="toggle-label">Exam Mode</span></div>
+        </div>
+      </div>
+      <div class="cq-section">
+        <div class="cq-section-header"><div style="font-size:12px;color:var(--gray);">▾</div><div class="cq-section-title">Question Mode</div></div>
+        <div class="cq-modes">
+          <div class="mode-option selected" onclick="selMode(this)">Unused (2308)</div>
+          <div class="mode-option" onclick="selMode(this)">Incorrect (0)</div>
+          <div class="mode-option" onclick="selMode(this)">Bookmarked (0)</div>
+          <div class="mode-option" onclick="selMode(this)">Omitted (0)</div>
+          <div class="mode-option" onclick="selMode(this)">All (2308)</div>
+        </div>
+      </div>
+      <div class="cq-section">
+        <div class="cq-section-header"><div style="font-size:12px;color:var(--gray);">▾</div><div class="cq-section-title">Difficulty</div></div>
+        <div class="difficulty-opts">
+          <div class="diff-opt selected" onclick="selDiff(this)">All</div>
+          <div class="diff-opt" onclick="selDiff(this)">Easy ★</div>
+          <div class="diff-opt" onclick="selDiff(this)">Medium ★★</div>
+          <div class="diff-opt" onclick="selDiff(this)">Hard ★★★</div>
+        </div>
+      </div>
+      <div class="cq-section">
+        <div class="cq-section-header"><div style="font-size:12px;color:var(--gray);">▾</div><div class="cq-section-title">Question Banks</div></div>
+        <div class="cq-banks">
+          <div class="bank-option selected" onclick="selBank(this)"><div class="bank-radio"></div><div><div class="bank-name">Nawa QBank <span class="bank-gem">💎 2308</span></div><div style="font-size:10px;color:var(--gray);">Core question bank</div></div></div>
+          <div class="bank-option" onclick="selBank(this)"><div class="bank-radio"></div><div><div class="bank-name">Final QBank <span class="bank-gem">💎 6403</span></div><div style="font-size:10px;color:var(--gray);">Final exam questions</div></div></div>
+        </div>
+      </div>
+      <div class="cq-section">
+        <div class="cq-section-header"><div style="font-size:12px;color:var(--gray);">▾</div><div class="cq-section-title">Blocks</div></div>
+        <div class="blocks-grid" id="blocksGrid"></div>
+      </div>
+      <div class="cq-section">
+        <div class="cq-section-header"><div style="font-size:12px;color:var(--gray);">▾</div><div class="cq-section-title">Questions Number</div></div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><input class="cq-num" type="number" value="10" min="1" max="120" id="qNumInput"><span style="font-size:11px;color:var(--gray);font-weight:300;">Max 120 Qs.</span></div>
+        <div class="cq-presets">
+          <div class="cq-preset active" onclick="setPreset(this,10)">Quick (10 Qs.)</div>
+          <div class="cq-preset" onclick="setPreset(this,20)">Standard (20 Qs.)</div>
+          <div class="cq-preset" onclick="setPreset(this,50)">Ultimate (50 Qs.)</div>
+        </div>
+        <button class="cq-generate-btn" onclick="sd('home');sa(document.querySelector('.sidebar-item'))">Generate Quiz ✦</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PREVIOUS QUIZZES -->
+
+  <div id="dash-prevquizzes" style="display:none;">
+    <div class="dash-topbar"><div><div class="dash-greeting">🕐 Previous <span>Quizzes</span></div><div class="dash-date">Your quiz history</div></div></div>
+    <div class="pq-search"><input class="pq-search-input" placeholder="🔍 Search Quiz Name..." type="text"><button style="padding:10px 16px;border-radius:10px;border:1.5px solid rgba(10,22,40,.1);background:white;font-size:11px;font-weight:600;color:var(--navy);cursor:pointer;font-family:'Montserrat',sans-serif;">☰ Filter</button></div>
+    <div class="pq-tabs"><div class="pq-tab active">All</div><div class="pq-tab">Finished</div><div class="pq-tab">Unfinished</div></div>
+    <div class="pq-grid" id="pqGrid"></div>
+  </div>
+
+  <!-- LEADERBOARD -->
+
+  <div id="dash-leaderboard" style="display:none;">
+    <div class="dash-topbar"><div><div class="dash-greeting">🏆 <span>Leaderboard</span></div><div class="dash-date">See how you compare with other students</div></div></div>
+    <div class="lb-page-grid">
+      <div>
+        <div class="lb-filters">
+          <button class="lb-filter-btn" onclick="setLbF(this)">Today</button>
+          <button class="lb-filter-btn active" onclick="setLbF(this)">This Week</button>
+          <button class="lb-filter-btn" onclick="setLbF(this)">This Month</button>
+          <button class="lb-filter-btn" onclick="setLbF(this)">All Time</button>
+        </div>
+        <div class="lb-info-badge">👥 Showing colleagues from <strong>Alexandria University · Year 4</strong></div>
+        <div style="margin-bottom:10px;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gray);">Module Leaderboards</div>
+        <div class="module-lb-tabs">
+          <div class="module-tab active" onclick="setMT(this)">🌍 Global</div>
+          <div class="module-tab" onclick="setMT(this)">❤️ Cardio</div>
+          <div class="module-tab" onclick="setMT(this)">🧠 Neuro</div>
+          <div class="module-tab" onclick="setMT(this)">💊 Pharma</div>
+          <div class="module-tab" onclick="setMT(this)">🔬 Derm</div>
+          <div class="module-tab" onclick="setMT(this)">🫁 Pulm</div>
+        </div>
+        <table class="lb-table">
+          <thead><tr><th>#</th><th>Student</th><th>Accuracy</th><th>Questions</th><th>Score</th></tr></thead>
+          <tbody id="lbTbody"></tbody>
+        </table>
+      </div>
+      <div>
+        <div class="your-rank-card">
+          <div class="yr-title">🏆 Your Rank</div>
+          <div class="yr-rank">#3</div>
+          <div class="yr-sub">You are <strong style="color:var(--sky)">2.3 pts</strong> away from #2</div>
+          <div class="yr-prog-label"><span>Progress to #2</span><span>87.8 / 90.1</span></div>
+          <div class="yr-prog-bar"><div class="yr-prog-fill" style="width:74%"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">🎖️ Module Ranks</div></div>
+          <div class="card-body" style="padding:10px 16px;">
+            <div class="mini-lb-row"><div style="font-size:15px;margin-right:4px;">❤️</div><div style="flex:1;"><div class="mini-name">Cardiopulmonary</div><div class="mini-score-sub">88% · 312 Qs</div></div><div class="mini-pts">#1</div></div>
+            <div class="mini-lb-row"><div style="font-size:15px;margin-right:4px;">🧠</div><div style="flex:1;"><div class="mini-name">Neuroscience</div><div class="mini-score-sub">81% · 203 Qs</div></div><div class="mini-pts">#4</div></div>
+            <div class="mini-lb-row"><div style="font-size:15px;margin-right:4px;">💊</div><div style="flex:1;"><div class="mini-name">Pharmacology</div><div class="mini-score-sub">74% · 180 Qs</div></div><div class="mini-pts">#7</div></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:14px;">
+          <div class="card-header"><div class="card-title">🎖️ Your Badges</div></div>
+          <div class="card-body">
+            <div class="badges-row" style="gap:7px;">
+              <div style="background:rgba(74,168,232,.1);color:var(--sky);padding:5px 10px;border-radius:100px;font-size:9px;font-weight:700;">❤️ Cardio Master</div>
+              <div style="background:rgba(74,168,232,.1);color:var(--sky);padding:5px 10px;border-radius:100px;font-size:9px;font-weight:700;">🔥 14-Day Streak</div>
+              <div style="background:var(--foam);color:var(--gray);padding:5px 10px;border-radius:100px;font-size:9px;font-weight:700;">💊 Pharma Expert</div>
+              <div style="background:var(--foam);color:var(--gray);padding:5px 10px;border-radius:100px;font-size:9px;font-weight:700;">🏆 Top 10</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
+
+<script>
+// ── MODULES DATA ──
+const modulesData = {
+  '1':`<strong>Semester 1:</strong> MED101 Normal Body Structure & Molecular Biology · MED102 Introduction to Disease · MED103 Infections & Immunology · MED104 Psychology & Mental Health · UNI101<br><br><strong>Semester 2:</strong> MED105 Blood & Lymphatic System · MED106 Musculoskeletal System · MED107 Integrated Hematology & MSK · MED108 Basic Doctoring · MED109 Communication Skills`,
+  '2':`<strong>Semester 3:</strong> MED210 Cardiovascular System · MED211 Respiratory System · MED212 Integrated Cardiopulmonary · MED213 CPPD 2 · MED214 Biostatistics 1<br><br><strong>Semester 4:</strong> MED215 Endocrine & Metabolism · MED216 Digestive System & Nutrition · MED217 Integrated Endocrine & GIT · MED218 Biostatistics 2`,
+  '3':`<strong>Semester 5:</strong> MED319 CNS & Special Senses · MED320 Genitourinary System · MED321 Integrated Neuro & GU · MED322 Biostatistics 3<br><br><strong>Semester 6:</strong> MED323 General Medicine · MED324 General Surgery · MED325 Tropical Medicine · MED326 Forensic Medicine · MED328 Community Medicine · MED329 CPPD 3`,
+  '4':`<strong>Semester 7:</strong> MED430 Medicine (GIT, Endocrine, Hematology, Nephrology) · MED431 Cardiopulmonary · MED432 Investigative Medicine & Radiology<br><br><strong>Semester 8:</strong> MED433 Pediatrics · MED434 Ophthalmology · MED435 ENT · MED436 Neuropsychiatry · MED437 Biostatistics 4`,
+  '5':`<strong>Semester 9:</strong> MED538 Surgery + Anesthesia & Emergency · MED539 Orthopedic · MED540 Research & Graduation Project<br><br><strong>Semester 10:</strong> MED541 Obstetrics & Gynecology · MED542 Family Medicine · MED543 Dermatology · E503 Elective Clinical Training`,
+  'intern':`House Officer Rotations: Internal Medicine · Surgery · Pediatrics · OB/GYN · Emergency Medicine · Community Medicine`
+};
+
+function updateModulesReg(){
+  const yr=document.getElementById('yearSelectReg').value;
+  const g=document.getElementById('modulesGroupReg');
+  const d=document.getElementById('modulesDisplayReg');
+  if(yr&&modulesData[yr]){g.style.display='block';d.innerHTML=modulesData[yr];}
+  else g.style.display='none';
+}
+
+// ── PAGE / DASH NAV ──
+function showPage(n){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+n).classList.add('active');window.scrollTo(0,0);cm();}
+function ss(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'});}
+function sd(s){['home','createquiz','prevquizzes','leaderboard'].forEach(x=>{const e=document.getElementById('dash-'+x);if(e)e.style.display=x===s?'block':'none';});if(s==='leaderboard')renderLb();if(s==='prevquizzes')renderPQ();}
+function sa(el){document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');}
+
+// ── MOBILE / SIDEBAR ──
+function onHamburger(){const p=document.querySelector('.page.active');if(p&&p.id==='page-dashboard'){openSB();return;}document.getElementById('mobileMenu').classList.toggle('open');}
+function cm(){document.getElementById('mobileMenu').classList.remove('open');}
+function openSB(){document.getElementById('sidebar').classList.add('open');document.getElementById('sidebarOverlay').classList.add('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidebarOverlay').classList.remove('open');}
+document.getElementById('hamburger').addEventListener('click',onHamburger);
+
+// ── MODALS ──
+function openModal(t){document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('open'));document.getElementById('modal-'+t).classList.add('open');}
+function closeModal(){document.querySelectorAll('.modal-overlay').forEach(m=>m.classList.remove('open'));}
+function switchModal(t){closeModal();setTimeout(()=>openModal(t),150);}
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',function(e){if(e.target===this)closeModal();}));
+
+// ── QUIZ ──
+const Qs=[
+  {q:"Which of the following best describes the primary pacemaker of the heart?",opts:["AV Node — 40–60 bpm","Sinoatrial Node — 60–100 bpm","Bundle of His — 20–40 bpm","Purkinje Fibers — 20–40 bpm"],correct:1,exp:"The <strong>Sinoatrial (SA) Node</strong> is the primary pacemaker located in the right atrium, firing at 60–100 bpm. Key takeaway: SA node initiates each normal heartbeat.",video:"▶ Video: SA Node & Cardiac Conduction"},
+  {q:"A patient on a long-haul flight develops sudden pleuritic chest pain and tachycardia. Most likely diagnosis?",opts:["Spontaneous Pneumothorax","Pulmonary Embolism","Acute MI","Aortic Dissection"],correct:1,exp:"<strong>Pulmonary Embolism</strong> — prolonged immobility → DVT → PE. Classic triad: dyspnea, chest pain, tachycardia. Always suspect PE after long travel.",video:"▶ Video: Pulmonary Embolism Diagnosis"},
+  {q:"Which enzyme converts Angiotensin I to Angiotensin II?",opts:["Renin","Aldosterone Synthase","ACE","Chymase"],correct:2,exp:"<strong>ACE</strong> (Angiotensin-Converting Enzyme) converts Ang I → Ang II in pulmonary vasculature. ACE inhibitors block this — key mechanism in hypertension treatment.",video:"▶ Video: RAAS System"},
+  {q:"Proximal muscle weakness + heliotrope rash + elevated CK. Diagnosis?",opts:["SLE","Polymyositis","Dermatomyositis","Myasthenia Gravis"],correct:2,exp:"<strong>Dermatomyositis</strong> — muscle inflammation + skin findings (heliotrope rash, Gottron's papules). Key: Polymyositis = NO skin findings.",video:"▶ Video: Myopathies Comparison"}
+];
+let cQ=0,answered=false,secs=90;
+
+function renderQ(){
+  const q=Qs[cQ];
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('qBadge').textContent=`Q ${cQ+1}/${Qs.length}`;
+  const pct=Math.round((cQ+1)/Qs.length*100);
+  document.getElementById('qFill').style.width=pct+'%';
+  document.getElementById('qPct').textContent=pct+'%';
+  document.getElementById('qOptions').innerHTML=q.opts.map((o,i)=>`<div class="q-opt" onclick="selOpt(this,${i===q.correct},${q.correct})"><div class="q-opt-letter">${['A','B','C','D'][i]}</div>${o}</div>`).join('');
+  const expEl=document.getElementById('qExplanation');
+  expEl.style.display='none'; expEl.innerHTML='';
+  answered=false; secs=90;
+}
+
+function selOpt(el,isCorr,corrIdx){
+  if(answered)return; answered=true;
+  document.querySelectorAll('.q-opt').forEach((o,i)=>{if(i===corrIdx)o.classList.add('correct');});
+  if(!isCorr)el.classList.add('wrong');
+  const expEl=document.getElementById('qExplanation');
+  const q=Qs[cQ];
+  expEl.innerHTML=`<div class="q-explanation">${q.exp}</div><button class="q-video-btn">🎬 ${q.video}</button>`;
+  expEl.style.display='block';
+}
+
+function nextQ(){cQ=(cQ+1)%Qs.length;renderQ();}
+renderQ();
+
+setInterval(()=>{
+  const el=document.getElementById('timer');
+  if(!el)return;
+  secs=Math.max(0,secs-1);
+  el.textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');
+  const dot=document.querySelector('.q-timer-dot');
+  if(dot)dot.style.background=secs<20?'#E84A4A':'#E87A1A';
+  if(secs===0){secs=90;nextQ();}
+},1000);
+
+// ── CALENDAR ──
+const cg=document.getElementById('calGrid');
+if(cg){['S','M','T','W','T','F','S'].forEach(d=>{const e=document.createElement('div');e.className='cal-day-label';e.textContent=d;cg.appendChild(e);});for(let i=0;i<84;i++){const e=document.createElement('div');e.className='cal-day';const r=Math.random();if(r>.5){e.classList.add('done');if(r>.75)e.classList.add('high');}cg.appendChild(e);}}
+
+// ── CHART ──
+const wkData=[{l:'Fri',t:20,c:14},{l:'Sat',t:35,c:28},{l:'Sun',t:15,c:12},{l:'Mon',t:40,c:34},{l:'Tue',t:25,c:20},{l:'Wed',t:50,c:44},{l:'Today',t:23,c:20}];
+function renderChart(data){
+  const max=Math.max(...data.map(d=>d.t));
+  document.getElementById('chartBars').innerHTML=data.map(d=>`<div class="chart-bar-wrap"><div style="width:100%;height:${(d.t/max)*100}%;background:var(--foam);border-radius:3px 3px 0 0;position:relative;"><div style="position:absolute;bottom:0;left:0;right:0;height:${(d.c/d.t)*100}%;background:var(--sky);border-radius:3px 3px 0 0;"></div></div><div class="chart-label">${d.l}</div></div>`).join('');
+}
+renderChart(wkData);
+function setPerfTab(el,type){document.querySelectorAll('.perf-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');if(type==='month'){const md=Array.from({length:30},(_,i)=>({l:(i+1)+'',t:Math.floor(Math.random()*50+10),c:0}));md.forEach(d=>d.c=Math.floor(d.t*(.6+Math.random()*.35)));renderChart(md);}else renderChart(wkData);}
+
+// ── LB TABLE ──
+const lbData=[
+  {rank:1,ch:'—',name:'Yassmine Abouzaid',univ:'Alex · Y4',anon:false,acc:'95.25%',qs:421,score:92.2},
+  {rank:2,ch:'+5',name:'Zeyad M. Etman',univ:'Alex · Y4',anon:false,acc:'92.3%',qs:935,score:90.1},
+  {rank:3,ch:'+41',name:'Moneim Tarek',univ:'Alex · Y4',anon:false,acc:'85.42%',qs:847,score:87.8,isMe:true},
+  {rank:4,ch:'+18',name:'Noor Alshammari',univ:'Alex · Y4',anon:false,acc:'88.3%',qs:171,score:79.6},
+  {rank:5,ch:'—',name:'Anonymous',univ:'',anon:true,acc:'86.44%',qs:494,score:78.1},
+  {rank:6,ch:'+30',name:'Anonymous',univ:'',anon:true,acc:'89.11%',qs:101,score:77.9},
+  {rank:7,ch:'-4',name:'Ahmed Eldakhs',univ:'Alex · Y4',anon:false,acc:'81.03%',qs:232,score:76.1},
+];
+function renderLb(){
+  const tb=document.getElementById('lbTbody');
+  if(!tb)return;
+  const medals=['🥇','🥈','🥉'];
+  tb.innerHTML=lbData.map(r=>`<tr class="${r.isMe?'me':r.rank<=3?['top1','top2','top3'][r.rank-1]:''}">
+    <td><strong>${r.rank<=3?medals[r.rank-1]:r.rank}</strong></td>
+    <td><div style="display:flex;align-items:center;gap:9px;"><div style="width:30px;height:30px;border-radius:50%;background:${r.anon?'rgba(10,22,40,.1)':'linear-gradient(135deg,#0D3B7A,#4AA8E8)'};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;">${r.anon?'?':r.name[0]}</div><div><div style="font-size:12px;font-weight:${r.isMe?700:500};color:${r.isMe?'#1560BD':'var(--navy)'};">${r.name}${r.isMe?' (You)':''}</div><div style="font-size:9px;color:var(--gray);">${r.univ}</div></div></div></td>
+    <td>${r.acc}</td><td>${r.qs}</td>
+    <td><strong style="color:var(--sky);">${r.score}</strong><span class="lb-rank-change ${r.ch.startsWith('+')?'up':r.ch.startsWith('-')?'down':'same'}">${r.ch!=='—'?r.ch:''}</span></td>
+  </tr>`).join('');
+}
+function setLbF(el){document.querySelectorAll('.lb-filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
+function setMT(el){document.querySelectorAll('.module-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');}
+
+// ── PREV QUIZZES ──
+const pqData=[
+  {name:'Cardiology Revision — Week 3',date:'Apr 21, 2026',status:'finished',correct:18,total:20,acc:'90%'},
+  {name:'Pharmacology Quick Practice',date:'Apr 20, 2026',status:'finished',correct:11,total:15,acc:'73%'},
+  {name:'Anatomy — Brachial Plexus',date:'Apr 18, 2026',status:'finished',correct:9,total:10,acc:'90%'},
+  {name:'Surgery Module Review',date:'Apr 15, 2026',status:'unfinished',correct:3,total:20,acc:'—'},
+];
+function renderPQ(){
+  const g=document.getElementById('pqGrid');
+  if(!g)return;
+  g.innerHTML=pqData.map(q=>`<div class="pq-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;"><div><div class="pq-card-name">${q.name}</div><div class="pq-card-date">${q.date}</div></div><div class="pq-status ${q.status}">${q.status==='finished'?'Finished':'Unfinished'}</div></div><div class="pq-card-stats"><div class="pq-stat"><div class="pq-stat-val">${q.total}</div><div class="pq-stat-label">Questions</div></div><div class="pq-stat"><div class="pq-stat-val">${q.correct}</div><div class="pq-stat-label">Correct</div></div><div class="pq-stat"><div class="pq-stat-val" style="color:var(--sky)">${q.acc}</div><div class="pq-stat-label">Accuracy</div></div></div></div>`).join('');
+}
+
+// ── CREATE QUIZ ──
+const blocks=[
+  {name:'Dermatology',icon:'🔬',count:688,color:'linear-gradient(135deg,#1A3A5C,#2D6A8A)'},
+  {name:'Cardiopulmonary',icon:'❤️',count:840,color:'linear-gradient(135deg,#7A0D0D,#C43030)'},
+  {name:'Investigative Med.',icon:'🧪',count:0,color:'linear-gradient(135deg,#1A4A1A,#2D8A3E)'},
+  {name:'Neuroscience',icon:'🧠',count:780,color:'linear-gradient(135deg,#3A1A6A,#6A2DA8)'},
+  {name:'Pharmacology',icon:'💊',count:420,color:'linear-gradient(135deg,#4A3A0A,#8A6A1A)'},
+  {name:'Surgery',icon:'🔪',count:380,color:'linear-gradient(135deg,#1A3A5C,#4AA8E8)'},
+  {name:'Pediatrics',icon:'👶',count:260,color:'linear-gradient(135deg,#0A4A2A,#1DB97A)'},
+  {name:'OB/GYN',icon:'🤰',count:200,color:'linear-gradient(135deg,#5A0A2A,#E84A8A)'},
+];
+const bg=document.getElementById('blocksGrid');
+if(bg)bg.innerHTML=blocks.map(b=>`<div class="block-card" onclick="this.classList.toggle('selected')"><div class="block-img" style="background:${b.color}">${b.icon}</div><div class="block-footer"><div class="block-name">${b.name}</div><div class="block-count">${b.count} Qs</div></div><div class="block-check">✓</div></div>`).join('');
+
+function toggleSw(el){el.querySelector('.toggle-switch').classList.toggle('on');}
+function selMode(el){document.querySelectorAll('.mode-option').forEach(m=>m.classList.remove('selected'));el.classList.add('selected');}
+function selDiff(el){document.querySelectorAll('.diff-opt').forEach(d=>d.classList.remove('selected'));el.classList.add('selected');}
+function selBank(el){document.querySelectorAll('.bank-option').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');}
+function setPreset(el,n){document.querySelectorAll('.cq-preset').forEach(p=>p.classList.remove('active'));el.classList.add('active');document.getElementById('qNumInput').value=n;}
+</script>
+
+</body>
+</html>
