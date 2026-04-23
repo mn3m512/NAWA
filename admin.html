@@ -7,258 +7,303 @@
 <title>Nawa Admin</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:Arial,sans-serif;background:#F4F8FC;color:#0A1628;}
-.inp{width:100%;padding:11px 13px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;outline:none;}
-.inp:focus{border-color:#4AA8E8;}
-.btn{padding:10px 20px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;}
+body{font-family:Arial,sans-serif;background:#F4F8FC;color:#0A1628;padding:20px;}
+input,select,textarea{width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;}
+input:focus,select:focus,textarea:focus{border-color:#4AA8E8;}
+button{padding:10px 20px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
 .card{background:white;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px;}
-.tab{padding:9px 20px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#8A9BB5;}
-.tab.active{background:#0A1628;color:white;}
-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0A1628;display:block;margin-bottom:5px;margin-top:12px;}
-.ok{color:#0D7A4A;font-size:12px;padding:8px 12px;background:rgba(29,185,122,.08);border-radius:7px;margin-bottom:12px;}
-.err{color:#B83030;font-size:12px;padding:8px 12px;background:rgba(232,74,74,.08);border-radius:7px;margin-bottom:12px;}
+.ok{color:#0D7A4A;background:rgba(29,185,122,.1);padding:8px 12px;border-radius:7px;font-size:12px;font-weight:600;margin-bottom:12px;}
+.er{color:#B83030;background:rgba(232,74,74,.1);padding:8px 12px;border-radius:7px;font-size:12px;font-weight:600;margin-bottom:12px;}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0A1628;display:block;margin:12px 0 4px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.tab{padding:8px 18px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:white;color:#8A9BB5;}
+.tab.on{background:#0A1628;color:white;}
 </style>
 </head>
 <body>
-<div id="ROOT" style="padding:20px;min-height:100vh;">
-  <div style="text-align:center;padding:80px;color:#8A9BB5;font-size:14px;">Loading...</div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js" onload="INIT()" onerror="document.getElementById('ROOT').innerHTML='<div style=color:red;padding:40px;text-align:center>Failed to load. Check internet connection.</div>'"></script>
+<div id="A"></div>
 
 <script>
-var SB, ROOT;
+var URL = 'https://zphhtwarzqhsmqsawknt.supabase.co';
+var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
+var TOKEN = localStorage.getItem('nawa_admin_token') || '';
+var USER_EMAIL = localStorage.getItem('nawa_admin_email') || '';
+var A = document.getElementById('A');
+var ALL_Q = [];
 
-function INIT() {
-  try {
-    SB = supabase.createClient(
-      'https://zphhtwarzqhsmqsawknt.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY'
-    );
-    ROOT = document.getElementById('ROOT');
-    SB.auth.getSession().then(function(r) {
-      if (r.data && r.data.session) DASH(r.data.session.user);
-      else LOGIN();
-    });
-  } catch(e) {
-    document.getElementById('ROOT').innerHTML = '<div style="color:red;padding:40px;text-align:center;">Error: ' + e.message + '</div>';
-  }
+// ── API HELPERS ──
+async function api(method, path, body) {
+  var headers = {
+    'Content-Type': 'application/json',
+    'apikey': KEY,
+    'Authorization': 'Bearer ' + (TOKEN || KEY),
+    'Prefer': 'return=representation'
+  };
+  var opts = { method: method, headers: headers };
+  if (body) opts.body = JSON.stringify(body);
+  var r = await fetch(URL + path, opts);
+  var text = await r.text();
+  try { return { ok: r.ok, data: JSON.parse(text), status: r.status }; }
+  catch(e) { return { ok: r.ok, data: text, status: r.status }; }
 }
 
-/* ── LOGIN ── */
-function LOGIN() {
-  ROOT.innerHTML =
-    '<div style="max-width:360px;margin:80px auto;"><div class="card" style="text-align:center;">' +
+async function authApi(method, path, body) {
+  var headers = { 'Content-Type': 'application/json', 'apikey': KEY };
+  if (TOKEN) headers['Authorization'] = 'Bearer ' + TOKEN;
+  var r = await fetch(URL + path, { method: method, headers: headers, body: body ? JSON.stringify(body) : undefined });
+  var text = await r.text();
+  try { return { ok: r.ok, data: JSON.parse(text) }; }
+  catch(e) { return { ok: r.ok, data: text }; }
+}
+
+// ── INIT ──
+if (TOKEN) {
+  showDash();
+} else {
+  showLogin();
+}
+
+// ── LOGIN ──
+function showLogin() {
+  A.innerHTML =
+    '<div style="max-width:360px;margin:60px auto;">' +
+    '<div class="card" style="text-align:center;">' +
     '<div style="font-size:36px;margin-bottom:12px;">🔐</div>' +
     '<h2 style="font-size:20px;font-weight:800;margin-bottom:4px;">Nawa Admin</h2>' +
-    '<p style="font-size:13px;color:#8A9BB5;margin-bottom:20px;">Admins only</p>' +
+    '<p style="font-size:13px;color:#8A9BB5;margin-bottom:20px;">Sign in to manage your platform</p>' +
     '<div id="LM"></div>' +
-    '<label>Email</label><input class="inp" id="LE" type="email" placeholder="admin@email.com" style="margin-bottom:4px;">' +
-    '<label>Password</label><input class="inp" id="LP" type="password" placeholder="Password" style="margin-bottom:16px;" onkeydown="if(event.key===\'Enter\')DO_LOGIN()">' +
-    '<button class="btn" onclick="DO_LOGIN()" style="width:100%;background:#0A1628;color:white;">Sign In</button>' +
+    '<span class="lbl" style="text-align:left;">Email</span>' +
+    '<input id="LE" type="email" placeholder="admin@email.com" style="margin-bottom:4px;">' +
+    '<span class="lbl" style="text-align:left;">Password</span>' +
+    '<input id="LP" type="password" placeholder="Password" style="margin-bottom:16px;" onkeydown="if(event.key===\'Enter\')doLogin()">' +
+    '<button onclick="doLogin()" style="width:100%;background:#0A1628;color:white;">Sign In</button>' +
     '</div></div>';
 }
 
-async function DO_LOGIN() {
-  var e = document.getElementById('LE').value.trim();
-  var p = document.getElementById('LP').value;
+async function doLogin() {
+  var email = document.getElementById('LE').value.trim();
+  var pw = document.getElementById('LP').value;
   var m = document.getElementById('LM');
-  if (!e || !p) { m.innerHTML = '<div class="err">Enter email and password</div>'; return; }
-  m.innerHTML = '<div style="font-size:12px;color:#8A9BB5;margin-bottom:8px;">Signing in...</div>';
-  var r = await SB.auth.signInWithPassword({ email: e, password: p });
-  if (r.error) { m.innerHTML = '<div class="err">' + r.error.message + '</div>'; }
-  else DASH(r.data.user);
+  if (!email || !pw) { m.innerHTML = '<div class="er">Enter email and password</div>'; return; }
+  m.innerHTML = '<p style="color:#8A9BB5;font-size:12px;margin-bottom:8px;">Signing in...</p>';
+
+  var r = await authApi('POST', '/auth/v1/token?grant_type=password', { email: email, password: pw });
+
+  if (!r.ok || !r.data.access_token) {
+    var msg = r.data.error_description || r.data.message || 'Wrong email or password';
+    m.innerHTML = '<div class="er">' + msg + '</div>';
+  } else {
+    TOKEN = r.data.access_token;
+    USER_EMAIL = email;
+    localStorage.setItem('nawa_admin_token', TOKEN);
+    localStorage.setItem('nawa_admin_email', USER_EMAIL);
+    showDash();
+  }
 }
 
-/* ── DASHBOARD ── */
-var ALL_Q = [];
-var CUR_TAB = 'q';
+// ── DASHBOARD ──
+var CUR = 'q';
 
-function DASH(user) {
-  ROOT.innerHTML =
+function showDash() {
+  A.innerHTML =
     '<div style="background:#0A1628;margin:-20px -20px 20px;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;">' +
     '<span style="color:white;font-size:15px;font-weight:700;">🎓 Nawa Admin</span>' +
     '<div style="display:flex;align-items:center;gap:10px;">' +
-    '<span style="color:rgba(255,255,255,.45);font-size:11px;">' + (user.email||'') + '</span>' +
-    '<button class="btn" onclick="DO_LOGOUT()" style="background:rgba(255,255,255,.1);color:white;padding:6px 12px;font-size:11px;">Sign Out</button>' +
+    '<span style="color:rgba(255,255,255,.45);font-size:11px;">' + USER_EMAIL + '</span>' +
+    '<button onclick="doLogout()" style="background:rgba(255,255,255,.1);color:white;padding:6px 12px;font-size:11px;">Sign Out</button>' +
     '</div></div>' +
     '<div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">' +
-    '<button class="tab active" id="tb-q" onclick="TAB(\'q\')">📋 Questions</button>' +
-    '<button class="tab" id="tb-add" onclick="TAB(\'add\')">➕ Add Question</button>' +
-    '<button class="tab" id="tb-u" onclick="TAB(\'u\')">👥 Users</button>' +
+    '<button class="tab on" id="t-q" onclick="goTab(\'q\')">📋 Questions</button>' +
+    '<button class="tab" id="t-add" onclick="goTab(\'add\')">➕ Add Question</button>' +
+    '<button class="tab" id="t-u" onclick="goTab(\'u\')">👥 Users</button>' +
     '</div>' +
     '<div id="TC"></div>';
-  LOAD_Q();
+  loadQ();
 }
 
-async function DO_LOGOUT() { await SB.auth.signOut(); LOGIN(); }
+function doLogout() {
+  TOKEN = ''; USER_EMAIL = '';
+  localStorage.removeItem('nawa_admin_token');
+  localStorage.removeItem('nawa_admin_email');
+  showLogin();
+}
 
-function TAB(t) {
-  CUR_TAB = t;
+function goTab(t) {
+  CUR = t;
   ['q','add','u'].forEach(function(x) {
-    var el = document.getElementById('tb-' + x);
-    if (el) el.className = 'tab' + (x === t ? ' active' : '');
+    var el = document.getElementById('t-' + x);
+    if (el) { el.className = 'tab' + (x === t ? ' on' : ''); }
   });
-  if (t === 'q') LOAD_Q();
-  else if (t === 'add') FORM_ADD();
-  else if (t === 'u') LOAD_U();
+  if (t === 'q') loadQ();
+  else if (t === 'add') showAdd();
+  else if (t === 'u') loadU();
 }
 
-/* ── QUESTIONS ── */
-async function LOAD_Q() {
+// ── QUESTIONS ──
+async function loadQ() {
   var c = document.getElementById('TC'); if (!c) return;
-  c.innerHTML = '<div style="color:#8A9BB5;font-size:13px;">Loading...</div>';
-  var r = await SB.from('questions').select('*').order('created_at', {ascending:false});
+  c.innerHTML = '<p style="color:#8A9BB5;font-size:13px;padding:10px 0;">Loading...</p>';
+  var r = await api('GET', '/rest/v1/questions?select=*&order=created_at.desc');
+  if (!r.ok) { c.innerHTML = '<div class="er">Error: ' + JSON.stringify(r.data) + '</div>'; return; }
   ALL_Q = r.data || [];
-  RENDER_Q(ALL_Q);
+  renderQ(ALL_Q);
 }
 
-function RENDER_Q(data) {
+function renderQ(data) {
   var c = document.getElementById('TC'); if (!c) return;
   var h =
     '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">' +
-    '<div style="font-size:16px;font-weight:700;">Questions (' + data.length + ' / ' + ALL_Q.length + ' total)</div>' +
+    '<div style="font-size:16px;font-weight:700;">Questions (' + data.length + '/' + ALL_Q.length + ')</div>' +
     '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
-    '<input class="inp" id="QS" placeholder="Search..." style="width:160px;" oninput="FILTER_Q()">' +
-    '<select id="QY" class="inp" style="width:110px;" onchange="FILTER_Q()">' +
-    '<option value="">All Years</option><option value="1">Year 1</option><option value="2">Year 2</option>' +
+    '<input id="QS" placeholder="🔍 Search..." style="width:160px;" oninput="filterQ()">' +
+    '<select id="QY" style="width:110px;" onchange="filterQ()">' +
+    '<option value="">All Years</option>' +
+    '<option value="1">Year 1</option><option value="2">Year 2</option>' +
     '<option value="3">Year 3</option><option value="4">Year 4</option><option value="5">Year 5</option>' +
     '</select></div></div>' +
-    '<div id="QM" style="margin-bottom:8px;"></div>' +
-    '<div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">';
+    '<div id="QM" style="margin-bottom:8px;"></div>';
+
   if (!data.length) {
-    h += '<div style="text-align:center;padding:30px;color:#8A9BB5;">No questions. Add your first one!</div>';
+    h += '<div class="card" style="text-align:center;color:#8A9BB5;padding:40px;">No questions yet. Click "Add Question"!</div>';
   } else {
+    h += '<div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">';
     h += data.map(function(q, i) {
-      return '<div style="padding:12px 16px;border-bottom:1px solid #f0f4f8;display:flex;justify-content:space-between;align-items:center;gap:10px;' + (i%2?'background:#fafcff':'') + '">' +
+      return '<div style="padding:12px 16px;border-bottom:1px solid #f0f4f8;display:flex;justify-content:space-between;align-items:center;gap:10px;' + (i%2 ? 'background:#fafcff' : '') + '">' +
         '<div style="flex:1;min-width:0;">' +
-        '<div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + q.question_text.substring(0,65) + (q.question_text.length>65?'...':'') + '</div>' +
-        '<div style="font-size:11px;color:#8A9BB5;margin-top:2px;">' + (q.module_name||'—') + ' · Y' + (q.year_level||'?') + ' · <strong style="color:#0D7A4A;">' + (q.correct_option||'?').toUpperCase() + '</strong> · ' + (q.bank||'nawa') + '</div>' +
-        '</div><div style="display:flex;gap:5px;flex-shrink:0;">' +
-        '<button class="btn" style="font-size:10px;padding:4px 9px;background:' + (q.is_active?'rgba(29,185,122,.1)':'rgba(232,122,26,.1)') + ';color:' + (q.is_active?'#0D7A4A':'#B85A0D') + ';" onclick="TOG_Q(\'' + q.id + '\',' + q.is_active + ')">' + (q.is_active?'Active':'Inactive') + '</button>' +
-        '<button class="btn" style="font-size:10px;padding:4px 9px;background:rgba(232,74,74,.1);color:#B83030;" onclick="DEL_Q(\'' + q.id + '\')">🗑</button>' +
+        '<div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + q.question_text.substring(0, 65) + (q.question_text.length > 65 ? '...' : '') + '</div>' +
+        '<div style="font-size:11px;color:#8A9BB5;margin-top:3px;">' + (q.module_name||'—') + ' · Y' + (q.year_level||'?') + ' · <strong style="color:#0D7A4A;">' + (q.correct_option||'?').toUpperCase() + '</strong></div>' +
+        '</div>' +
+        '<div style="display:flex;gap:5px;flex-shrink:0;">' +
+        '<button onclick="togQ(\'' + q.id + '\',' + q.is_active + ')" style="padding:4px 9px;font-size:10px;font-weight:700;border:none;border-radius:6px;cursor:pointer;background:' + (q.is_active ? 'rgba(29,185,122,.1)' : 'rgba(232,122,26,.1)') + ';color:' + (q.is_active ? '#0D7A4A' : '#B85A0D') + ';">' + (q.is_active ? '✓ Active' : '✗ Off') + '</button>' +
+        '<button onclick="delQ(\'' + q.id + '\')" style="padding:4px 9px;font-size:12px;border:none;border-radius:6px;cursor:pointer;background:rgba(232,74,74,.1);">🗑</button>' +
         '</div></div>';
     }).join('');
+    h += '</div>';
   }
-  h += '</div>';
   c.innerHTML = h;
 }
 
-function FILTER_Q() {
-  var s = (document.getElementById('QS').value||'').toLowerCase();
+function filterQ() {
+  var s = (document.getElementById('QS').value || '').toLowerCase();
   var y = document.getElementById('QY').value;
-  RENDER_Q(ALL_Q.filter(function(q) {
+  renderQ(ALL_Q.filter(function(q) {
     return (!s || (q.question_text||'').toLowerCase().includes(s) || (q.module_name||'').toLowerCase().includes(s)) &&
            (!y || q.year_level === y);
   }));
 }
 
-async function TOG_Q(id, active) {
-  await SB.from('questions').update({is_active: !active}).eq('id', id);
-  LOAD_Q();
+async function togQ(id, active) {
+  await api('PATCH', '/rest/v1/questions?id=eq.' + id, { is_active: !active });
+  loadQ();
 }
 
-async function DEL_Q(id) {
+async function delQ(id) {
   if (!confirm('Delete this question?')) return;
-  await SB.from('questions').delete().eq('id', id);
-  var m = document.getElementById('QM');
-  if (m) m.innerHTML = '<div class="ok">✅ Deleted</div>';
-  setTimeout(LOAD_Q, 700);
+  await api('DELETE', '/rest/v1/questions?id=eq.' + id);
+  document.getElementById('QM').innerHTML = '<div class="ok">✅ Deleted</div>';
+  setTimeout(loadQ, 600);
 }
 
-/* ── ADD QUESTION ── */
-function FORM_ADD() {
+// ── ADD QUESTION ──
+function showAdd() {
   var c = document.getElementById('TC'); if (!c) return;
   c.innerHTML =
     '<div class="card" style="max-width:660px;">' +
     '<h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">➕ Add New Question</h3>' +
     '<div id="AM"></div>' +
-    '<label>Question Text *</label>' +
-    '<textarea class="inp" id="AQ" rows="3" placeholder="Which of the following..." style="resize:vertical;"></textarea>' +
+    '<span class="lbl">Question Text *</span>' +
+    '<textarea id="AQ" rows="3" placeholder="Which of the following..."></textarea>' +
 
 ```
-'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
-'<div><label>Option A *</label><input class="inp" id="AA" placeholder="Option A"></div>' +
-'<div><label>Option B *</label><input class="inp" id="AB" placeholder="Option B"></div>' +
-'<div><label>Option C *</label><input class="inp" id="AC" placeholder="Option C"></div>' +
-'<div><label>Option D *</label><input class="inp" id="AD" placeholder="Option D"></div>' +
+'<div class="row2">' +
+'<div><span class="lbl">Option A *</span><input id="AA" placeholder="Option A"></div>' +
+'<div><span class="lbl">Option B *</span><input id="AB" placeholder="Option B"></div>' +
+'<div><span class="lbl">Option C *</span><input id="AC" placeholder="Option C"></div>' +
+'<div><span class="lbl">Option D *</span><input id="AD" placeholder="Option D"></div>' +
 '</div>' +
-'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
-'<div><label>Correct Answer *</label><select class="inp" id="ACOR"><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option></select></div>' +
-'<div><label>Difficulty</label><select class="inp" id="ADIF"><option value="1">1 Easy</option><option value="2">2</option><option value="3" selected>3 Medium</option><option value="4">4</option><option value="5">5 Hard</option></select></div>' +
+'<div class="row2">' +
+'<div><span class="lbl">Correct Answer *</span><select id="ACOR"><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option></select></div>' +
+'<div><span class="lbl">Difficulty</span><select id="ADIF"><option value="1">1 Easy</option><option value="2">2</option><option value="3" selected>3 Medium</option><option value="4">4</option><option value="5">5 Hard</option></select></div>' +
 '</div>' +
-'<label>Explanation</label><input class="inp" id="AEXP" placeholder="Why is this correct?">' +
-'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
-'<div><label>Module Name</label><input class="inp" id="AMOD" placeholder="MED431 Cardiopulmonary"></div>' +
-'<div><label>Year Level</label><select class="inp" id="AYEAR"><option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4" selected>Year 4</option><option value="5">Year 5</option></select></div>' +
+'<span class="lbl">Explanation</span><input id="AEXP" placeholder="Why is this the correct answer?">' +
+'<div class="row2">' +
+'<div><span class="lbl">Module Name</span><input id="AMOD" placeholder="MED431 Cardiopulmonary"></div>' +
+'<div><span class="lbl">Year Level</span><select id="AYEAR"><option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4" selected>Year 4</option><option value="5">Year 5</option></select></div>' +
 '</div>' +
-'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
-'<div><label>Subject/Block</label><input class="inp" id="ABLK" placeholder="Cardiology"></div>' +
-'<div><label>Bank</label><select class="inp" id="ABNK"><option value="nawa">Nawa QBank</option><option value="final">Final QBank</option></select></div>' +
+'<div class="row2">' +
+'<div><span class="lbl">Subject/Block</span><input id="ABLK" placeholder="Cardiology"></div>' +
+'<div><span class="lbl">Bank</span><select id="ABNK"><option value="nawa">Nawa QBank</option><option value="final">Final QBank</option></select></div>' +
 '</div>' +
 '<div style="margin-top:18px;">' +
-'<button class="btn" onclick="SAVE_Q()" style="background:#0A1628;color:white;">Save Question</button>' +
+'<button onclick="saveQ()" style="background:#0A1628;color:white;">Save Question</button>' +
 '</div></div>';
 ```
 
 }
 
-async function SAVE_Q() {
-var q=document.getElementById(‘AQ’).value.trim();
-var a=document.getElementById(‘AA’).value.trim();
-var b=document.getElementById(‘AB’).value.trim();
-var cc=document.getElementById(‘AC’).value.trim();
-var d=document.getElementById(‘AD’).value.trim();
-var m=document.getElementById(‘AM’);
-if(!q||!a||!b||!cc||!d){m.innerHTML=’<div class="err">Fill all required fields (*)</div>’;return;}
-m.innerHTML=’<div style="font-size:12px;color:#8A9BB5;">Saving…</div>’;
-var r=await SB.from(‘questions’).insert({
-question_text:q,option_a:a,option_b:b,option_c:cc,option_d:d,
-correct_option:document.getElementById(‘ACOR’).value,
-explanation:document.getElementById(‘AEXP’).value.trim(),
-module_name:document.getElementById(‘AMOD’).value.trim(),
-year_level:document.getElementById(‘AYEAR’).value,
-block:document.getElementById(‘ABLK’).value.trim(),
-bank:document.getElementById(‘ABNK’).value,
-difficulty:parseInt(document.getElementById(‘ADIF’).value),
-is_active:true
+async function saveQ() {
+var q = document.getElementById(‘AQ’).value.trim();
+var a = document.getElementById(‘AA’).value.trim();
+var b = document.getElementById(‘AB’).value.trim();
+var cc = document.getElementById(‘AC’).value.trim();
+var d = document.getElementById(‘AD’).value.trim();
+var m = document.getElementById(‘AM’);
+if (!q||!a||!b||!cc||!d) { m.innerHTML = ‘<div class="er">Fill all required fields (*)</div>’; return; }
+m.innerHTML = ‘<p style="color:#8A9BB5;font-size:12px;margin-bottom:8px;">Saving…</p>’;
+var r = await api(‘POST’, ‘/rest/v1/questions’, {
+question_text: q, option_a: a, option_b: b, option_c: cc, option_d: d,
+correct_option: document.getElementById(‘ACOR’).value,
+explanation: document.getElementById(‘AEXP’).value.trim(),
+module_name: document.getElementById(‘AMOD’).value.trim(),
+year_level: document.getElementById(‘AYEAR’).value,
+block: document.getElementById(‘ABLK’).value.trim(),
+bank: document.getElementById(‘ABNK’).value,
+difficulty: parseInt(document.getElementById(‘ADIF’).value),
+is_active: true
 });
-if(r.error){m.innerHTML=’<div class="err">Error: ‘+r.error.message+’</div>’;}
-else{
-m.innerHTML=’<div class="ok">✅ Question saved!</div>’;
-[‘AQ’,‘AA’,‘AB’,‘AC’,‘AD’,‘AEXP’,‘AMOD’,‘ABLK’].forEach(function(id){var el=document.getElementById(id);if(el)el.value=’’;});
+if (!r.ok) {
+m.innerHTML = ’<div class="er">Error: ’ + JSON.stringify(r.data) + ‘</div>’;
+} else {
+m.innerHTML = ‘<div class="ok">✅ Question saved!</div>’;
+[‘AQ’,‘AA’,‘AB’,‘AC’,‘AD’,‘AEXP’,‘AMOD’,‘ABLK’].forEach(function(id) {
+var el = document.getElementById(id); if (el) el.value = ‘’;
+});
 }
 }
 
-/* ── USERS ── */
-async function LOAD_U() {
-var c=document.getElementById(‘TC’);if(!c)return;
-c.innerHTML=’<div style="color:#8A9BB5;font-size:13px;">Loading…</div>’;
-var r=await SB.from(‘profiles’).select(’*’).order(‘created_at’,{ascending:false});
-var users=r.data||[];
-var h=’<div style="font-size:16px;font-weight:700;margin-bottom:14px;">Students (’+users.length+’)</div>’ +
-‘<div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">’;
-if(!users.length){
-h+=’<div style="text-align:center;padding:30px;color:#8A9BB5;">No users yet</div>’;
+// ── USERS ──
+async function loadU() {
+var c = document.getElementById(‘TC’); if (!c) return;
+c.innerHTML = ‘<p style="color:#8A9BB5;font-size:13px;padding:10px 0;">Loading…</p>’;
+var r = await api(‘GET’, ‘/rest/v1/profiles?select=*&order=created_at.desc’);
+if (!r.ok) { c.innerHTML = ‘<div class="er">Error: ’ + JSON.stringify(r.data) + ‘</div>’; return; }
+var users = r.data || [];
+var h = ‘<div style="font-size:16px;font-weight:700;margin-bottom:14px;">Students (’ + users.length + ‘)</div>’;
+if (!users.length) {
+h += ‘<div class="card" style="text-align:center;color:#8A9BB5;padding:40px;">No users yet</div>’;
 } else {
-h+=users.map(function(u,i){
-return ‘<div style="padding:12px 16px;border-bottom:1px solid #f0f4f8;display:flex;justify-content:space-between;align-items:center;'+(i%2?'background:#fafcff':'')+'">’ +
+h += ‘<div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">’;
+h += users.map(function(u, i) {
+return ‘<div style="padding:12px 16px;border-bottom:1px solid #f0f4f8;display:flex;justify-content:space-between;align-items:center;' + (i%2 ? 'background:#fafcff' : '') + '">’ +
 ‘<div>’ +
-‘<div style="font-size:13px;font-weight:600;">’+(u.first_name||’’)+’ ‘+(u.last_name||’’)+’</div>’ +
-‘<div style="font-size:11px;color:#8A9BB5;">’+(u.email||’’)+’·’+(u.university||’—’)+’·Y’+(u.year||’?’)+’</div>’ +
+‘<div style="font-size:13px;font-weight:600;">’ + (u.first_name||’’) + ’ ’ + (u.last_name||’’) + ‘</div>’ +
+‘<div style="font-size:11px;color:#8A9BB5;">’ + (u.email||’’) + ’ · ’ + (u.university||’—’) + ’ · Y’ + (u.year||’?’) + ‘</div>’ +
 ‘</div>’ +
-‘<select onchange="UPD_PLAN(\''+u.id+'\',this.value)" style="padding:6px 10px;border-radius:7px;border:1px solid #ddd;font-size:12px;">’ +
-‘<option value=“basic”’+(u.plan===‘basic’?’ selected’:’’)+’>Basic</option>’ +
-‘<option value=“pro”’+(u.plan===‘pro’?’ selected’:’’)+’>Pro</option>’ +
-‘<option value=“elite”’+(u.plan===‘elite’?’ selected’:’’)+’>Elite</option>’ +
+‘<select onchange="updPlan(\'' + u.id + '\',this.value)" style="padding:6px 10px;border-radius:7px;border:1px solid #ddd;font-size:12px;width:auto;">’ +
+‘<option value=“basic”’ + (u.plan===‘basic’ ? ’ selected’ : ‘’) + ‘>Basic</option>’ +
+‘<option value=“pro”’ + (u.plan===‘pro’ ? ’ selected’ : ‘’) + ‘>Pro</option>’ +
+‘<option value=“elite”’ + (u.plan===‘elite’ ? ’ selected’ : ‘’) + ‘>Elite</option>’ +
 ‘</select></div>’;
 }).join(’’);
+h += ‘</div>’;
 }
-h+=’</div>’;
-c.innerHTML=h;
+c.innerHTML = h;
 }
 
-async function UPD_PLAN(id,plan){await SB.from(‘profiles’).update({plan:plan}).eq(‘id’,id);}
+async function updPlan(id, plan) {
+await api(‘PATCH’, ‘/rest/v1/profiles?id=eq.’ + id, { plan: plan });
+}
 </script>
 
 </body>
