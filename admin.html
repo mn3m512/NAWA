@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nawa Admin Panel</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Montserrat',-apple-system,sans-serif;background:#F4F8FC;color:#0A1628;}
+nav{background:#0A1628;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:fixed;top:0;left:0;right:0;z-index:100;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logo span{font-size:14px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:white;}
+.admin-badge{background:#E84A4A;color:white;font-size:9px;font-weight:700;padding:3px 8px;border-radius:100px;letter-spacing:2px;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.nav-user{font-size:11px;color:rgba(255,255,255,.5);}
+.btn-logout{background:rgba(255,255,255,.1);color:white;border:none;padding:6px 14px;border-radius:7px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit;}
+
+/* LOGIN */
+#login-screen{position:fixed;inset:0;background:#0A1628;display:flex;align-items:center;justify-content:center;z-index:200;}
+.login-box{background:white;border-radius:20px;padding:36px;width:100%;max-width:380px;text-align:center;}
+.login-title{font-size:20px;font-weight:800;color:#0A1628;margin-bottom:4px;}
+.login-sub{font-size:12px;color:#8A9BB5;margin-bottom:24px;}
+.form-inp{width:100%;padding:11px 14px;border:1.5px solid rgba(10,22,40,.12);border-radius:10px;font-family:inherit;font-size:13px;color:#0A1628;outline:none;margin-bottom:12px;}
+.form-inp:focus{border-color:#4AA8E8;}
+.btn-primary{width:100%;padding:12px;background:#0A1628;color:white;border:none;border-radius:10px;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
+.err-msg{color:#B83030;font-size:11px;margin-bottom:10px;}
+
+/* LAYOUT */
+main{margin-top:56px;display:flex;min-height:calc(100vh - 56px);}
+.sidebar{width:200px;background:white;border-right:1px solid rgba(10,22,40,.06);padding:20px 0;position:fixed;top:56px;left:0;bottom:0;overflow-y:auto;}
+.s-item{display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:12px;font-weight:600;color:#8A9BB5;cursor:pointer;transition:all .2s;}
+.s-item:hover{background:#F4F8FC;color:#0A1628;}
+.s-item.active{background:#E2EDF8;color:#0D3B7A;border-right:3px solid #4AA8E8;}
+.s-label{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#8A9BB5;padding:14px 16px 6px;}
+.content{margin-left:200px;flex:1;padding:24px;}
+
+/* CARDS */
+.card{background:white;border-radius:14px;box-shadow:0 2px 12px rgba(10,22,40,.06);border:1px solid rgba(10,22,40,.04);margin-bottom:20px;overflow:hidden;}
+.card-hd{padding:16px 20px;border-bottom:1px solid rgba(10,22,40,.05);display:flex;justify-content:space-between;align-items:center;}
+.card-title{font-size:14px;font-weight:700;color:#0A1628;}
+.card-body{padding:20px;}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:20px;}
+.stat-box{background:white;border-radius:12px;padding:18px;box-shadow:0 2px 12px rgba(10,22,40,.05);position:relative;overflow:hidden;}
+.stat-box::after{content:’’;position:absolute;top:0;left:0;right:0;height:3px;}
+.stat-box.blue::after{background:linear-gradient(to right,#0D3B7A,#4AA8E8);}
+.stat-box.green::after{background:linear-gradient(to right,#0D7A4A,#1DB97A);}
+.stat-box.orange::after{background:linear-gradient(to right,#B85A0D,#E87A1A);}
+.stat-box.red::after{background:linear-gradient(to right,#B83030,#E84A4A);}
+.stat-val{font-size:28px;font-weight:800;color:#0A1628;letter-spacing:-1px;}
+.stat-lbl{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8A9BB5;margin-top:4px;}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;}
+th{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#8A9BB5;padding:10px 14px;text-align:left;border-bottom:1px solid rgba(10,22,40,.06);background:#F4F8FC;}
+td{padding:11px 14px;border-bottom:1px solid rgba(10,22,40,.04);font-size:12px;color:#0A1628;}
+tr:hover td{background:#F4F8FC;}
+.badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:100px;}
+.badge-green{background:rgba(29,185,122,.1);color:#0D7A4A;}
+.badge-orange{background:rgba(232,122,26,.1);color:#B85A0D;}
+.badge-blue{background:rgba(74,168,232,.1);color:#0D3B7A;}
+
+/* UPLOAD ZONE */
+.upload-zone{border:2px dashed rgba(74,168,232,.3);border-radius:14px;padding:40px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(74,168,232,.02);}
+.upload-zone:hover,.upload-zone.drag{border-color:#4AA8E8;background:rgba(74,168,232,.05);}
+.upload-icon{font-size:40px;margin-bottom:12px;}
+.upload-title{font-size:14px;font-weight:700;color:#0A1628;margin-bottom:6px;}
+.upload-sub{font-size:12px;color:#8A9BB5;font-weight:300;}
+.upload-btn{background:#4AA8E8;color:#0A1628;padding:10px 24px;border-radius:9px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;font-family:inherit;margin-top:16px;}
+
+/* FORM */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.form-group{margin-bottom:14px;}
+.form-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#0A1628;display:block;margin-bottom:5px;}
+.form-input{width:100%;padding:10px 12px;border:1.5px solid rgba(10,22,40,.1);border-radius:9px;font-family:inherit;font-size:13px;color:#0A1628;outline:none;transition:border-color .2s;}
+.form-input:focus{border-color:#4AA8E8;}
+.form-select{width:100%;padding:10px 12px;border:1.5px solid rgba(10,22,40,.1);border-radius:9px;font-family:inherit;font-size:13px;color:#0A1628;outline:none;appearance:none;}
+textarea.form-input{resize:vertical;min-height:80px;}
+.btn-save{background:#0A1628;color:white;padding:11px 24px;border-radius:9px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;font-family:inherit;}
+.btn-danger{background:rgba(232,74,74,.1);color:#B83030;padding:7px 14px;border-radius:7px;font-size:10px;font-weight:700;border:none;cursor:pointer;font-family:inherit;}
+.btn-edit{background:#E2EDF8;color:#0D3B7A;padding:7px 14px;border-radius:7px;font-size:10px;font-weight:700;border:none;cursor:pointer;font-family:inherit;}
+.btn-success{background:rgba(29,185,122,.1);color:#0D7A4A;padding:9px 20px;border-radius:9px;font-size:11px;font-weight:700;border:none;cursor:pointer;font-family:inherit;}
+
+/* PREVIEW TABLE */
+.preview-q{background:#F4F8FC;border-radius:10px;padding:14px;margin-bottom:10px;border:1px solid rgba(10,22,40,.06);}
+.preview-q-text{font-size:13px;font-weight:600;color:#0A1628;margin-bottom:8px;}
+.preview-opts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
+.preview-opt{font-size:11px;padding:6px 10px;border-radius:7px;border:1px solid rgba(10,22,40,.08);}
+.preview-opt.correct{background:rgba(29,185,122,.1);border-color:rgba(29,185,122,.3);color:#0D7A4A;font-weight:700;}
+.preview-meta{font-size:10px;color:#8A9BB5;}
+.progress-bar{height:6px;background:#E2EDF8;border-radius:6px;overflow:hidden;margin:10px 0;}
+.progress-fill{height:100%;background:linear-gradient(to right,#0D3B7A,#4AA8E8);border-radius:6px;transition:width .3s;}
+.msg-box{padding:12px 16px;border-radius:10px;font-size:12px;font-weight:600;margin-bottom:14px;}
+.msg-success{background:rgba(29,185,122,.08);color:#0D7A4A;border:1px solid rgba(29,185,122,.2);}
+.msg-error{background:rgba(232,74,74,.08);color:#B83030;border:1px solid rgba(232,74,74,.2);}
+.msg-info{background:rgba(74,168,232,.08);color:#0D3B7A;border:1px solid rgba(74,168,232,.2);}
+</style>
+
+</head>
+<body>
+
+<!-- LOGIN -->
+
+<div id="login-screen">
+  <div class="login-box">
+    <div style="font-size:32px;margin-bottom:12px;">🔐</div>
+    <div class="login-title">Admin Panel</div>
+    <div class="login-sub">Nawa Medical Education — Admins Only</div>
+    <div id="login-err" class="err-msg" style="display:none;"></div>
+    <input class="form-inp" type="email" id="admin-email" placeholder="Admin Email">
+    <input class="form-inp" type="password" id="admin-pw" placeholder="Password" onkeydown="if(event.key==='Enter')doAdminLogin()">
+    <button class="btn-primary" onclick="doAdminLogin()">Sign In</button>
+  </div>
+</div>
+
+<!-- NAV -->
+
+<nav>
+  <div class="nav-logo">
+    <svg width="28" height="28" viewBox="0 0 100 100" fill="none"><defs><clipPath id="ac"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#ac)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="white" stroke-width="2.5" fill="none"/><circle cx="50" cy="50" r="4" fill="white"/><circle cx="50" cy="50" r="2" fill="#0A1628"/></svg>
+    <span>NAWA</span>
+    <span class="admin-badge">ADMIN</span>
+  </div>
+  <div class="nav-right">
+    <span class="nav-user" id="nav-email"></span>
+    <button class="btn-logout" onclick="doAdminLogout()">Sign Out</button>
+  </div>
+</nav>
+
+<main>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="s-label">Dashboard</div>
+    <div class="s-item active" onclick="showSection('overview',this)">📊 Overview</div>
+    <div class="s-label">Questions</div>
+    <div class="s-item" onclick="showSection('upload',this)">📄 Upload PDF</div>
+    <div class="s-item" onclick="showSection('add',this)">➕ Add Question</div>
+    <div class="s-item" onclick="showSection('manage',this)">📋 Manage Questions</div>
+    <div class="s-label">Users</div>
+    <div class="s-item" onclick="showSection('users',this)">👥 All Users</div>
+    <div class="s-label">System</div>
+    <div class="s-item" onclick="showSection('settings',this)">⚙️ Settings</div>
+  </div>
+
+  <!-- CONTENT -->
+
+  <div class="content" id="content"></div>
+</main>
+
+<script>
+var SURL='https://zphhtwarzqhsmqsawknt.supabase.co';
+var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
+var sb=window.supabase.createClient(SURL,SKEY);
+var adminUser=null;
+var ADMIN_EMAIL='abdelmonemabdrl@gmail.com'; // ← غير ده لـ email بتاعك
+
+// Check session
+sb.auth.getSession().then(function(r){
+  if(r.data&&r.data.session&&r.data.session.user.email===ADMIN_EMAIL){
+    adminUser=r.data.session.user;
+    showAdmin();
+  }
+});
+
+async function doAdminLogin(){
+  var email=document.getElementById('admin-email').value.trim();
+  var pw=document.getElementById('admin-pw').value;
+  var err=document.getElementById('login-err');
+  
+  if(email!==ADMIN_EMAIL){err.textContent='Access denied. Admins only.';err.style.display='block';return;}
+  
+  var res=await sb.auth.signInWithPassword({email:email,password:pw});
+  if(res.error){err.textContent=res.error.message;err.style.display='block';}
+  else{adminUser=res.data.user;showAdmin();}
+}
+
+async function doAdminLogout(){
+  await sb.auth.signOut();
+  location.reload();
+}
+
+function showAdmin(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('nav-email').textContent=adminUser.email;
+  showSection('overview',document.querySelector('.s-item'));
+}
+
+function showSection(id, el){
+  document.querySelectorAll('.s-item').forEach(s=>s.classList.remove('active'));
+  if(el)el.classList.add('active');
+  var c=document.getElementById('content');
+  if(id==='overview')renderOverview(c);
+  else if(id==='upload')renderUpload(c);
+  else if(id==='add')renderAdd(c);
+  else if(id==='manage')renderManage(c);
+  else if(id==='users')renderUsers(c);
+  else if(id==='settings')renderSettings(c);
+}
+
+// ══════════════════════════════════
+// OVERVIEW
+// ══════════════════════════════════
+async function renderOverview(c){
+  c.innerHTML='<div style="margin-bottom:20px;"><div style="font-size:20px;font-weight:800;color:#0A1628;">📊 Overview</div><div style="font-size:12px;color:#8A9BB5;margin-top:3px;">Nawa platform statistics</div></div><div class="stats-row" id="stats-row"><div style="font-size:12px;color:#8A9BB5;">Loading...</div></div><div id="recent-section"></div>';
+  
+  var [qRes, uRes] = await Promise.all([
+    sb.from('questions').select('id,is_active,bank,year_level', {count:'exact'}),
+    sb.from('profiles').select('id,plan,created_at', {count:'exact'})
+  ]);
+  
+  var totalQ = qRes.count || 0;
+  var activeQ = qRes.data ? qRes.data.filter(q=>q.is_active).length : 0;
+  var totalU = uRes.count || 0;
+  var proU = uRes.data ? uRes.data.filter(u=>u.plan!=='basic').length : 0;
+  
+  document.getElementById('stats-row').innerHTML=
+    statBox('📝','Total Questions',totalQ,'blue')+
+    statBox('✅','Active Questions',activeQ,'green')+
+    statBox('👥','Total Students',totalU,'orange')+
+    statBox('⭐','Pro Users',proU,'red');
+  
+  // Recent users
+  var recent = uRes.data ? uRes.data.slice(-5).reverse() : [];
+  var recentHtml='<div class="card"><div class="card-hd"><div class="card-title">👥 Recent Signups</div><button class="btn-edit" onclick="showSection(\'users\',null)">See All</button></div><div style="overflow-x:auto;"><table><thead><tr><th>Email</th><th>Plan</th><th>Joined</th></tr></thead><tbody id="recent-users"></tbody></table></div></div>';
+  document.getElementById('recent-section').innerHTML=recentHtml;
+  
+  // Get user emails
+  var usersHtml='';
+  if(uRes.data && uRes.data.length>0){
+    usersHtml='<tr><td colspan="3" style="color:#8A9BB5;text-align:center;padding:20px;">User emails require service role key</td></tr>';
+  } else {
+    usersHtml='<tr><td colspan="3" style="color:#8A9BB5;text-align:center;padding:20px;">No users yet</td></tr>';
+  }
+  document.getElementById('recent-users').innerHTML=usersHtml;
+}
+
+function statBox(icon,label,val,color){
+  return '<div class="stat-box '+color+'"><div style="font-size:20px;margin-bottom:8px;">'+icon+'</div><div class="stat-val">'+val+'</div><div class="stat-lbl">'+label+'</div></div>';
+}
+
+// ══════════════════════════════════
+// UPLOAD PDF
+// ══════════════════════════════════
+function renderUpload(c){
+  c.innerHTML=`
+    <div style="margin-bottom:20px;"><div style="font-size:20px;font-weight:800;color:#0A1628;">📄 Upload PDF</div><div style="font-size:12px;color:#8A9BB5;margin-top:3px;">Upload question bank PDF and import automatically</div></div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">📤 Upload Question Bank</div></div>
+      <div class="card-body">
+        <div id="upload-msg"></div>
+        <div class="upload-zone" id="upload-zone" onclick="document.getElementById('pdf-input').click()" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)">
+          <div class="upload-icon">📄</div>
+          <div class="upload-title">Drop PDF here or click to browse</div>
+          <div class="upload-sub">Supports: Question Bank PDF format (Q1, A., B., C., D. + Answers section)</div>
+          <button class="upload-btn" onclick="event.stopPropagation()">Browse File</button>
+        </div>
+        <input type="file" id="pdf-input" accept=".pdf" style="display:none" onchange="handlePDFUpload(this.files[0])">
+        
+        <div class="form-row" style="margin-top:20px;">
+          <div>
+            <label class="form-label">Module Name</label>
+            <input class="form-input" id="pdf-module" placeholder="e.g. Basic Of Infections">
+          </div>
+          <div>
+            <label class="form-label">Year Level</label>
+            <select class="form-select" id="pdf-year">
+              <option value="1">Year 1</option><option value="2">Year 2</option>
+              <option value="3">Year 3</option><option value="4" selected>Year 4</option>
+              <option value="5">Year 5</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div>
+            <label class="form-label">Subject/Block</label>
+            <select class="form-select" id="pdf-block">
+              <option>MICROBIOLOGY</option><option>PATHOLOGY</option>
+              <option>IMMUNOLOGY</option><option>PARASITOLOGY</option>
+              <option>CARDIOLOGY</option><option>PHARMACOLOGY</option>
+              <option>SURGERY</option><option>PEDIATRICS</option><option>OTHER</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Bank</label>
+            <select class="form-select" id="pdf-bank">
+              <option value="nawa">Nawa QBank</option>
+              <option value="final">Final QBank</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="preview-section" style="display:none;">
+      <div class="card">
+        <div class="card-hd">
+          <div class="card-title">👀 Preview Questions</div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span id="preview-count" style="font-size:12px;color:#8A9BB5;"></span>
+            <button class="btn-success" id="import-btn" onclick="importQuestions()">✅ Import All</button>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="progress-bar"><div class="progress-fill" id="import-progress" style="width:0%"></div></div>
+          <div id="preview-list"></div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+var parsedQuestions = [];
+
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('drag');
+  var file = e.dataTransfer.files[0];
+  if(file && file.type==='application/pdf') handlePDFUpload(file);
+}
+
+async function handlePDFUpload(file){
+  if(!file) return;
+  var msg = document.getElementById('upload-msg');
+  msg.innerHTML='<div class="msg-box msg-info">⏳ Reading PDF... Please wait.</div>';
+  
+  try {
+    var text = await extractTextFromPDF(file);
+    parsedQuestions = parsePDFQuestions(text);
+    
+    var module = document.getElementById('pdf-module').value || file.name.replace('.pdf','');
+    var year = document.getElementById('pdf-year').value;
+    var block = document.getElementById('pdf-block').value;
+    var bank = document.getElementById('pdf-bank').value;
+    
+    parsedQuestions = parsedQuestions.map(q=>({...q, module_name: module || q.module_name, year_level: year, block: block, bank: bank}));
+    
+    if(parsedQuestions.length === 0){
+      msg.innerHTML='<div class="msg-box msg-error">❌ No questions found. Make sure PDF has Q1, A., B., C., D. format.</div>';
+      return;
+    }
+    
+    msg.innerHTML=`<div class="msg-box msg-success">✅ Found ${parsedQuestions.length} questions! Review below and click "Import All".</div>`;
+    showPreview(parsedQuestions);
+  } catch(err) {
+    msg.innerHTML='<div class="msg-box msg-error">❌ Error reading PDF: ' + err.message + '</div>';
+  }
+}
+
+// Simple PDF text extractor using FileReader
+async function extractTextFromPDF(file){
+  return new Promise((resolve, reject) => {
+    var reader = new FileReader();
+    reader.onload = function(e){
+      // We'll use a simple text extraction approach
+      var arrayBuffer = e.target.result;
+      var uint8 = new Uint8Array(arrayBuffer);
+      var text = '';
+      // Extract readable text from PDF binary
+      for(var i=0; i<uint8.length-1; i++){
+        var c = uint8[i];
+        if(c >= 32 && c <= 126) text += String.fromCharCode(c);
+        else if(c === 10 || c === 13) text += '\n';
+      }
+      resolve(text);
+    };
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+function parsePDFQuestions(text){
+  var questions = [];
+  
+  // Clean text - extract readable portions
+  // Pattern: Q followed by number, then question text, then A. B. C. D. options
+  var qPattern = /Q(\d+)\s*[\r\n]+([\s\S]*?)[\r\n]+A[.\)]\s*([\s\S]*?)[\r\n]+B[.\)]\s*([\s\S]*?)[\r\n]+C[.\)]\s*([\s\S]*?)[\r\n]+D[.\)]\s*([\s\S]*?)(?=[\r\n]+Q\d+|[\r\n]+Answers|$)/g;
+  
+  var match;
+  while((match = qPattern.exec(text)) !== null){
+    var qtext = match[2].trim().replace(/[\r\n]+/g,' ');
+    var optA = match[3].trim().replace(/[\r\n]+/g,' ').split(/[\r\n]/)[0];
+    var optB = match[4].trim().replace(/[\r\n]+/g,' ').split(/[\r\n]/)[0];
+    var optC = match[5].trim().replace(/[\r\n]+/g,' ').split(/[\r\n]/)[0];
+    var optD = match[6].trim().replace(/[\r\n]+/g,' ').split(/[\r\n]/)[0];
+    
+    // Remove trailing numbers (page numbers)
+    optD = optD.replace(/\s*\d+\s*$/, '').trim();
+    
+    if(qtext.length > 10 && optA && optB && optC && optD){
+      questions.push({
+        question_text: qtext,
+        option_a: optA,
+        option_b: optB,
+        option_c: optC,
+        option_d: optD,
+        correct_option: '',
+        explanation: '',
+        module_name: '',
+        year_level: '1',
+        block: '',
+        bank: 'nawa',
+        difficulty: 3,
+        is_active: true
+      });
+    }
+  }
+  
+  // Try to match answers
+  var ansPattern = /(\d+)\s*\n\s*([A-D])\s*\n\s*([^\n]+)/g;
+  var ansMatch;
+  var answers = {};
+  while((ansMatch = ansPattern.exec(text)) !== null){
+    answers[parseInt(ansMatch[1])] = {
+      letter: ansMatch[2].toLowerCase(),
+      explanation: ansMatch[3].trim()
+    };
+  }
+  
+  questions.forEach((q, i) => {
+    var ans = answers[i+1];
+    if(ans){ q.correct_option = ans.letter; q.explanation = ans.explanation; }
+  });
+  
+  return questions;
+}
+
+function showPreview(qs){
+  document.getElementById('preview-section').style.display='block';
+  document.getElementById('preview-count').textContent = qs.length + ' questions found';
+  
+  var html = '';
+  var show = Math.min(qs.length, 10);
+  for(var i=0; i<show; i++){
+    var q = qs[i];
+    html += `<div class="preview-q">
+      <div class="preview-q-text">Q${i+1}. ${q.question_text.substring(0,100)}${q.question_text.length>100?'...':''}</div>
+      <div class="preview-opts">
+        <div class="preview-opt ${q.correct_option==='a'?'correct':''}">A. ${q.option_a.substring(0,50)}</div>
+        <div class="preview-opt ${q.correct_option==='b'?'correct':''}">B. ${q.option_b.substring(0,50)}</div>
+        <div class="preview-opt ${q.correct_option==='c'?'correct':''}">C. ${q.option_c.substring(0,50)}</div>
+        <div class="preview-opt ${q.correct_option==='d'?'correct':''}">D. ${q.option_d.substring(0,50)}</div>
+      </div>
+      <div class="preview-meta">📚 ${q.module_name} · Year ${q.year_level} · ${q.block} ${q.correct_option?'· ✅ Answer: '+q.correct_option.toUpperCase():''}</div>
+    </div>`;
+  }
+  if(qs.length > 10) html += `<div style="text-align:center;padding:14px;font-size:12px;color:#8A9BB5;">... and ${qs.length-10} more questions</div>`;
+  
+  document.getElementById('preview-list').innerHTML = html;
+  document.getElementById('import-progress').style.width='0%';
+}
+
+async function importQuestions(){
+  if(!parsedQuestions.length) return;
+  var btn = document.getElementById('import-btn');
+  btn.textContent = 'Importing...'; btn.disabled = true;
+  
+  var batchSize = 50;
+  var total = parsedQuestions.length;
+  var imported = 0;
+  
+  for(var i=0; i<total; i+=batchSize){
+    var batch = parsedQuestions.slice(i, i+batchSize);
+    var res = await sb.from('questions').insert(batch);
+    if(res.error){
+      document.getElementById('upload-msg').innerHTML='<div class="msg-box msg-error">❌ Error: '+res.error.message+'</div>';
+      btn.textContent='✅ Import All'; btn.disabled=false;
+      return;
+    }
+    imported += batch.length;
+    var pct = Math.round((imported/total)*100);
+    document.getElementById('import-progress').style.width = pct+'%';
+  }
+  
+  document.getElementById('upload-msg').innerHTML=`<div class="msg-box msg-success">🎉 Successfully imported ${imported} questions!</div>`;
+  btn.textContent='✅ Import All'; btn.disabled=false;
+}
+
+// ══════════════════════════════════
+// ADD QUESTION
+// ══════════════════════════════════
+function renderAdd(c){
+  c.innerHTML=`
+    <div style="margin-bottom:20px;"><div style="font-size:20px;font-weight:800;color:#0A1628;">➕ Add Question</div><div style="font-size:12px;color:#8A9BB5;margin-top:3px;">Add a single question manually</div></div>
+    <div class="card">
+      <div class="card-hd"><div class="card-title">New Question</div></div>
+      <div class="card-body">
+        <div id="add-msg"></div>
+        <div class="form-group">
+          <label class="form-label">Question Text *</label>
+          <textarea class="form-input" id="q-text" placeholder="Which of the following..." rows="3"></textarea>
+
+```
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Option A *</label><input class="form-input" id="q-a" placeholder="Option A"></div>
+      <div class="form-group"><label class="form-label">Option B *</label><input class="form-input" id="q-b" placeholder="Option B"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Option C *</label><input class="form-input" id="q-c" placeholder="Option C"></div>
+      <div class="form-group"><label class="form-label">Option D *</label><input class="form-input" id="q-d" placeholder="Option D"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Correct Answer *</label>
+        <select class="form-select" id="q-correct">
+          <option value="a">A</option><option value="b">B</option>
+          <option value="c">C</option><option value="d">D</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Difficulty (1-5)</label>
+        <select class="form-select" id="q-diff">
+          <option value="1">1 — Very Easy</option><option value="2">2 — Easy</option>
+          <option value="3" selected>3 — Medium</option><option value="4">4 — Hard</option>
+          <option value="5">5 — Very Hard</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Explanation</label>
+      <textarea class="form-input" id="q-exp" placeholder="Explanation why this is the correct answer..." rows="2"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Module Name</label>
+        <input class="form-input" id="q-module" placeholder="e.g. MED431 Cardiopulmonary">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Year Level</label>
+        <select class="form-select" id="q-year">
+          <option value="1">Year 1</option><option value="2">Year 2</option>
+          <option value="3">Year 3</option><option value="4" selected>Year 4</option>
+          <option value="5">Year 5</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Block/Subject</label>
+        <input class="form-input" id="q-block" placeholder="e.g. Cardiology">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bank</label>
+        <select class="form-select" id="q-bank">
+          <option value="nawa">Nawa QBank</option>
+          <option value="final">Final QBank</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-save" onclick="saveQuestion()">Save Question</button>
+  </div>
+</div>
+```
+
+`;
+}
+
+async function saveQuestion(){
+var text = document.getElementById(‘q-text’).value.trim();
+var a = document.getElementById(‘q-a’).value.trim();
+var b = document.getElementById(‘q-b’).value.trim();
+var c = document.getElementById(‘q-c’).value.trim();
+var d = document.getElementById(‘q-d’).value.trim();
+var msg = document.getElementById(‘add-msg’);
+
+if(!text||!a||!b||!c||!d){msg.innerHTML=’<div class="msg-box msg-error">Please fill all required fields</div>’;return;}
+
+var res = await sb.from(‘questions’).insert({
+question_text: text,
+option_a: a, option_b: b, option_c: c, option_d: d,
+correct_option: document.getElementById(‘q-correct’).value,
+explanation: document.getElementById(‘q-exp’).value.trim(),
+module_name: document.getElementById(‘q-module’).value.trim(),
+year_level: document.getElementById(‘q-year’).value,
+block: document.getElementById(‘q-block’).value.trim(),
+bank: document.getElementById(‘q-bank’).value,
+difficulty: parseInt(document.getElementById(‘q-diff’).value),
+is_active: true
+});
+
+if(res.error){msg.innerHTML=’<div class="msg-box msg-error">❌ ‘+res.error.message+’</div>’;}
+else{
+msg.innerHTML=’<div class="msg-box msg-success">✅ Question saved successfully!</div>’;
+[‘q-text’,‘q-a’,‘q-b’,‘q-c’,‘q-d’,‘q-exp’,‘q-module’,‘q-block’].forEach(id=>{document.getElementById(id).value=’’;});
+}
+}
+
+// ══════════════════════════════════
+// MANAGE QUESTIONS
+// ══════════════════════════════════
+var allQuestions = [];
+var currentPage = 0;
+var pageSize = 20;
+
+async function renderManage(c){
+c.innerHTML=`<div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;"> <div><div style="font-size:20px;font-weight:800;color:#0A1628;">📋 Manage Questions</div><div style="font-size:12px;color:#8A9BB5;margin-top:3px;">View, edit, and delete questions</div></div> </div> <div class="card"> <div class="card-hd"> <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;"> <input id="search-q" placeholder="🔍 Search questions..." style="padding:8px 12px;border:1.5px solid rgba(10,22,40,.1);border-radius:9px;font-family:inherit;font-size:12px;width:200px;outline:none;" oninput="filterQuestions()"> <select id="filter-year" style="padding:8px 12px;border:1.5px solid rgba(10,22,40,.1);border-radius:9px;font-family:inherit;font-size:12px;outline:none;appearance:none;" onchange="filterQuestions()"> <option value="">All Years</option> <option value="1">Year 1</option><option value="2">Year 2</option> <option value="3">Year 3</option><option value="4">Year 4</option><option value="5">Year 5</option> </select> <select id="filter-bank" style="padding:8px 12px;border:1.5px solid rgba(10,22,40,.1);border-radius:9px;font-family:inherit;font-size:12px;outline:none;appearance:none;" onchange="filterQuestions()"> <option value="">All Banks</option> <option value="nawa">Nawa QBank</option> <option value="final">Final QBank</option> </select> </div> <span id="q-count" style="font-size:12px;color:#8A9BB5;"></span> </div> <div id="manage-msg"></div> <div style="overflow-x:auto;"> <table> <thead><tr><th>Question</th><th>Module</th><th>Year</th><th>Answer</th><th>Bank</th><th>Status</th><th>Actions</th></tr></thead> <tbody id="q-table-body"><tr><td colspan="7" style="text-align:center;padding:20px;color:#8A9BB5;">Loading...</td></tr></tbody> </table> </div> <div id="pagination" style="padding:14px 20px;border-top:1px solid rgba(10,22,40,.05);display:flex;justify-content:space-between;align-items:center;"> <button onclick="prevPage()" style="padding:7px 14px;border-radius:8px;border:1.5px solid rgba(10,22,40,.1);background:white;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;">← Prev</button> <span id="page-info" style="font-size:12px;color:#8A9BB5;"></span> <button onclick="nextPage()" style="padding:7px 14px;border-radius:8px;border:1.5px solid rgba(10,22,40,.1);background:white;font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;">Next →</button> </div> </div>`;
+await loadQuestions();
+}
+
+async function loadQuestions(){
+var res = await sb.from(‘questions’).select(’*’).order(‘created_at’, {ascending:false});
+if(!res.error) allQuestions = res.data || [];
+document.getElementById(‘q-count’).textContent = allQuestions.length + ’ total’;
+currentPage = 0;
+renderTable();
+}
+
+var filteredQ = [];
+function filterQuestions(){
+var search = document.getElementById(‘search-q’).value.toLowerCase();
+var year = document.getElementById(‘filter-year’).value;
+var bank = document.getElementById(‘filter-bank’).value;
+
+filteredQ = allQuestions.filter(q=>{
+var matchS = !search || q.question_text.toLowerCase().includes(search) || (q.module_name||’’).toLowerCase().includes(search);
+var matchY = !year || q.year_level === year;
+var matchB = !bank || q.bank === bank;
+return matchS && matchY && matchB;
+});
+currentPage = 0;
+renderTable(true);
+}
+
+function renderTable(filtered){
+var data = filtered ? filteredQ : allQuestions;
+var start = currentPage * pageSize;
+var page = data.slice(start, start + pageSize);
+
+document.getElementById(‘page-info’).textContent = ‘Page ‘+(currentPage+1)+’ of ‘+Math.ceil(data.length/pageSize)+’ (’+data.length+’ questions)’;
+
+if(!page.length){
+document.getElementById(‘q-table-body’).innerHTML=’<tr><td colspan="7" style="text-align:center;padding:20px;color:#8A9BB5;">No questions found</td></tr>’;
+return;
+}
+
+document.getElementById(‘q-table-body’).innerHTML = page.map(q=>`<tr> <td style="max-width:280px;"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;">${q.question_text.substring(0,60)}...</div></td> <td style="font-size:11px;color:#8A9BB5;">${q.module_name||'—'}</td> <td><span class="badge badge-blue">Y${q.year_level||'?'}</span></td> <td><span style="background:#E2EDF8;color:#0D3B7A;font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;">${(q.correct_option||'?').toUpperCase()}</span></td> <td><span class="badge ${q.bank==='nawa'?'badge-green':'badge-orange'}">${q.bank||'nawa'}</span></td> <td><span class="badge ${q.is_active?'badge-green':'badge-orange'}">${q.is_active?'Active':'Inactive'}</span></td> <td> <div style="display:flex;gap:6px;"> <button class="btn-edit" onclick="toggleActive('${q.id}',${q.is_active})">${q.is_active?'Deactivate':'Activate'}</button> <button class="btn-danger" onclick="deleteQuestion('${q.id}')">Delete</button> </div> </td> </tr>`).join(’’);
+}
+
+async function toggleActive(id, current){
+await sb.from(‘questions’).update({is_active: !current}).eq(‘id’, id);
+await loadQuestions();
+}
+
+async function deleteQuestion(id){
+if(!confirm(‘Delete this question?’)) return;
+await sb.from(‘questions’).delete().eq(‘id’, id);
+var msg = document.getElementById(‘manage-msg’);
+if(msg) msg.innerHTML=’<div class="msg-box msg-success" style="margin:10px 20px;">✅ Question deleted</div>’;
+await loadQuestions();
+}
+
+function prevPage(){if(currentPage>0){currentPage–;renderTable(filteredQ.length?true:false);}}
+function nextPage(){var data=filteredQ.length?filteredQ:allQuestions;if((currentPage+1)*pageSize<data.length){currentPage++;renderTable(filteredQ.length?true:false);}}
+
+// ══════════════════════════════════
+// USERS
+// ══════════════════════════════════
+async function renderUsers(c){
+c.innerHTML=`<div style="margin-bottom:20px;"><div style="font-size:20px;font-weight:800;color:#0A1628;">👥 All Users</div></div> <div class="card"> <div class="card-hd"><div class="card-title">Registered Students</div><span id="users-count" style="font-size:12px;color:#8A9BB5;"></span></div> <div style="overflow-x:auto;"> <table> <thead><tr><th>Name</th><th>University</th><th>Year</th><th>Plan</th><th>Joined</th><th>Actions</th></tr></thead> <tbody id="users-body"><tr><td colspan="6" style="text-align:center;padding:20px;color:#8A9BB5;">Loading...</td></tr></tbody> </table> </div> </div>`;
+
+var res = await sb.from(‘profiles’).select(’*’).order(‘created_at’, {ascending:false});
+var users = res.data || [];
+document.getElementById(‘users-count’).textContent = users.length + ’ users’;
+
+if(!users.length){
+document.getElementById(‘users-body’).innerHTML=’<tr><td colspan="6" style="text-align:center;padding:30px;color:#8A9BB5;">No users yet</td></tr>’;
+return;
+}
+
+document.getElementById(‘users-body’).innerHTML = users.map(u=>`<tr> <td style="font-weight:600;">${u.first_name||''} ${u.last_name||''}<div style="font-size:10px;color:#8A9BB5;">${u.email||''}</div></td> <td style="font-size:11px;color:#8A9BB5;max-width:160px;">${u.university||'—'}</td> <td><span class="badge badge-blue">${u.year?'Y'+u.year:'—'}</span></td> <td><span class="badge ${u.plan==='pro'?'badge-green':u.plan==='elite'?'badge-orange':'badge-blue'}">${u.plan||'basic'}</span></td> <td style="font-size:11px;color:#8A9BB5;">${u.created_at?new Date(u.created_at).toLocaleDateString():'—'}</td> <td> <select onchange="updateUserPlan('${u.id}',this.value)" style="padding:5px 8px;border-radius:7px;border:1px solid rgba(10,22,40,.1);font-family:inherit;font-size:11px;"> <option value="basic" ${u.plan==='basic'?'selected':''}>Basic</option> <option value="pro" ${u.plan==='pro'?'selected':''}>Pro</option> <option value="elite" ${u.plan==='elite'?'selected':''}>Elite</option> </select> </td> </tr>`).join(’’);
+}
+
+async function updateUserPlan(id, plan){
+await sb.from(‘profiles’).update({plan:plan}).eq(‘id’,id);
+}
+
+// ══════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════
+function renderSettings(c){
+c.innerHTML=`<div style="margin-bottom:20px;"><div style="font-size:20px;font-weight:800;color:#0A1628;">⚙️ Settings</div></div> <div class="card"> <div class="card-hd"><div class="card-title">Admin Access</div></div> <div class="card-body"> <div class="msg-box msg-info">Current admin email: <strong>${ADMIN_EMAIL}</strong><br>To change, edit the ADMIN_EMAIL variable in admin.html</div> </div> </div> <div class="card"> <div class="card-hd"><div class="card-title">Quick Stats</div></div> <div class="card-body" id="settings-stats">Loading...</div> </div>`;
+
+sb.from(‘questions’).select(‘id’, {count:‘exact’}).then(r=>{
+sb.from(‘profiles’).select(‘id’, {count:‘exact’}).then(u=>{
+document.getElementById(‘settings-stats’).innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"> <div style="background:#F4F8FC;border-radius:10px;padding:16px;text-align:center;"> <div style="font-size:24px;font-weight:800;color:#4AA8E8;">${r.count||0}</div> <div style="font-size:11px;color:#8A9BB5;margin-top:4px;">Total Questions</div> </div> <div style="background:#F4F8FC;border-radius:10px;padding:16px;text-align:center;"> <div style="font-size:24px;font-weight:800;color:#1DB97A;">${u.count||0}</div> <div style="font-size:11px;color:#8A9BB5;margin-top:4px;">Total Users</div> </div> </div>`;
+});
+});
+}
+</script>
+
+</body>
+</html>
