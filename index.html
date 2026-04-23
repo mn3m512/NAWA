@@ -33,7 +33,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(10,22,40,.96
 .nav-mobile-link:hover{background:rgba(255,255,255,.06);color:white;}
 
 /* PAGES */
-.page{display:none;}.page.active{display:block;}#page-landing{display:block;}#page-dashboard{display:none;}
+/* pages visible by default */
 
 /* MODALS */
 .modal-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(10,22,40,.75);backdrop-filter:blur(10px);align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;}
@@ -445,8 +445,7 @@ footer{background:var(–navy);padding:60px 40px 0;}
 @media(max-width:1024px){.dash-grid{grid-template-columns:1fr;}.dash-right{display:grid;grid-template-columns:1fr 1fr;}.stats-row{grid-template-columns:1fr 1fr;}.lb-inner{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr 1fr;}.lb-page-grid{grid-template-columns:1fr;}}
 @media(max-width:768px){nav{padding:0 16px;}.nav-links{display:none;}.nav-btns{display:none;}.nav-hamburger{display:flex;}.sidebar{transform:translateX(-100%);}.sidebar.open{transform:translateX(0);}.sidebar-overlay.open{display:block;}.dash-main{margin-left:0;padding:16px;}.dash-right{grid-template-columns:1fr;}.features{padding:60px 20px;}.lb-section{padding:60px 20px;}.pricing{padding:60px 20px;}.payment-section{padding:50px 20px;}.cta-section{padding:60px 20px;}footer{padding:48px 20px 0;}.footer-grid{grid-template-columns:1fr;gap:24px;}.form-row{grid-template-columns:1fr;}.welcome-banner{flex-direction:column;align-items:flex-start;}.blocks-grid{grid-template-columns:repeat(2,1fr);}.pq-grid{grid-template-columns:1fr;}}
 @media(max-width:480px){.stats-row{grid-template-columns:1fr 1fr;gap:10px;}.sc-value{font-size:22px;}.hero-stats{gap:18px;}.modal-box{padding:24px 16px;}.pricing-grid{grid-template-columns:1fr;}}
-/* No animations - always visible */
-.hero-content>*{opacity:1;transform:none;}
+.hero-content>*{opacity:1 !important;visibility:visible !important;}
 </style>
 
 </head>
@@ -649,7 +648,7 @@ footer{background:var(–navy);padding:60px 40px 0;}
 
 <!-- ════════════ LANDING ════════════ -->
 
-<div id="page-landing" class="page active">
+<div id="page-landing">
 
 <section class="hero">
   <div class="hero-content">
@@ -810,7 +809,7 @@ footer{background:var(–navy);padding:60px 40px 0;}
 
 <!-- ════════════ DASHBOARD ════════════ -->
 
-<div id="page-dashboard" class="page">
+<div id="page-dashboard" style="display:none;">
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-section">
