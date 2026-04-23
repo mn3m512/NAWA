@@ -307,7 +307,7 @@ nav{padding:0 16px;}
       </div>
     </div>
     <div class="si-section"><div class="si-label">Menu</div><div class="si active" onclick="setDash('home',this)"><span>🏠</span> Home</div></div>
-    <div class="si-section"><div class="si-label">Quiz</div><div class="si" onclick="setDash('create',this)"><span>✏️</span> Create Quiz</div><div class="si" onclick="setDash('prev',this)"><span>🕐</span> Previous Quizzes</div></div>
+    <div class="si-section"><div class="si-label">Quiz</div><div class="si" onclick="setDash('modules',this)"><span>📚</span> My Modules</div><div class="si" onclick="setDash('create',this)"><span>✏️</span> Create Quiz</div><div class="si" onclick="setDash('prev',this)"><span>🕐</span> Previous Quizzes</div></div>
     <div class="si-section"><div class="si-label">Performance</div><div class="si" onclick="setDash('overview',this)"><span>📈</span> Overview</div><div class="si" onclick="setDash('analysis',this)"><span>📊</span> Analysis</div><div class="si" onclick="setDash('lb',this)"><span>🏆</span> Leaderboard</div></div>
     <div class="si-section"><div class="si-label">More</div><div class="si" onclick="setDash('notes',this)"><span>📝</span> My Notes</div><div class="si" onclick="setDash('library',this)"><span>📚</span> Medical Library</div><div class="si" onclick="setDash('flash',this)"><span>🃏</span> Flashcards <span style="font-size:7px;background:rgba(74,168,232,.2);color:#4AA8E8;padding:2px 5px;border-radius:4px;">PRO</span></div><div class="si" onclick="setDash('ai',this)"><span>🤖</span> AI Analysis <span style="font-size:7px;background:rgba(74,168,232,.2);color:#4AA8E8;padding:2px 5px;border-radius:4px;">PRO</span></div></div>
     <div class="si-section"><div class="si-label">Account</div><div class="si" onclick="setDash('profile',this)"><span>👤</span> My Profile</div><div class="si" onclick="doLogout()"><span>🚪</span> Sign Out</div></div>
@@ -641,6 +641,7 @@ function renderDash(){
   else if(currentDash==='lb')renderLB(m);
   else if(currentDash==='profile')renderProfile(m);
   else if(currentDash==='create')renderCreate(m);
+  else if(currentDash==='modules')renderModules(m);
   else{
     m.innerHTML='<div style="text-align:center;padding:60px 20px;"><div style="font-size:40px;margin-bottom:16px;">🚧</div><div style="font-size:18px;font-weight:700;color:#0A1628;margin-bottom:8px;text-transform:capitalize;">'+currentDash+'</div><div style="font-size:14px;color:#8A9BB5;font-weight:300;">Coming soon!</div></div>';
   }
@@ -1023,3 +1024,140 @@ var pg=document.getElementById('pricing-grid');
 
 </body>
 </html>
+<script>
+// ── MODULES DATA ──
+var MODULES_BY_YEAR = {
+  '1': [
+    {code:'MED101', name:'Normal Body Structure', sub:'Anatomy & Physiology', icon:'🦴', color:'linear-gradient(135deg,#0D3B7A,#1560BD)', qs:0, sem:1},
+    {code:'MED102', name:'Introduction to Disease', sub:'Pathology Basics', icon:'🔬', color:'linear-gradient(135deg,#5A0D7A,#8A2BE2)', qs:0, sem:1},
+    {code:'MED103', name:'Infections & Immunology', sub:'Microbiology & Immunology', icon:'🦠', color:'linear-gradient(135deg,#0D7A4A,#1DB97A)', qs:0, sem:1},
+    {code:'MED104', name:'Psychology & Mental Health', sub:'Psychiatry Basics', icon:'🧠', color:'linear-gradient(135deg,#7A4A0D,#E87A1A)', qs:0, sem:1},
+    {code:'MED105', name:'Blood & Lymphatic System', sub:'Hematology', icon:'🩸', color:'linear-gradient(135deg,#7A0D0D,#E84A4A)', qs:0, sem:2},
+    {code:'MED106', name:'Musculoskeletal System', sub:'Anatomy & Orthopedics', icon:'💪', color:'linear-gradient(135deg,#1A4A1A,#2D8A3E)', qs:0, sem:2},
+    {code:'MED107', name:'Integrated: Hematology & MSK', sub:'Integrated Module', icon:'⚡', color:'linear-gradient(135deg,#0D3B7A,#4AA8E8)', qs:0, sem:2},
+    {code:'MED108', name:'Basic Doctoring', sub:'Clinical Skills', icon:'🩺', color:'linear-gradient(135deg,#3A1A6A,#6A2DA8)', qs:0, sem:2},
+  ],
+  '2': [
+    {code:'MED210', name:'Cardiovascular System', sub:'Cardiology', icon:'❤️', color:'linear-gradient(135deg,#7A0D0D,#C43030)', qs:0, sem:3},
+    {code:'MED211', name:'Respiratory System', sub:'Pulmonology', icon:'🫁', color:'linear-gradient(135deg,#0D3B7A,#4AA8E8)', qs:0, sem:3},
+    {code:'MED212', name:'Integrated: Cardiopulmonary', sub:'Integrated Module', icon:'⚡', color:'linear-gradient(135deg,#7A0D0D,#4AA8E8)', qs:0, sem:3},
+    {code:'MED215', name:'Endocrine & Metabolism', sub:'Endocrinology', icon:'⚗️', color:'linear-gradient(135deg,#7A4A0D,#E87A1A)', qs:0, sem:4},
+    {code:'MED216', name:'Digestive System & Nutrition', sub:'Gastroenterology', icon:'🍽️', color:'linear-gradient(135deg,#1A4A1A,#2D8A3E)', qs:0, sem:4},
+    {code:'MED217', name:'Integrated: Endocrine & GIT', sub:'Integrated Module', icon:'⚡', color:'linear-gradient(135deg,#7A4A0D,#2D8A3E)', qs:0, sem:4},
+  ],
+  '3': [
+    {code:'MED319', name:'CNS & Special Senses', sub:'Neuroscience', icon:'🧠', color:'linear-gradient(135deg,#3A1A6A,#6A2DA8)', qs:0, sem:5},
+    {code:'MED320', name:'Genitourinary System', sub:'Nephrology & Urology', icon:'🫘', color:'linear-gradient(135deg,#0D3B7A,#1560BD)', qs:0, sem:5},
+    {code:'MED321', name:'Integrated: Neuro & GU', sub:'Integrated Module', icon:'⚡', color:'linear-gradient(135deg,#3A1A6A,#1560BD)', qs:0, sem:5},
+    {code:'MED323', name:'General Medicine', sub:'Internal Medicine', icon:'🩺', color:'linear-gradient(135deg,#0D7A4A,#1DB97A)', qs:0, sem:6},
+    {code:'MED324', name:'General Surgery', sub:'Surgery', icon:'🔪', color:'linear-gradient(135deg,#4A4A0D,#8A8A1A)', qs:0, sem:6},
+    {code:'MED325', name:'Tropical Medicine', sub:'Infectious Disease', icon:'🌿', color:'linear-gradient(135deg,#1A4A1A,#2D8A3E)', qs:0, sem:6},
+    {code:'MED326', name:'Forensic Medicine', sub:'Forensics & Toxicology', icon:'⚖️', color:'linear-gradient(135deg,#2A2A2A,#5A5A5A)', qs:0, sem:6},
+    {code:'MED328', name:'Community Medicine', sub:'Public Health', icon:'🏥', color:'linear-gradient(135deg,#0D4A7A,#1560BD)', qs:0, sem:6},
+  ],
+  '4': [
+    {code:'MED430', name:'Medicine', sub:'GIT · Endocrine · Hematology · Nephrology', icon:'🩺', color:'linear-gradient(135deg,#0D3B7A,#1560BD)', qs:120, sem:7},
+    {code:'MED431', name:'Cardiopulmonary', sub:'Cardiology & Pulmonology', icon:'❤️', color:'linear-gradient(135deg,#7A0D0D,#C43030)', qs:840, sem:7},
+    {code:'MED432', name:'Investigative Medicine', sub:'Radiology & Lab Medicine', icon:'🔬', color:'linear-gradient(135deg,#1A3A5C,#2D6A8A)', qs:688, sem:7},
+    {code:'MED433', name:'Pediatrics', sub:'Child Health', icon:'👶', color:'linear-gradient(135deg,#0A4A2A,#1DB97A)', qs:260, sem:8},
+    {code:'MED434', name:'Ophthalmology', sub:'Eye Diseases', icon:'👁️', color:'linear-gradient(135deg,#0D3B7A,#4AA8E8)', qs:0, sem:8},
+    {code:'MED435', name:'ENT', sub:'Ear · Nose · Throat', icon:'👂', color:'linear-gradient(135deg,#4A1A5A,#8A2DA8)', qs:0, sem:8},
+    {code:'MED436', name:'Neuropsychiatry', sub:'Neurology & Psychiatry', icon:'🧠', color:'linear-gradient(135deg,#3A1A6A,#6A2DA8)', qs:780, sem:8},
+    {code:'MED437', name:'Biostatistics 4', sub:'Research Methods', icon:'📊', color:'linear-gradient(135deg,#2A2A2A,#4A4A4A)', qs:0, sem:8},
+  ],
+  '5': [
+    {code:'MED538', name:'Surgery', sub:'General · Cardio · Neuro · Uro + Anesthesia', icon:'🔪', color:'linear-gradient(135deg,#4A4A0D,#8A8A1A)', qs:380, sem:9},
+    {code:'MED539', name:'Orthopedics', sub:'Bones & Joints', icon:'🦴', color:'linear-gradient(135deg,#1A3A5C,#4AA8E8)', qs:380, sem:9},
+    {code:'MED540', name:'Research & Graduation Project', sub:'Biostatistics 5', icon:'📝', color:'linear-gradient(135deg,#2A2A2A,#5A5A5A)', qs:0, sem:9},
+    {code:'MED541', name:'Obstetrics & Gynecology', sub:'OB/GYN', icon:'🤰', color:'linear-gradient(135deg,#5A0A2A,#E84A8A)', qs:320, sem:10},
+    {code:'MED542', name:'Family Medicine', sub:'Integrated Clinical Course', icon:'🏠', color:'linear-gradient(135deg,#0D4A7A,#1DB97A)', qs:200, sem:10},
+    {code:'MED543', name:'Dermatology', sub:'Skin Diseases', icon:'🔬', color:'linear-gradient(135deg,#7A3A0D,#E87A1A)', qs:688, sem:10},
+  ],
+  'intern': [
+    {code:'INT01', name:'Internal Medicine', sub:'Rotation', icon:'🩺', color:'linear-gradient(135deg,#0D3B7A,#1560BD)', qs:0, sem:0},
+    {code:'INT02', name:'Surgery', sub:'Rotation', icon:'🔪', color:'linear-gradient(135deg,#4A4A0D,#8A8A1A)', qs:0, sem:0},
+    {code:'INT03', name:'Pediatrics', sub:'Rotation', icon:'👶', color:'linear-gradient(135deg,#0A4A2A,#1DB97A)', qs:0, sem:0},
+    {code:'INT04', name:'OB/GYN', sub:'Rotation', icon:'🤰', color:'linear-gradient(135deg,#5A0A2A,#E84A8A)', qs:0, sem:0},
+    {code:'INT05', name:'Emergency Medicine', sub:'Rotation', icon:'🚨', color:'linear-gradient(135deg,#7A0D0D,#C43030)', qs:0, sem:0},
+    {code:'INT06', name:'Community Medicine', sub:'Rotation', icon:'🏥', color:'linear-gradient(135deg,#0D4A7A,#1560BD)', qs:0, sem:0},
+  ]
+};
+
+function renderModules(m) {
+var year = (window.userProfile && window.userProfile.year) || ‘4’;
+var mods = MODULES_BY_YEAR[year] || MODULES_BY_YEAR[‘4’];
+var userName = (window.userProfile && window.userProfile.first_name) || ‘Student’;
+
+// Group by semester
+var sems = {};
+mods.forEach(function(mod) {
+var s = mod.sem || 0;
+if (!sems[s]) sems[s] = [];
+sems[s].push(mod);
+});
+
+var html =
+‘<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:10px;">’ +
+‘<div>’ +
+‘<div style="font-size:clamp(16px,2vw,20px);font-weight:800;color:#0A1628;">📚 My <span style="color:#4AA8E8;">Modules</span></div>’ +
+‘<div style="font-size:11px;color:#8A9BB5;margin-top:3px;letter-spacing:1px;">Year ’ + year + ’ · Alexandria National University</div>’ +
+‘</div>’ +
+‘<button onclick="setDash(\'create\',null)" style="background:#4AA8E8;color:#0A1628;padding:9px 18px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;font-family:inherit;">✦ Create Quiz</button>’ +
+‘</div>’;
+
+// Render by semester
+Object.keys(sems).sort().forEach(function(sem) {
+var semMods = sems[sem];
+var semLabel = sem == 0 ? ‘Rotations’ : ’Semester ’ + sem;
+
+```
+html += '<div style="margin-bottom:28px;">' +
+  '<div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#8A9BB5;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(10,22,40,.06);">' + semLabel + '</div>' +
+  '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;">';
+
+semMods.forEach(function(mod) {
+  var hasQ = mod.qs > 0;
+  html +=
+    '<div onclick="openModule(\'' + mod.code + '\')" style="border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 4px 16px rgba(10,22,40,.1);transition:transform .2s;" onmouseover="this.style.transform=\'translateY(-3px)\'" onmouseout="this.style.transform=\'translateY(0)\'">' +
+    // Card image area
+    '<div style="height:120px;background:' + mod.color + ';display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;">' +
+    '<div style="position:absolute;top:-10px;right:-10px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.06);"></div>' +
+    '<div style="font-size:36px;margin-bottom:6px;">' + mod.icon + '</div>' +
+    '<div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.6);">' + mod.code + '</div>' +
+    (hasQ ? '<div style="position:absolute;top:8px;right:8px;background:rgba(29,185,122,.9);color:white;font-size:8px;font-weight:700;padding:2px 7px;border-radius:100px;">' + mod.qs + ' Qs</div>' : '<div style="position:absolute;top:8px;right:8px;background:rgba(255,255,255,.15);color:white;font-size:8px;font-weight:700;padding:2px 7px;border-radius:100px;">Soon</div>') +
+    '</div>' +
+    // Card info
+    '<div style="background:white;padding:12px;">' +
+    '<div style="font-size:12px;font-weight:700;color:#0A1628;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + mod.name + '</div>' +
+    '<div style="font-size:10px;color:#8A9BB5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + mod.sub + '</div>' +
+    '</div></div>';
+});
+
+html += '</div></div>';
+```
+
+});
+
+m.innerHTML = html;
+}
+
+function openModule(code) {
+// Find the module
+var year = (window.userProfile && window.userProfile.year) || ‘4’;
+var mods = MODULES_BY_YEAR[year] || [];
+var mod = mods.find(function(m) { return m.code === code; });
+if (!mod) return;
+
+if (mod.qs === 0) {
+alert(’📚 ’ + mod.name + ‘\n\nQuestions for this module are coming soon!’);
+return;
+}
+
+// Go to create quiz with this module pre-selected
+setDash(‘create’, null);
+setTimeout(function() {
+var modInput = document.getElementById(‘AMOD’);
+if (modInput) modInput.value = code + ’ ’ + mod.name;
+}, 100);
+}
+</script>
