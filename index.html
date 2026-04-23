@@ -33,13 +33,13 @@ nav{position:sticky;top:0;left:0;right:0;z-index:200;background:rgba(10,22,40,.9
 .nav-mobile-link:hover{background:rgba(255,255,255,.06);color:white;}
 
 /* PAGES */
-.page{display:none;}.page.active{display:block;}#page-landing{display:block;}#page-dashboard{display:none;}
+#page-landing{display:block;}#page-dashboard{display:none;}
 
 /* MODALS */
 .modal-overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(10,22,40,.75);backdrop-filter:blur(10px);align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;}
 .modal-overlay.open{display:flex;}
-.modal-box{background:white;border-radius:24px;padding:36px;width:100%;max-width:520px;box-shadow:0 40px 100px rgba(10,22,40,.3);position:relative;margin:auto;}
-to{opacity:1;transform:scale(1)}}
+.modal-box{background:white;border-radius:24px;padding:36px;width:100%;max-width:520px;box-shadow:0 40px 100px rgba(10,22,40,.3);position:relative;animation:popIn .3s ease;margin:auto;}
+@keyframes popIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
 .modal-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;}
 .modal-logo-name{font-size:18px;font-weight:800;letter-spacing:6px;text-transform:uppercase;color:var(–navy);}
 .modal-title{font-size:20px;font-weight:800;color:var(–navy);margin-bottom:4px;}
@@ -66,14 +66,14 @@ to{opacity:1;transform:scale(1)}}
 .modules-box strong{font-weight:700;color:var(–ocean);}
 
 /* HERO */
-.hero{min-height:100vh;background:#0A1628;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.hero{min-height:100vh;background:var(–navy);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
 .hero::before{content:’’;position:absolute;inset:0;background-image:linear-gradient(rgba(74,168,232,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,168,232,.04) 1px,transparent 1px);background-size:60px 60px;}
 .hero::after{content:’’;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(600px,90vw);height:min(600px,90vw);border-radius:50%;background:radial-gradient(circle,rgba(74,168,232,.08) 0%,transparent 65%);}
-.hero-content>*{}
-
-.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(–sky);}
-50%{opacity:.3}}
-
+.hero-content{position:relative;z-index:2;text-align:center;padding:40px 24px;max-width:800px;width:100%;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,168,232,.1);border:1px solid rgba(74,168,232,.2);color:var(–sky);padding:8px 20px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:28px;}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(–sky);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-logo-big{display:flex;justify-content:center;margin-bottom:24px;}
 .hero-title{font-size:clamp(34px,6vw,68px);font-weight:800;color:white;line-height:1.05;letter-spacing:-2px;margin-bottom:18px;}
 .hero-title span{color:var(–sky);}
 .hero-sub{font-size:clamp(13px,2vw,15px);font-weight:300;color:rgba(255,255,255,.5);line-height:1.8;margin-bottom:36px;max-width:520px;margin-left:auto;margin-right:auto;}
@@ -243,7 +243,7 @@ footer{background:var(–navy);padding:60px 40px 0;}
 .q-explanation strong{color:#0D7A4A;font-weight:700;}
 .q-video-btn{margin-top:8px;display:flex;align-items:center;gap:6px;background:rgba(10,22,40,.06);border:none;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:600;color:var(–navy);cursor:pointer;font-family:‘Montserrat’,sans-serif;}
 .q-timer{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(–navy);}
-.q-timer-dot{width:7px;height:7px;border-radius:50%;background:var(–orange);}
+.q-timer-dot{width:7px;height:7px;border-radius:50%;background:var(–orange);animation:pulse 1s infinite;}
 .q-submit{background:var(–navy);color:white;padding:10px 20px;border-radius:9px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;font-family:‘Montserrat’,sans-serif;transition:all .2s;}
 .q-submit:hover{background:var(–ocean);}
 .q-actions{display:flex;gap:8px;align-items:center;}
@@ -446,7 +446,15 @@ footer{background:var(–navy);padding:60px 40px 0;}
 @media(max-width:768px){nav{padding:0 16px;}.nav-links{display:none;}.nav-btns{display:none;}.nav-hamburger{display:flex;}.sidebar{transform:translateX(-100%);}.sidebar.open{transform:translateX(0);}.sidebar-overlay.open{display:block;}.dash-main{margin-left:0;padding:16px;}.dash-right{grid-template-columns:1fr;}.features{padding:60px 20px;}.lb-section{padding:60px 20px;}.pricing{padding:60px 20px;}.payment-section{padding:50px 20px;}.cta-section{padding:60px 20px;}footer{padding:48px 20px 0;}.footer-grid{grid-template-columns:1fr;gap:24px;}.form-row{grid-template-columns:1fr;}.welcome-banner{flex-direction:column;align-items:flex-start;}.blocks-grid{grid-template-columns:repeat(2,1fr);}.pq-grid{grid-template-columns:1fr;}}
 @media(max-width:480px){.stats-row{grid-template-columns:1fr 1fr;gap:10px;}.sc-value{font-size:22px;}.hero-stats{gap:18px;}.modal-box{padding:24px 16px;}.pricing-grid{grid-template-columns:1fr;}}
 /* No animations - always visible */
-.hero-content>*{}
+
+/* FORCE HERO TEXT VISIBLE */
+.hero-badge { color: #4AA8E8 !important; opacity: 1 !important; visibility: visible !important; display: inline-flex !important; }
+.hero-title { color: white !important; opacity: 1 !important; visibility: visible !important; display: block !important; }
+.hero-title span { color: #4AA8E8 !important; }
+.hero-sub { color: rgba(255,255,255,.5) !important; opacity: 1 !important; visibility: visible !important; display: block !important; }
+.hero-btns { opacity: 1 !important; visibility: visible !important; display: flex !important; }
+.hero-stats { opacity: 1 !important; visibility: visible !important; display: flex !important; }
+.hero-logo-big { opacity: 1 !important; visibility: visible !important; display: flex !important; }
 </style>
 
 </head>
@@ -649,7 +657,7 @@ footer{background:var(–navy);padding:60px 40px 0;}
 
 <!-- ════════════ LANDING ════════════ -->
 
-<div id="page-landing" class="page active">
+<div id="page-landing" style="display:block;">
 
 <section class="hero">
   <div class="hero-content">
@@ -810,7 +818,7 @@ footer{background:var(–navy);padding:60px 40px 0;}
 
 <!-- ════════════ DASHBOARD ════════════ -->
 
-<div id="page-dashboard" class="page">
+<div id="page-dashboard" style="display:none;">
 <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-section">
