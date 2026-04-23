@@ -1,310 +1,302 @@
-<!DOCTYPE html>
+import { useState, useEffect } from “react”;
 
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nawa Admin</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:Arial,sans-serif;background:#F4F8FC;color:#0A1628;padding:20px;}
-input,select,textarea{width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;font-family:inherit;outline:none;box-sizing:border-box;}
-input:focus,select:focus,textarea:focus{border-color:#4AA8E8;}
-button{padding:10px 20px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
-.card{background:white;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px;}
-.ok{color:#0D7A4A;background:rgba(29,185,122,.1);padding:8px 12px;border-radius:7px;font-size:12px;font-weight:600;margin-bottom:12px;}
-.er{color:#B83030;background:rgba(232,74,74,.1);padding:8px 12px;border-radius:7px;font-size:12px;font-weight:600;margin-bottom:12px;}
-.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0A1628;display:block;margin:12px 0 4px;}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.tab{padding:8px 18px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:white;color:#8A9BB5;}
-.tab.on{background:#0A1628;color:white;}
-</style>
-</head>
-<body>
+const URL = ‘https://zphhtwarzqhsmqsawknt.supabase.co’;
+const KEY = ‘eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY’;
 
-<div id="A"></div>
-
-<script>
-var URL = 'https://zphhtwarzqhsmqsawknt.supabase.co';
-var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
-var TOKEN = localStorage.getItem('nawa_admin_token') || '';
-var USER_EMAIL = localStorage.getItem('nawa_admin_email') || '';
-var A = document.getElementById('A');
-var ALL_Q = [];
-
-// ── API HELPERS ──
-async function api(method, path, body) {
-  var headers = {
-    'Content-Type': 'application/json',
-    'apikey': KEY,
-    'Authorization': 'Bearer ' + (TOKEN || KEY),
-    'Prefer': 'return=representation'
-  };
-  var opts = { method: method, headers: headers };
-  if (body) opts.body = JSON.stringify(body);
-  var r = await fetch(URL + path, opts);
-  var text = await r.text();
-  try { return { ok: r.ok, data: JSON.parse(text), status: r.status }; }
-  catch(e) { return { ok: r.ok, data: text, status: r.status }; }
+async function api(method, path, body, token) {
+const headers = {
+‘Content-Type’: ‘application/json’,
+‘apikey’: KEY,
+‘Authorization’: ’Bearer ’ + (token || KEY),
+‘Prefer’: ‘return=representation’
+};
+const r = await fetch(URL + path, {
+method,
+headers,
+body: body ? JSON.stringify(body) : undefined
+});
+const text = await r.text();
+try { return { ok: r.ok, data: JSON.parse(text) }; }
+catch { return { ok: r.ok, data: text }; }
 }
 
-async function authApi(method, path, body) {
-  var headers = { 'Content-Type': 'application/json', 'apikey': KEY };
-  if (TOKEN) headers['Authorization'] = 'Bearer ' + TOKEN;
-  var r = await fetch(URL + path, { method: method, headers: headers, body: body ? JSON.stringify(body) : undefined });
-  var text = await r.text();
-  try { return { ok: r.ok, data: JSON.parse(text) }; }
-  catch(e) { return { ok: r.ok, data: text }; }
-}
+export default function Admin() {
+const [token, setToken] = useState(localStorage.getItem(‘nawa_t’) || ‘’);
+const [email, setEmail] = useState(’’);
+const [pw, setPw] = useState(’’);
+const [loginMsg, setLoginMsg] = useState(’’);
+const [tab, setTab] = useState(‘q’);
+const [questions, setQuestions] = useState([]);
+const [users, setUsers] = useState([]);
+const [search, setSearch] = useState(’’);
+const [yearFilter, setYearFilter] = useState(’’);
+const [msg, setMsg] = useState(’’);
+const [loading, setLoading] = useState(false);
 
-// ── INIT ──
-if (TOKEN) {
-  showDash();
-} else {
-  showLogin();
-}
+// Add form state
+const [form, setForm] = useState({
+question_text: ‘’, option_a: ‘’, option_b: ‘’, option_c: ‘’, option_d: ‘’,
+correct_option: ‘a’, explanation: ‘’, module_name: ‘’, year_level: ‘4’,
+block: ‘’, bank: ‘nawa’, difficulty: 3
+});
+
+useEffect(() => {
+if (token && tab === ‘q’) loadQ();
+if (token && tab === ‘u’) loadU();
+}, [token, tab]);
 
 // ── LOGIN ──
-function showLogin() {
-  A.innerHTML =
-    '<div style="max-width:360px;margin:60px auto;">' +
-    '<div class="card" style="text-align:center;">' +
-    '<div style="font-size:36px;margin-bottom:12px;">🔐</div>' +
-    '<h2 style="font-size:20px;font-weight:800;margin-bottom:4px;">Nawa Admin</h2>' +
-    '<p style="font-size:13px;color:#8A9BB5;margin-bottom:20px;">Sign in to manage your platform</p>' +
-    '<div id="LM"></div>' +
-    '<span class="lbl" style="text-align:left;">Email</span>' +
-    '<input id="LE" type="email" placeholder="admin@email.com" style="margin-bottom:4px;">' +
-    '<span class="lbl" style="text-align:left;">Password</span>' +
-    '<input id="LP" type="password" placeholder="Password" style="margin-bottom:16px;" onkeydown="if(event.key===\'Enter\')doLogin()">' +
-    '<button onclick="doLogin()" style="width:100%;background:#0A1628;color:white;">Sign In</button>' +
-    '</div></div>';
-}
-
 async function doLogin() {
-  var email = document.getElementById('LE').value.trim();
-  var pw = document.getElementById('LP').value;
-  var m = document.getElementById('LM');
-  if (!email || !pw) { m.innerHTML = '<div class="er">Enter email and password</div>'; return; }
-  m.innerHTML = '<p style="color:#8A9BB5;font-size:12px;margin-bottom:8px;">Signing in...</p>';
-
-  var r = await authApi('POST', '/auth/v1/token?grant_type=password', { email: email, password: pw });
-
-  if (!r.ok || !r.data.access_token) {
-    var msg = r.data.error_description || r.data.message || 'Wrong email or password';
-    m.innerHTML = '<div class="er">' + msg + '</div>';
-  } else {
-    TOKEN = r.data.access_token;
-    USER_EMAIL = email;
-    localStorage.setItem('nawa_admin_token', TOKEN);
-    localStorage.setItem('nawa_admin_email', USER_EMAIL);
-    showDash();
-  }
+if (!email || !pw) { setLoginMsg(‘Enter email and password’); return; }
+setLoginMsg(‘Signing in…’);
+const r = await fetch(URL + ‘/auth/v1/token?grant_type=password’, {
+method: ‘POST’,
+headers: { ‘Content-Type’: ‘application/json’, ‘apikey’: KEY },
+body: JSON.stringify({ email, password: pw })
+});
+const data = await r.json();
+if (data.access_token) {
+localStorage.setItem(‘nawa_t’, data.access_token);
+setToken(data.access_token);
+setLoginMsg(’’);
+} else {
+setLoginMsg(data.error_description || data.message || ‘Wrong email or password’);
 }
-
-// ── DASHBOARD ──
-var CUR = 'q';
-
-function showDash() {
-  A.innerHTML =
-    '<div style="background:#0A1628;margin:-20px -20px 20px;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;">' +
-    '<span style="color:white;font-size:15px;font-weight:700;">🎓 Nawa Admin</span>' +
-    '<div style="display:flex;align-items:center;gap:10px;">' +
-    '<span style="color:rgba(255,255,255,.45);font-size:11px;">' + USER_EMAIL + '</span>' +
-    '<button onclick="doLogout()" style="background:rgba(255,255,255,.1);color:white;padding:6px 12px;font-size:11px;">Sign Out</button>' +
-    '</div></div>' +
-    '<div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">' +
-    '<button class="tab on" id="t-q" onclick="goTab(\'q\')">📋 Questions</button>' +
-    '<button class="tab" id="t-add" onclick="goTab(\'add\')">➕ Add Question</button>' +
-    '<button class="tab" id="t-u" onclick="goTab(\'u\')">👥 Users</button>' +
-    '</div>' +
-    '<div id="TC"></div>';
-  loadQ();
 }
 
 function doLogout() {
-  TOKEN = ''; USER_EMAIL = '';
-  localStorage.removeItem('nawa_admin_token');
-  localStorage.removeItem('nawa_admin_email');
-  showLogin();
-}
-
-function goTab(t) {
-  CUR = t;
-  ['q','add','u'].forEach(function(x) {
-    var el = document.getElementById('t-' + x);
-    if (el) { el.className = 'tab' + (x === t ? ' on' : ''); }
-  });
-  if (t === 'q') loadQ();
-  else if (t === 'add') showAdd();
-  else if (t === 'u') loadU();
+localStorage.removeItem(‘nawa_t’);
+setToken(’’);
 }
 
 // ── QUESTIONS ──
 async function loadQ() {
-  var c = document.getElementById('TC'); if (!c) return;
-  c.innerHTML = '<p style="color:#8A9BB5;font-size:13px;padding:10px 0;">Loading...</p>';
-  var r = await api('GET', '/rest/v1/questions?select=*&order=created_at.desc');
-  if (!r.ok) { c.innerHTML = '<div class="er">Error: ' + JSON.stringify(r.data) + '</div>'; return; }
-  ALL_Q = r.data || [];
-  renderQ(ALL_Q);
-}
-
-function renderQ(data) {
-  var c = document.getElementById('TC'); if (!c) return;
-  var h =
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">' +
-    '<div style="font-size:16px;font-weight:700;">Questions (' + data.length + '/' + ALL_Q.length + ')</div>' +
-    '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
-    '<input id="QS" placeholder="🔍 Search..." style="width:160px;" oninput="filterQ()">' +
-    '<select id="QY" style="width:110px;" onchange="filterQ()">' +
-    '<option value="">All Years</option>' +
-    '<option value="1">Year 1</option><option value="2">Year 2</option>' +
-    '<option value="3">Year 3</option><option value="4">Year 4</option><option value="5">Year 5</option>' +
-    '</select></div></div>' +
-    '<div id="QM" style="margin-bottom:8px;"></div>';
-
-  if (!data.length) {
-    h += '<div class="card" style="text-align:center;color:#8A9BB5;padding:40px;">No questions yet. Click "Add Question"!</div>';
-  } else {
-    h += '<div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">';
-    h += data.map(function(q, i) {
-      return '<div style="padding:12px 16px;border-bottom:1px solid #f0f4f8;display:flex;justify-content:space-between;align-items:center;gap:10px;' + (i%2 ? 'background:#fafcff' : '') + '">' +
-        '<div style="flex:1;min-width:0;">' +
-        '<div style="font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + q.question_text.substring(0, 65) + (q.question_text.length > 65 ? '...' : '') + '</div>' +
-        '<div style="font-size:11px;color:#8A9BB5;margin-top:3px;">' + (q.module_name||'—') + ' · Y' + (q.year_level||'?') + ' · <strong style="color:#0D7A4A;">' + (q.correct_option||'?').toUpperCase() + '</strong></div>' +
-        '</div>' +
-        '<div style="display:flex;gap:5px;flex-shrink:0;">' +
-        '<button onclick="togQ(\'' + q.id + '\',' + q.is_active + ')" style="padding:4px 9px;font-size:10px;font-weight:700;border:none;border-radius:6px;cursor:pointer;background:' + (q.is_active ? 'rgba(29,185,122,.1)' : 'rgba(232,122,26,.1)') + ';color:' + (q.is_active ? '#0D7A4A' : '#B85A0D') + ';">' + (q.is_active ? '✓ Active' : '✗ Off') + '</button>' +
-        '<button onclick="delQ(\'' + q.id + '\')" style="padding:4px 9px;font-size:12px;border:none;border-radius:6px;cursor:pointer;background:rgba(232,74,74,.1);">🗑</button>' +
-        '</div></div>';
-    }).join('');
-    h += '</div>';
-  }
-  c.innerHTML = h;
-}
-
-function filterQ() {
-  var s = (document.getElementById('QS').value || '').toLowerCase();
-  var y = document.getElementById('QY').value;
-  renderQ(ALL_Q.filter(function(q) {
-    return (!s || (q.question_text||'').toLowerCase().includes(s) || (q.module_name||'').toLowerCase().includes(s)) &&
-           (!y || q.year_level === y);
-  }));
+setLoading(true);
+const r = await api(‘GET’, ‘/rest/v1/questions?select=*&order=created_at.desc’, null, token);
+if (r.ok) setQuestions(r.data || []);
+else setMsg(’Error: ’ + JSON.stringify(r.data));
+setLoading(false);
 }
 
 async function togQ(id, active) {
-  await api('PATCH', '/rest/v1/questions?id=eq.' + id, { is_active: !active });
-  loadQ();
+await api(‘PATCH’, ‘/rest/v1/questions?id=eq.’ + id, { is_active: !active }, token);
+loadQ();
 }
 
 async function delQ(id) {
-  if (!confirm('Delete this question?')) return;
-  await api('DELETE', '/rest/v1/questions?id=eq.' + id);
-  document.getElementById('QM').innerHTML = '<div class="ok">✅ Deleted</div>';
-  setTimeout(loadQ, 600);
+if (!confirm(‘Delete?’)) return;
+await api(‘DELETE’, ‘/rest/v1/questions?id=eq.’ + id, null, token);
+setMsg(‘✅ Deleted’);
+setTimeout(() => { setMsg(’’); loadQ(); }, 800);
 }
 
-// ── ADD QUESTION ──
-function showAdd() {
-  var c = document.getElementById('TC'); if (!c) return;
-  c.innerHTML =
-    '<div class="card" style="max-width:660px;">' +
-    '<h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">➕ Add New Question</h3>' +
-    '<div id="AM"></div>' +
-    '<span class="lbl">Question Text *</span>' +
-    '<textarea id="AQ" rows="3" placeholder="Which of the following..."></textarea>' +
-
-```
-'<div class="row2">' +
-'<div><span class="lbl">Option A *</span><input id="AA" placeholder="Option A"></div>' +
-'<div><span class="lbl">Option B *</span><input id="AB" placeholder="Option B"></div>' +
-'<div><span class="lbl">Option C *</span><input id="AC" placeholder="Option C"></div>' +
-'<div><span class="lbl">Option D *</span><input id="AD" placeholder="Option D"></div>' +
-'</div>' +
-'<div class="row2">' +
-'<div><span class="lbl">Correct Answer *</span><select id="ACOR"><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option></select></div>' +
-'<div><span class="lbl">Difficulty</span><select id="ADIF"><option value="1">1 Easy</option><option value="2">2</option><option value="3" selected>3 Medium</option><option value="4">4</option><option value="5">5 Hard</option></select></div>' +
-'</div>' +
-'<span class="lbl">Explanation</span><input id="AEXP" placeholder="Why is this the correct answer?">' +
-'<div class="row2">' +
-'<div><span class="lbl">Module Name</span><input id="AMOD" placeholder="MED431 Cardiopulmonary"></div>' +
-'<div><span class="lbl">Year Level</span><select id="AYEAR"><option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4" selected>Year 4</option><option value="5">Year 5</option></select></div>' +
-'</div>' +
-'<div class="row2">' +
-'<div><span class="lbl">Subject/Block</span><input id="ABLK" placeholder="Cardiology"></div>' +
-'<div><span class="lbl">Bank</span><select id="ABNK"><option value="nawa">Nawa QBank</option><option value="final">Final QBank</option></select></div>' +
-'</div>' +
-'<div style="margin-top:18px;">' +
-'<button onclick="saveQ()" style="background:#0A1628;color:white;">Save Question</button>' +
-'</div></div>';
-```
-
-}
-
+// ── SAVE QUESTION ──
 async function saveQ() {
-var q = document.getElementById(‘AQ’).value.trim();
-var a = document.getElementById(‘AA’).value.trim();
-var b = document.getElementById(‘AB’).value.trim();
-var cc = document.getElementById(‘AC’).value.trim();
-var d = document.getElementById(‘AD’).value.trim();
-var m = document.getElementById(‘AM’);
-if (!q||!a||!b||!cc||!d) { m.innerHTML = ‘<div class="er">Fill all required fields (*)</div>’; return; }
-m.innerHTML = ‘<p style="color:#8A9BB5;font-size:12px;margin-bottom:8px;">Saving…</p>’;
-var r = await api(‘POST’, ‘/rest/v1/questions’, {
-question_text: q, option_a: a, option_b: b, option_c: cc, option_d: d,
-correct_option: document.getElementById(‘ACOR’).value,
-explanation: document.getElementById(‘AEXP’).value.trim(),
-module_name: document.getElementById(‘AMOD’).value.trim(),
-year_level: document.getElementById(‘AYEAR’).value,
-block: document.getElementById(‘ABLK’).value.trim(),
-bank: document.getElementById(‘ABNK’).value,
-difficulty: parseInt(document.getElementById(‘ADIF’).value),
-is_active: true
-});
-if (!r.ok) {
-m.innerHTML = ’<div class="er">Error: ’ + JSON.stringify(r.data) + ‘</div>’;
+const { question_text, option_a, option_b, option_c, option_d } = form;
+if (!question_text || !option_a || !option_b || !option_c || !option_d) {
+setMsg(‘❌ Fill all required fields’); return;
+}
+setMsg(‘Saving…’);
+const r = await api(‘POST’, ‘/rest/v1/questions’, { …form, is_active: true }, token);
+if (r.ok) {
+setMsg(‘✅ Question saved!’);
+setForm({ question_text: ‘’, option_a: ‘’, option_b: ‘’, option_c: ‘’, option_d: ‘’, correct_option: ‘a’, explanation: ‘’, module_name: ‘’, year_level: ‘4’, block: ‘’, bank: ‘nawa’, difficulty: 3 });
 } else {
-m.innerHTML = ‘<div class="ok">✅ Question saved!</div>’;
-[‘AQ’,‘AA’,‘AB’,‘AC’,‘AD’,‘AEXP’,‘AMOD’,‘ABLK’].forEach(function(id) {
-var el = document.getElementById(id); if (el) el.value = ‘’;
-});
+setMsg(’❌ ’ + JSON.stringify(r.data));
 }
 }
 
 // ── USERS ──
 async function loadU() {
-var c = document.getElementById(‘TC’); if (!c) return;
-c.innerHTML = ‘<p style="color:#8A9BB5;font-size:13px;padding:10px 0;">Loading…</p>’;
-var r = await api(‘GET’, ‘/rest/v1/profiles?select=*&order=created_at.desc’);
-if (!r.ok) { c.innerHTML = ‘<div class="er">Error: ’ + JSON.stringify(r.data) + ‘</div>’; return; }
-var users = r.data || [];
-var h = ‘<div style="font-size:16px;font-weight:700;margin-bottom:14px;">Students (’ + users.length + ‘)</div>’;
-if (!users.length) {
-h += ‘<div class="card" style="text-align:center;color:#8A9BB5;padding:40px;">No users yet</div>’;
-} else {
-h += ‘<div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">’;
-h += users.map(function(u, i) {
-return ‘<div style="padding:12px 16px;border-bottom:1px solid #f0f4f8;display:flex;justify-content:space-between;align-items:center;' + (i%2 ? 'background:#fafcff' : '') + '">’ +
-‘<div>’ +
-‘<div style="font-size:13px;font-weight:600;">’ + (u.first_name||’’) + ’ ’ + (u.last_name||’’) + ‘</div>’ +
-‘<div style="font-size:11px;color:#8A9BB5;">’ + (u.email||’’) + ’ · ’ + (u.university||’—’) + ’ · Y’ + (u.year||’?’) + ‘</div>’ +
-‘</div>’ +
-‘<select onchange="updPlan(\'' + u.id + '\',this.value)" style="padding:6px 10px;border-radius:7px;border:1px solid #ddd;font-size:12px;width:auto;">’ +
-‘<option value=“basic”’ + (u.plan===‘basic’ ? ’ selected’ : ‘’) + ‘>Basic</option>’ +
-‘<option value=“pro”’ + (u.plan===‘pro’ ? ’ selected’ : ‘’) + ‘>Pro</option>’ +
-‘<option value=“elite”’ + (u.plan===‘elite’ ? ’ selected’ : ‘’) + ‘>Elite</option>’ +
-‘</select></div>’;
-}).join(’’);
-h += ‘</div>’;
-}
-c.innerHTML = h;
+setLoading(true);
+const r = await api(‘GET’, ‘/rest/v1/profiles?select=*&order=created_at.desc’, null, token);
+if (r.ok) setUsers(r.data || []);
+setLoading(false);
 }
 
 async function updPlan(id, plan) {
-await api(‘PATCH’, ‘/rest/v1/profiles?id=eq.’ + id, { plan: plan });
+await api(‘PATCH’, ‘/rest/v1/profiles?id=eq.’ + id, { plan }, token);
+loadU();
 }
-</script>
 
-</body>
-</html>
+// ── STYLES ──
+const s = {
+nav: { background: ‘#0A1628’, padding: ‘14px 24px’, display: ‘flex’, justifyContent: ‘space-between’, alignItems: ‘center’, marginBottom: 20 },
+inp: { width: ‘100%’, padding: ‘10px 12px’, border: ‘1.5px solid #ddd’, borderRadius: 8, fontSize: 13, fontFamily: ‘inherit’, outline: ‘none’, boxSizing: ‘border-box’ },
+btn: (c) => ({ padding: ‘10px 20px’, border: ‘none’, borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: ‘pointer’, background: c || ‘#0A1628’, color: c ? ‘#0A1628’ : ‘white’, fontFamily: ‘inherit’ }),
+card: { background: ‘white’, borderRadius: 12, padding: 24, boxShadow: ‘0 2px 8px rgba(0,0,0,.06)’, marginBottom: 20 },
+lbl: { fontSize: 10, fontWeight: 700, letterSpacing: 1, textTransform: ‘uppercase’, color: ‘#0A1628’, display: ‘block’, marginBottom: 4, marginTop: 12 },
+tab: (on) => ({ padding: ‘8px 18px’, border: ‘none’, borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: ‘pointer’, background: on ? ‘#0A1628’ : ‘white’, color: on ? ‘white’ : ‘#8A9BB5’, fontFamily: ‘inherit’ })
+};
+
+const filteredQ = questions.filter(q =>
+(!search || (q.question_text||’’).toLowerCase().includes(search.toLowerCase()) || (q.module_name||’’).toLowerCase().includes(search.toLowerCase())) &&
+(!yearFilter || q.year_level === yearFilter)
+);
+
+// ── LOGIN PAGE ──
+if (!token) return (
+<div style={{ fontFamily: ‘Arial,sans-serif’, background: ‘#F4F8FC’, minHeight: ‘100vh’, padding: 20 }}>
+<div style={{ maxWidth: 360, margin: ‘60px auto’ }}>
+<div style={s.card}>
+<div style={{ textAlign: ‘center’ }}>
+<div style={{ fontSize: 36, marginBottom: 12 }}>🔐</div>
+<h2 style={{ fontSize: 20, fontWeight: 800, marginBottom: 4 }}>Nawa Admin</h2>
+<p style={{ fontSize: 13, color: ‘#8A9BB5’, marginBottom: 20 }}>Admins only</p>
+{loginMsg && <div style={{ color: loginMsg.includes(’…’) ? ‘#8A9BB5’ : ‘#B83030’, fontSize: 12, marginBottom: 12, padding: ‘8px 12px’, background: ‘rgba(232,74,74,.08)’, borderRadius: 7 }}>{loginMsg}</div>}
+<span style={s.lbl}>Email</span>
+<input style={{ …s.inp, marginBottom: 4 }} type=“email” placeholder=“admin@email.com” value={email} onChange={e => setEmail(e.target.value)} />
+<span style={s.lbl}>Password</span>
+<input style={{ …s.inp, marginBottom: 16 }} type=“password” placeholder=“Password” value={pw} onChange={e => setPw(e.target.value)} onKeyDown={e => e.key === ‘Enter’ && doLogin()} />
+<button style={{ …s.btn(), width: ‘100%’ }} onClick={doLogin}>Sign In</button>
+</div>
+</div>
+</div>
+</div>
+);
+
+// ── DASHBOARD ──
+return (
+<div style={{ fontFamily: ‘Arial,sans-serif’, background: ‘#F4F8FC’, minHeight: ‘100vh’ }}>
+<div style={s.nav}>
+<span style={{ color: ‘white’, fontSize: 15, fontWeight: 700 }}>🎓 Nawa Admin</span>
+<div style={{ display: ‘flex’, alignItems: ‘center’, gap: 10 }}>
+<button onClick={doLogout} style={{ background: ‘rgba(255,255,255,.1)’, color: ‘white’, border: ‘none’, padding: ‘6px 12px’, borderRadius: 7, fontSize: 11, cursor: ‘pointer’ }}>Sign Out</button>
+</div>
+</div>
+
+```
+  <div style={{ padding: '0 20px 20px' }}>
+    {/* Tabs */}
+    <div style={{ display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' }}>
+      <button style={s.tab(tab === 'q')} onClick={() => setTab('q')}>📋 Questions ({questions.length})</button>
+      <button style={s.tab(tab === 'add')} onClick={() => { setTab('add'); setMsg(''); }}>➕ Add Question</button>
+      <button style={s.tab(tab === 'u')} onClick={() => setTab('u')}>👥 Users ({users.length})</button>
+    </div>
+
+    {/* Global Message */}
+    {msg && <div style={{ padding: '8px 14px', borderRadius: 8, marginBottom: 14, fontSize: 12, fontWeight: 600, background: msg.startsWith('✅') ? 'rgba(29,185,122,.1)' : msg.startsWith('❌') ? 'rgba(232,74,74,.1)' : 'rgba(74,168,232,.1)', color: msg.startsWith('✅') ? '#0D7A4A' : msg.startsWith('❌') ? '#B83030' : '#0D3B7A' }}>{msg}</div>}
+
+    {/* ── QUESTIONS TAB ── */}
+    {tab === 'q' && (
+      <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
+          <div style={{ fontSize: 16, fontWeight: 700 }}>Questions ({filteredQ.length}/{questions.length})</div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <input style={{ ...s.inp, width: 160 }} placeholder="🔍 Search..." value={search} onChange={e => setSearch(e.target.value)} />
+            <select style={{ ...s.inp, width: 110 }} value={yearFilter} onChange={e => setYearFilter(e.target.value)}>
+              <option value="">All Years</option>
+              {['1','2','3','4','5'].map(y => <option key={y} value={y}>Year {y}</option>)}
+            </select>
+            <button style={s.btn('#4AA8E8')} onClick={loadQ}>↻ Refresh</button>
+          </div>
+        </div>
+        {loading ? <p style={{ color: '#8A9BB5', fontSize: 13 }}>Loading...</p> :
+        !filteredQ.length ? <div style={{ ...s.card, textAlign: 'center', color: '#8A9BB5', padding: 40 }}>No questions. Add your first one!</div> :
+        <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,.06)' }}>
+          {filteredQ.map((q, i) => (
+            <div key={q.id} style={{ padding: '12px 16px', borderBottom: '1px solid #f0f4f8', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, background: i%2 ? '#fafcff' : 'white' }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{q.question_text.substring(0, 65)}{q.question_text.length > 65 ? '...' : ''}</div>
+                <div style={{ fontSize: 11, color: '#8A9BB5', marginTop: 2 }}>{q.module_name||'—'} · Y{q.year_level||'?'} · <strong style={{ color: '#0D7A4A' }}>{(q.correct_option||'?').toUpperCase()}</strong> · {q.bank}</div>
+              </div>
+              <div style={{ display: 'flex', gap: 5, flexShrink: 0 }}>
+                <button onClick={() => togQ(q.id, q.is_active)} style={{ padding: '4px 9px', fontSize: 10, fontWeight: 700, border: 'none', borderRadius: 6, cursor: 'pointer', background: q.is_active ? 'rgba(29,185,122,.1)' : 'rgba(232,122,26,.1)', color: q.is_active ? '#0D7A4A' : '#B85A0D' }}>{q.is_active ? '✓ Active' : '✗ Off'}</button>
+                <button onClick={() => delQ(q.id)} style={{ padding: '4px 9px', fontSize: 12, border: 'none', borderRadius: 6, cursor: 'pointer', background: 'rgba(232,74,74,.1)' }}>🗑</button>
+              </div>
+            </div>
+          ))}
+        </div>}
+      </div>
+    )}
+
+    {/* ── ADD QUESTION TAB ── */}
+    {tab === 'add' && (
+      <div style={{ ...s.card, maxWidth: 660 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16 }}>➕ Add New Question</h3>
+        <span style={s.lbl}>Question Text *</span>
+        <textarea style={{ ...s.inp, resize: 'vertical', minHeight: 80 }} placeholder="Which of the following..." value={form.question_text} onChange={e => setForm({...form, question_text: e.target.value})} />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          {['a','b','c','d'].map(opt => (
+            <div key={opt}>
+              <span style={s.lbl}>Option {opt.toUpperCase()} *</span>
+              <input style={s.inp} placeholder={'Option ' + opt.toUpperCase()} value={form['option_' + opt]} onChange={e => setForm({...form, ['option_' + opt]: e.target.value})} />
+            </div>
+          ))}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div>
+            <span style={s.lbl}>Correct Answer *</span>
+            <select style={s.inp} value={form.correct_option} onChange={e => setForm({...form, correct_option: e.target.value})}>
+              <option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option>
+            </select>
+          </div>
+          <div>
+            <span style={s.lbl}>Difficulty</span>
+            <select style={s.inp} value={form.difficulty} onChange={e => setForm({...form, difficulty: parseInt(e.target.value)})}>
+              <option value="1">1 Easy</option><option value="2">2</option><option value="3">3 Medium</option><option value="4">4</option><option value="5">5 Hard</option>
+            </select>
+          </div>
+        </div>
+        <span style={s.lbl}>Explanation</span>
+        <input style={s.inp} placeholder="Why is this the correct answer?" value={form.explanation} onChange={e => setForm({...form, explanation: e.target.value})} />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div>
+            <span style={s.lbl}>Module Name</span>
+            <input style={s.inp} placeholder="MED431 Cardiopulmonary" value={form.module_name} onChange={e => setForm({...form, module_name: e.target.value})} />
+          </div>
+          <div>
+            <span style={s.lbl}>Year Level</span>
+            <select style={s.inp} value={form.year_level} onChange={e => setForm({...form, year_level: e.target.value})}>
+              {['1','2','3','4','5'].map(y => <option key={y} value={y}>Year {y}</option>)}
+            </select>
+          </div>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div>
+            <span style={s.lbl}>Subject/Block</span>
+            <input style={s.inp} placeholder="Cardiology" value={form.block} onChange={e => setForm({...form, block: e.target.value})} />
+          </div>
+          <div>
+            <span style={s.lbl}>Bank</span>
+            <select style={s.inp} value={form.bank} onChange={e => setForm({...form, bank: e.target.value})}>
+              <option value="nawa">Nawa QBank</option>
+              <option value="final">Final QBank</option>
+            </select>
+          </div>
+        </div>
+        <div style={{ marginTop: 18 }}>
+          <button style={s.btn()} onClick={saveQ}>Save Question</button>
+        </div>
+      </div>
+    )}
+
+    {/* ── USERS TAB ── */}
+    {tab === 'u' && (
+      <div>
+        <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 14 }}>Students ({users.length})</div>
+        {loading ? <p style={{ color: '#8A9BB5', fontSize: 13 }}>Loading...</p> :
+        !users.length ? <div style={{ ...s.card, textAlign: 'center', color: '#8A9BB5', padding: 40 }}>No users yet</div> :
+        <div style={{ background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,.06)' }}>
+          {users.map((u, i) => (
+            <div key={u.id} style={{ padding: '12px 16px', borderBottom: '1px solid #f0f4f8', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: i%2 ? '#fafcff' : 'white' }}>
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 600 }}>{u.first_name||''} {u.last_name||''}</div>
+                <div style={{ fontSize: 11, color: '#8A9BB5' }}>{u.email||''} · {u.university||'—'} · Y{u.year||'?'}</div>
+              </div>
+              <select value={u.plan||'basic'} onChange={e => updPlan(u.id, e.target.value)} style={{ padding: '6px 10px', borderRadius: 7, border: '1px solid #ddd', fontSize: 12, cursor: 'pointer' }}>
+                <option value="basic">Basic</option>
+                <option value="pro">Pro</option>
+                <option value="elite">Elite</option>
+              </select>
+            </div>
+          ))}
+        </div>}
+      </div>
+    )}
+  </div>
+</div>
+```
+
+);
+}
