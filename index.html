@@ -7,6 +7,7 @@
 <title>Nawa — Medical Education</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Montserrat',-apple-system,sans-serif;background:#0A1628;color:#0A1628;}
@@ -307,7 +308,7 @@ input,select{width:100%;padding:11px 13px;border:1.5px solid rgba(10,22,40,.12);
     </div>
     <div class="si-section">
       <div class="si-label">Account</div>
-      <div class="si" onclick="showLanding()"><span>🚪</span> Sign Out</div>
+      <div class="si" onclick="doLogout()"><span>🚪</span> Sign Out</div>
     </div>
     <div style="margin:12px;padding:14px;background:rgba(74,168,232,.08);border:1px solid rgba(74,168,232,.15);border-radius:10px;">
       <p style="font-size:10px;font-weight:300;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:9px;">Upgrade for unlimited MCQs and premium features.</p>
@@ -397,14 +398,31 @@ var pg = document.getElementById('pricing-grid');
   pg.appendChild(d);
 });
 
+// ── SUPABASE ──
+var SUPA_URL = 'https://zphhtwarzqhsmqsawknt.supabase.co';
+var SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
+var supabase = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+var currentUser = null;
+var currentModalType = 'register';
+
+// Check if user already logged in
+supabase.auth.getSession().then(function(res){
+  if(res.data && res.data.session){
+    currentUser = res.data.session.user;
+    goToDash();
+  }
+});
+
 // MODAL
 function openModal(type){
+  currentModalType = type;
   var reg = document.getElementById('register-fields');
   var title = document.getElementById('modal-title');
   var sub = document.getElementById('modal-sub');
   var sw = document.getElementById('modal-switch');
   var forgot = document.getElementById('forgot-link');
   var btn = document.querySelector('.btn-submit');
+  clearAuthMsg();
   if(type==='register'){
     reg.style.display='block'; forgot.style.display='none';
     title.textContent='Create your account';
@@ -420,15 +438,146 @@ function openModal(type){
   }
   document.getElementById('modal-overlay').classList.add('open');
 }
-function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
+
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); clearAuthMsg(); }
+
+function clearAuthMsg(){
+  var m = document.getElementById('auth-msg');
+  if(m) m.remove();
+}
+
+function showAuthMsg(text, isError){
+  clearAuthMsg();
+  var m = document.createElement('div');
+  m.id = 'auth-msg';
+  m.style.cssText = 'padding:10px 14px;border-radius:9px;font-size:12px;font-weight:600;margin-bottom:12px;text-align:center;background:'+(isError?'rgba(232,74,74,.08)':'rgba(29,185,122,.08)')+';color:'+(isError?'#B83030':'#0D7A4A')+';border:1px solid '+(isError?'rgba(232,74,74,.2)':'rgba(29,185,122,.2)')+';';
+  m.textContent = text;
+  var btn = document.querySelector('.btn-submit');
+  btn.parentNode.insertBefore(m, btn);
+}
+
+function setLoading(loading){
+  var btn = document.querySelector('.btn-submit');
+  if(loading){ btn.textContent = 'Please wait...'; btn.disabled = true; btn.style.opacity='0.6'; }
+  else { btn.textContent = currentModalType==='register' ? 'Create Account' : 'Sign In'; btn.disabled = false; btn.style.opacity='1'; }
+}
+
 function updateModules(){
   var yr = document.getElementById('year-select').value;
   var box = document.getElementById('modules-box');
   if(yr && modules[yr]){ box.style.display='block'; box.innerHTML='<strong style="color:#0D3B7A;">Modules: </strong>'+modules[yr]; }
   else box.style.display='none';
 }
-function enterDash(){ closeModal(); showDash('home',null); document.getElementById('landing').style.display='none'; document.getElementById('dashboard').classList.add('active'); }
-function showLanding(){ document.getElementById('dashboard').classList.remove('active'); document.getElementById('landing').style.display='block'; }
+
+// GET FORM VALUES
+function getFormVal(placeholder){
+  var inputs = document.querySelectorAll('#modal-overlay input');
+  for(var i=0;i<inputs.length;i++){
+    if(inputs[i].placeholder && inputs[i].placeholder.indexOf(placeholder)!==-1) return inputs[i].value.trim();
+  }
+  return '';
+}
+function getSelectVal(id){ var el=document.getElementById(id); return el?el.value:''; }
+
+// MAIN AUTH FUNCTION
+function enterDash(){
+  if(currentModalType==='register') doRegister();
+  else doLogin();
+}
+
+async function doRegister(){
+  var email = getFormVal('ahmed@gmail.com');
+  var password = getFormVal('••••••••');
+  var firstName = getFormVal('Ahmed');
+  var lastName = getFormVal('Hassan');
+  var university = document.querySelector('#register-fields select') ? document.querySelector('#register-fields select').value : '';
+  var year = getSelectVal('year-select');
+
+  if(!email || !password){ showAuthMsg('Please enter email and password', true); return; }
+  if(password.length < 6){ showAuthMsg('Password must be at least 6 characters', true); return; }
+  if(!firstName){ showAuthMsg('Please enter your first name', true); return; }
+
+  setLoading(true);
+  var res = await supabase.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      data: { first_name: firstName, last_name: lastName, university: university, year: year }
+    }
+  });
+
+  setLoading(false);
+  if(res.error){
+    showAuthMsg(res.error.message, true);
+  } else if(res.data && res.data.user){
+    // Update profile in DB
+    await supabase.from('profiles').upsert({
+      id: res.data.user.id,
+      email: email,
+      first_name: firstName,
+      last_name: lastName,
+      university: university,
+      year: year
+    });
+    currentUser = res.data.user;
+    showAuthMsg('Account created! Welcome to Nawa 🎉', false);
+    setTimeout(function(){ closeModal(); goToDash(); }, 1200);
+  }
+}
+
+async function doLogin(){
+  var email = getFormVal('ahmed@gmail.com');
+  var password = getFormVal('••••••••');
+  if(!email || !password){ showAuthMsg('Please enter email and password', true); return; }
+
+  setLoading(true);
+  var res = await supabase.auth.signInWithPassword({ email: email, password: password });
+  setLoading(false);
+
+  if(res.error){
+    showAuthMsg(res.error.message === 'Invalid login credentials' ? 'Wrong email or password' : res.error.message, true);
+  } else if(res.data && res.data.user){
+    currentUser = res.data.user;
+    closeModal();
+    goToDash();
+  }
+}
+
+async function doLogout(){
+  await supabase.auth.signOut();
+  currentUser = null;
+  showLanding();
+}
+
+function goToDash(){
+  document.getElementById('landing').style.display='none';
+  document.getElementById('dashboard').classList.add('active');
+  showDash('home', null);
+  // Update nav to show user
+  updateNavForUser();
+}
+
+function updateNavForUser(){
+  if(!currentUser) return;
+  var navBtns = document.querySelector('.nav-btns');
+  if(navBtns){
+    navBtns.innerHTML = '<div style="display:flex;align-items:center;gap:10px;">'+
+      '<div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#0D3B7A,#4AA8E8);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;">'+
+        (currentUser.user_metadata && currentUser.user_metadata.first_name ? currentUser.user_metadata.first_name[0].toUpperCase() : currentUser.email[0].toUpperCase())+
+      '</div>'+
+      '<button onclick="doLogout()" class="btn btn-outline" style="font-size:10px;padding:7px 14px;">Sign Out</button>'+
+    '</div>';
+  }
+}
+
+function showLanding(){
+  document.getElementById('dashboard').classList.remove('active');
+  document.getElementById('landing').style.display='block';
+  var navBtns = document.querySelector('.nav-btns');
+  if(navBtns){
+    navBtns.innerHTML = '<button class="btn btn-outline" onclick="openModal(\'login\')">Sign In</button><button class="btn btn-sky" onclick="openModal(\'register\')">Sign Up</button>';
+  }
+}
 
 // DASHBOARD
 var currentDash='home';
@@ -453,7 +602,7 @@ function renderHome(m){
   var q=qs[qIdx]; answered=false;
   m.innerHTML=
   '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:10px;">'+
-    '<div><div style="font-size:clamp(16px,2vw,20px);font-weight:800;color:#0A1628;">Welcome, <span style="color:#4AA8E8;">Moneim</span>! 🔥</div><div style="font-size:10px;color:#8A9BB5;letter-spacing:2px;text-transform:uppercase;margin-top:2px;">Thursday · April 23, 2026</div></div>'+
+    '<div><div style="font-size:clamp(16px,2vw,20px);font-weight:800;color:#0A1628;">Welcome, <span style="color:#4AA8E8;">'+(currentUser && currentUser.user_metadata && currentUser.user_metadata.first_name ? currentUser.user_metadata.first_name : 'Moneim')+'</span>! 🔥</div><div style="font-size:10px;color:#8A9BB5;letter-spacing:2px;text-transform:uppercase;margin-top:2px;">Thursday · April 23, 2026</div></div>'+
     '<button onclick="showDash(\'quiz\',null)" style="background:#4AA8E8;color:#0A1628;padding:9px 18px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;font-family:inherit;">✦ Create Quiz</button>'+
   '</div>'+
   '<div style="background:linear-gradient(135deg,#0D3B7A,#1560BD);border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:14px;flex-wrap:wrap;">'+
