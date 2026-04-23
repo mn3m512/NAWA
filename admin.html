@@ -5,293 +5,260 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nawa Admin</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:Arial,sans-serif;background:#F4F8FC;color:#0A1628;}
+.inp{width:100%;padding:11px 13px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;outline:none;}
+.inp:focus{border-color:#4AA8E8;}
+.btn{padding:10px 20px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;}
+.card{background:white;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:20px;}
+.tab{padding:9px 20px;border:none;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:#8A9BB5;}
+.tab.active{background:#0A1628;color:white;}
+label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0A1628;display:block;margin-bottom:5px;margin-top:12px;}
+.ok{color:#0D7A4A;font-size:12px;padding:8px 12px;background:rgba(29,185,122,.08);border-radius:7px;margin-bottom:12px;}
+.err{color:#B83030;font-size:12px;padding:8px 12px;background:rgba(232,74,74,.08);border-radius:7px;margin-bottom:12px;}
 </style>
 </head>
 <body>
-<div id="app" style="padding:20px;">Loading...</div>
+<div id="ROOT" style="padding:20px;min-height:100vh;">
+  <div style="text-align:center;padding:80px;color:#8A9BB5;font-size:14px;">Loading...</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js" onload="INIT()" onerror="document.getElementById('ROOT').innerHTML='<div style=color:red;padding:40px;text-align:center>Failed to load. Check internet connection.</div>'"></script>
 
 <script>
-// ── INIT SUPABASE ──
-var sb = window.supabase.createClient(
-  'https://zphhtwarzqhsmqsawknt.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY'
-);
+var SB, ROOT;
 
-var app = document.getElementById('app');
-
-// ── CHECK SESSION ──
-sb.auth.getSession().then(function(result) {
-  var session = result.data && result.data.session;
-  if (session) {
-    showDashboard(session.user);
-  } else {
-    showLogin();
-  }
-});
-
-// ── LOGIN ──
-function showLogin() {
-  app.innerHTML = [
-    '<div style="max-width:400px;margin:80px auto;background:white;padding:32px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.1);">',
-    '<h2 style="font-size:22px;font-weight:800;color:#0A1628;margin-bottom:4px;">Nawa Admin</h2>',
-    '<p style="font-size:13px;color:#8A9BB5;margin-bottom:24px;">Sign in to manage your platform</p>',
-    '<div id="login-msg" style="margin-bottom:12px;"></div>',
-    '<label style="font-size:11px;font-weight:700;color:#0A1628;display:block;margin-bottom:5px;">EMAIL</label>',
-    '<input id="email" type="email" placeholder="your@email.com" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:12px;outline:none;">',
-    '<label style="font-size:11px;font-weight:700;color:#0A1628;display:block;margin-bottom:5px;">PASSWORD</label>',
-    '<input id="password" type="password" placeholder="••••••••" style="width:100%;padding:11px;border:1.5px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:20px;outline:none;" onkeydown="if(event.key===\'Enter\')doLogin()">',
-    '<button onclick="doLogin()" style="width:100%;padding:13px;background:#0A1628;color:white;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">Sign In</button>',
-    '</div>'
-  ].join('');
-}
-
-async function doLogin() {
-  var email = document.getElementById('email').value.trim();
-  var pw = document.getElementById('password').value;
-  var msg = document.getElementById('login-msg');
-  
-  if (!email || !pw) {
-    msg.innerHTML = '<p style="color:red;font-size:12px;">Please enter email and password</p>';
-    return;
-  }
-  
-  msg.innerHTML = '<p style="color:#8A9BB5;font-size:12px;">Signing in...</p>';
-  
-  var result = await sb.auth.signInWithPassword({ email: email, password: pw });
-  
-  if (result.error) {
-    msg.innerHTML = '<p style="color:red;font-size:12px;">' + result.error.message + '</p>';
-  } else {
-    showDashboard(result.data.user);
-  }
-}
-
-// ── DASHBOARD ──
-function showDashboard(user) {
-  app.innerHTML = [
-    '<div style="background:#0A1628;padding:16px 24px;margin:-20px -20px 24px;display:flex;justify-content:space-between;align-items:center;">',
-    '<span style="color:white;font-size:16px;font-weight:700;">🎓 Nawa Admin Panel</span>',
-    '<div style="display:flex;align-items:center;gap:12px;">',
-    '<span style="color:rgba(255,255,255,.5);font-size:12px;">' + user.email + '</span>',
-    '<button onclick="doLogout()" style="background:rgba(255,255,255,.1);color:white;border:none;padding:7px 14px;border-radius:7px;font-size:12px;cursor:pointer;">Sign Out</button>',
-    '</div></div>',
-    
-    '<div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">',
-    tabBtn('questions', 'Questions', true),
-    tabBtn('add', 'Add Question', false),
-    tabBtn('users', 'Users', false),
-    '</div>',
-    
-    '<div id="tab-content"></div>'
-  ].join('');
-  
-  showTab('questions');
-}
-
-function tabBtn(id, label, active) {
-  return '<button onclick="showTab(\'' + id + '\')" id="tab-' + id + '" style="padding:9px 20px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:' + (active ? '#0A1628' : '#fff') + ';color:' + (active ? '#fff' : '#8A9BB5') + ';">' + label + '</button>';
-}
-
-function setActiveTab(id) {
-  ['questions','add','users'].forEach(function(t) {
-    var btn = document.getElementById('tab-' + t);
-    if (!btn) return;
-    btn.style.background = t === id ? '#0A1628' : '#fff';
-    btn.style.color = t === id ? '#fff' : '#8A9BB5';
-  });
-}
-
-function showTab(id) {
-  setActiveTab(id);
-  if (id === 'questions') loadQuestions();
-  else if (id === 'add') showAddForm();
-  else if (id === 'users') loadUsers();
-}
-
-// ── QUESTIONS TAB ──
-async function loadQuestions() {
-  var c = document.getElementById('tab-content');
-  c.innerHTML = '<p style="color:#8A9BB5;font-size:13px;">Loading questions...</p>';
-  
-  var result = await sb.from('questions').select('*').order('created_at', {ascending: false});
-  var questions = result.data || [];
-  
-  var html = [
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">',
-    '<h3 style="font-size:16px;font-weight:700;">All Questions (' + questions.length + ')</h3>',
-    '<button onclick="showTab(\'add\')" style="background:#4AA8E8;color:#0A1628;border:none;padding:9px 18px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">+ Add Question</button>',
-    '</div>',
-    '<div id="q-msg" style="margin-bottom:12px;"></div>'
-  ].join('');
-  
-  if (!questions.length) {
-    html += '<div style="background:white;border-radius:12px;padding:40px;text-align:center;color:#8A9BB5;">No questions yet. Add your first question!</div>';
-  } else {
-    html += '<div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">';
-    questions.forEach(function(q, i) {
-      html += [
-        '<div style="padding:14px 18px;border-bottom:1px solid #f0f4f8;' + (i % 2 === 0 ? '' : 'background:#fafcff') + '">',
-        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">',
-        '<div style="flex:1;">',
-        '<div style="font-size:13px;font-weight:600;color:#0A1628;margin-bottom:4px;">' + q.question_text.substring(0, 80) + (q.question_text.length > 80 ? '...' : '') + '</div>',
-        '<div style="font-size:11px;color:#8A9BB5;">' + (q.module_name || '—') + ' · Year ' + (q.year_level || '?') + ' · Answer: <strong style="color:#0D7A4A;">' + (q.correct_option || '?').toUpperCase() + '</strong></div>',
-        '</div>',
-        '<div style="display:flex;gap:6px;flex-shrink:0;">',
-        '<button onclick="toggleQ(\'' + q.id + '\',' + q.is_active + ')" style="padding:5px 10px;border-radius:6px;border:none;font-size:11px;font-weight:600;cursor:pointer;background:' + (q.is_active ? 'rgba(29,185,122,.1)' : 'rgba(232,122,26,.1)') + ';color:' + (q.is_active ? '#0D7A4A' : '#B85A0D') + ';">' + (q.is_active ? 'Active' : 'Inactive') + '</button>',
-        '<button onclick="deleteQ(\'' + q.id + '\')" style="padding:5px 10px;border-radius:6px;border:none;font-size:11px;font-weight:600;cursor:pointer;background:rgba(232,74,74,.1);color:#B83030;">Delete</button>',
-        '</div></div></div>'
-      ].join('');
+function INIT() {
+  try {
+    SB = supabase.createClient(
+      'https://zphhtwarzqhsmqsawknt.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY'
+    );
+    ROOT = document.getElementById('ROOT');
+    SB.auth.getSession().then(function(r) {
+      if (r.data && r.data.session) DASH(r.data.session.user);
+      else LOGIN();
     });
-    html += '</div>';
+  } catch(e) {
+    document.getElementById('ROOT').innerHTML = '<div style="color:red;padding:40px;text-align:center;">Error: ' + e.message + '</div>';
   }
-  
-  c.innerHTML = html;
 }
 
-async function toggleQ(id, active) {
-  await sb.from('questions').update({is_active: !active}).eq('id', id);
-  loadQuestions();
+/* ── LOGIN ── */
+function LOGIN() {
+  ROOT.innerHTML =
+    '<div style="max-width:360px;margin:80px auto;"><div class="card" style="text-align:center;">' +
+    '<div style="font-size:36px;margin-bottom:12px;">🔐</div>' +
+    '<h2 style="font-size:20px;font-weight:800;margin-bottom:4px;">Nawa Admin</h2>' +
+    '<p style="font-size:13px;color:#8A9BB5;margin-bottom:20px;">Admins only</p>' +
+    '<div id="LM"></div>' +
+    '<label>Email</label><input class="inp" id="LE" type="email" placeholder="admin@email.com" style="margin-bottom:4px;">' +
+    '<label>Password</label><input class="inp" id="LP" type="password" placeholder="Password" style="margin-bottom:16px;" onkeydown="if(event.key===\'Enter\')DO_LOGIN()">' +
+    '<button class="btn" onclick="DO_LOGIN()" style="width:100%;background:#0A1628;color:white;">Sign In</button>' +
+    '</div></div>';
 }
 
-async function deleteQ(id) {
+async function DO_LOGIN() {
+  var e = document.getElementById('LE').value.trim();
+  var p = document.getElementById('LP').value;
+  var m = document.getElementById('LM');
+  if (!e || !p) { m.innerHTML = '<div class="err">Enter email and password</div>'; return; }
+  m.innerHTML = '<div style="font-size:12px;color:#8A9BB5;margin-bottom:8px;">Signing in...</div>';
+  var r = await SB.auth.signInWithPassword({ email: e, password: p });
+  if (r.error) { m.innerHTML = '<div class="err">' + r.error.message + '</div>'; }
+  else DASH(r.data.user);
+}
+
+/* ── DASHBOARD ── */
+var ALL_Q = [];
+var CUR_TAB = 'q';
+
+function DASH(user) {
+  ROOT.innerHTML =
+    '<div style="background:#0A1628;margin:-20px -20px 20px;padding:14px 24px;display:flex;justify-content:space-between;align-items:center;">' +
+    '<span style="color:white;font-size:15px;font-weight:700;">🎓 Nawa Admin</span>' +
+    '<div style="display:flex;align-items:center;gap:10px;">' +
+    '<span style="color:rgba(255,255,255,.45);font-size:11px;">' + (user.email||'') + '</span>' +
+    '<button class="btn" onclick="DO_LOGOUT()" style="background:rgba(255,255,255,.1);color:white;padding:6px 12px;font-size:11px;">Sign Out</button>' +
+    '</div></div>' +
+    '<div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">' +
+    '<button class="tab active" id="tb-q" onclick="TAB(\'q\')">📋 Questions</button>' +
+    '<button class="tab" id="tb-add" onclick="TAB(\'add\')">➕ Add Question</button>' +
+    '<button class="tab" id="tb-u" onclick="TAB(\'u\')">👥 Users</button>' +
+    '</div>' +
+    '<div id="TC"></div>';
+  LOAD_Q();
+}
+
+async function DO_LOGOUT() { await SB.auth.signOut(); LOGIN(); }
+
+function TAB(t) {
+  CUR_TAB = t;
+  ['q','add','u'].forEach(function(x) {
+    var el = document.getElementById('tb-' + x);
+    if (el) el.className = 'tab' + (x === t ? ' active' : '');
+  });
+  if (t === 'q') LOAD_Q();
+  else if (t === 'add') FORM_ADD();
+  else if (t === 'u') LOAD_U();
+}
+
+/* ── QUESTIONS ── */
+async function LOAD_Q() {
+  var c = document.getElementById('TC'); if (!c) return;
+  c.innerHTML = '<div style="color:#8A9BB5;font-size:13px;">Loading...</div>';
+  var r = await SB.from('questions').select('*').order('created_at', {ascending:false});
+  ALL_Q = r.data || [];
+  RENDER_Q(ALL_Q);
+}
+
+function RENDER_Q(data) {
+  var c = document.getElementById('TC'); if (!c) return;
+  var h =
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px;">' +
+    '<div style="font-size:16px;font-weight:700;">Questions (' + data.length + ' / ' + ALL_Q.length + ' total)</div>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;">' +
+    '<input class="inp" id="QS" placeholder="Search..." style="width:160px;" oninput="FILTER_Q()">' +
+    '<select id="QY" class="inp" style="width:110px;" onchange="FILTER_Q()">' +
+    '<option value="">All Years</option><option value="1">Year 1</option><option value="2">Year 2</option>' +
+    '<option value="3">Year 3</option><option value="4">Year 4</option><option value="5">Year 5</option>' +
+    '</select></div></div>' +
+    '<div id="QM" style="margin-bottom:8px;"></div>' +
+    '<div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">';
+  if (!data.length) {
+    h += '<div style="text-align:center;padding:30px;color:#8A9BB5;">No questions. Add your first one!</div>';
+  } else {
+    h += data.map(function(q, i) {
+      return '<div style="padding:12px 16px;border-bottom:1px solid #f0f4f8;display:flex;justify-content:space-between;align-items:center;gap:10px;' + (i%2?'background:#fafcff':'') + '">' +
+        '<div style="flex:1;min-width:0;">' +
+        '<div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + q.question_text.substring(0,65) + (q.question_text.length>65?'...':'') + '</div>' +
+        '<div style="font-size:11px;color:#8A9BB5;margin-top:2px;">' + (q.module_name||'—') + ' · Y' + (q.year_level||'?') + ' · <strong style="color:#0D7A4A;">' + (q.correct_option||'?').toUpperCase() + '</strong> · ' + (q.bank||'nawa') + '</div>' +
+        '</div><div style="display:flex;gap:5px;flex-shrink:0;">' +
+        '<button class="btn" style="font-size:10px;padding:4px 9px;background:' + (q.is_active?'rgba(29,185,122,.1)':'rgba(232,122,26,.1)') + ';color:' + (q.is_active?'#0D7A4A':'#B85A0D') + ';" onclick="TOG_Q(\'' + q.id + '\',' + q.is_active + ')">' + (q.is_active?'Active':'Inactive') + '</button>' +
+        '<button class="btn" style="font-size:10px;padding:4px 9px;background:rgba(232,74,74,.1);color:#B83030;" onclick="DEL_Q(\'' + q.id + '\')">🗑</button>' +
+        '</div></div>';
+    }).join('');
+  }
+  h += '</div>';
+  c.innerHTML = h;
+}
+
+function FILTER_Q() {
+  var s = (document.getElementById('QS').value||'').toLowerCase();
+  var y = document.getElementById('QY').value;
+  RENDER_Q(ALL_Q.filter(function(q) {
+    return (!s || (q.question_text||'').toLowerCase().includes(s) || (q.module_name||'').toLowerCase().includes(s)) &&
+           (!y || q.year_level === y);
+  }));
+}
+
+async function TOG_Q(id, active) {
+  await SB.from('questions').update({is_active: !active}).eq('id', id);
+  LOAD_Q();
+}
+
+async function DEL_Q(id) {
   if (!confirm('Delete this question?')) return;
-  await sb.from('questions').delete().eq('id', id);
-  var msg = document.getElementById('q-msg');
-  if (msg) msg.innerHTML = '<p style="color:#0D7A4A;font-size:12px;font-weight:600;">✅ Question deleted</p>';
-  setTimeout(loadQuestions, 800);
+  await SB.from('questions').delete().eq('id', id);
+  var m = document.getElementById('QM');
+  if (m) m.innerHTML = '<div class="ok">✅ Deleted</div>';
+  setTimeout(LOAD_Q, 700);
 }
 
-// ── ADD QUESTION TAB ──
-function showAddForm() {
-  var c = document.getElementById('tab-content');
-  c.innerHTML = [
-    '<div style="background:white;border-radius:12px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,.06);max-width:700px;">',
-    '<h3 style="font-size:16px;font-weight:700;margin-bottom:20px;">Add New Question</h3>',
-    '<div id="add-msg" style="margin-bottom:12px;"></div>',
-    
-    fld('Question Text *', '<textarea id="f-q" rows="3" placeholder="Which of the following..." style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;resize:vertical;outline:none;"></textarea>'),
+/* ── ADD QUESTION ── */
+function FORM_ADD() {
+  var c = document.getElementById('TC'); if (!c) return;
+  c.innerHTML =
+    '<div class="card" style="max-width:660px;">' +
+    '<h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">➕ Add New Question</h3>' +
+    '<div id="AM"></div>' +
+    '<label>Question Text *</label>' +
+    '<textarea class="inp" id="AQ" rows="3" placeholder="Which of the following..." style="resize:vertical;"></textarea>' +
 
 ```
-'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">',
-fld('Option A *', '<input id="f-a" placeholder="Option A" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;outline:none;">'),
-fld('Option B *', '<input id="f-b" placeholder="Option B" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;outline:none;">'),
-fld('Option C *', '<input id="f-c" placeholder="Option C" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;outline:none;">'),
-fld('Option D *', '<input id="f-d" placeholder="Option D" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;outline:none;">'),
-'</div>',
-
-'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">',
-fld('Correct Answer *', '<select id="f-correct" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;outline:none;"><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option></select>'),
-fld('Difficulty', '<select id="f-diff" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;outline:none;"><option value="1">1 Easy</option><option value="2">2</option><option value="3" selected>3 Medium</option><option value="4">4</option><option value="5">5 Hard</option></select>'),
-'</div>',
-
-fld('Explanation', '<input id="f-exp" placeholder="Why is this the correct answer?" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;outline:none;">'),
-
-'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">',
-fld('Module Name', '<input id="f-mod" placeholder="e.g. MED431 Cardiopulmonary" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;outline:none;">'),
-fld('Year Level', '<select id="f-year" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;outline:none;"><option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4" selected>Year 4</option><option value="5">Year 5</option></select>'),
-'</div>',
-
-'<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">',
-fld('Subject/Block', '<input id="f-block" placeholder="e.g. Cardiology" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;outline:none;">'),
-fld('Bank', '<select id="f-bank" style="width:100%;padding:10px;border:1.5px solid #ddd;border-radius:8px;font-size:13px;outline:none;"><option value="nawa">Nawa QBank</option><option value="final">Final QBank</option></select>'),
-'</div>',
-
-'<button onclick="saveQ()" style="background:#0A1628;color:white;border:none;padding:12px 28px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;margin-top:8px;">Save Question</button>',
-'</div>'
+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+'<div><label>Option A *</label><input class="inp" id="AA" placeholder="Option A"></div>' +
+'<div><label>Option B *</label><input class="inp" id="AB" placeholder="Option B"></div>' +
+'<div><label>Option C *</label><input class="inp" id="AC" placeholder="Option C"></div>' +
+'<div><label>Option D *</label><input class="inp" id="AD" placeholder="Option D"></div>' +
+'</div>' +
+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+'<div><label>Correct Answer *</label><select class="inp" id="ACOR"><option value="a">A</option><option value="b">B</option><option value="c">C</option><option value="d">D</option></select></div>' +
+'<div><label>Difficulty</label><select class="inp" id="ADIF"><option value="1">1 Easy</option><option value="2">2</option><option value="3" selected>3 Medium</option><option value="4">4</option><option value="5">5 Hard</option></select></div>' +
+'</div>' +
+'<label>Explanation</label><input class="inp" id="AEXP" placeholder="Why is this correct?">' +
+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+'<div><label>Module Name</label><input class="inp" id="AMOD" placeholder="MED431 Cardiopulmonary"></div>' +
+'<div><label>Year Level</label><select class="inp" id="AYEAR"><option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4" selected>Year 4</option><option value="5">Year 5</option></select></div>' +
+'</div>' +
+'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+'<div><label>Subject/Block</label><input class="inp" id="ABLK" placeholder="Cardiology"></div>' +
+'<div><label>Bank</label><select class="inp" id="ABNK"><option value="nawa">Nawa QBank</option><option value="final">Final QBank</option></select></div>' +
+'</div>' +
+'<div style="margin-top:18px;">' +
+'<button class="btn" onclick="SAVE_Q()" style="background:#0A1628;color:white;">Save Question</button>' +
+'</div></div>';
 ```
 
-].join(’’);
 }
 
-function fld(label, input) {
-return ‘<div style="margin-bottom:14px;"><label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0A1628;display:block;margin-bottom:5px;">’ + label + ‘</label>’ + input + ‘</div>’;
-}
-
-async function saveQ() {
-var q = document.getElementById(‘f-q’).value.trim();
-var a = document.getElementById(‘f-a’).value.trim();
-var b = document.getElementById(‘f-b’).value.trim();
-var c = document.getElementById(‘f-c’).value.trim();
-var d = document.getElementById(‘f-d’).value.trim();
-var msg = document.getElementById(‘add-msg’);
-
-if (!q || !a || !b || !c || !d) {
-msg.innerHTML = ‘<p style="color:red;font-size:12px;font-weight:600;">Please fill all required fields (*)</p>’;
-return;
-}
-
-msg.innerHTML = ‘<p style="color:#8A9BB5;font-size:12px;">Saving…</p>’;
-
-var result = await sb.from(‘questions’).insert({
-question_text: q,
-option_a: a, option_b: b, option_c: c, option_d: d,
-correct_option: document.getElementById(‘f-correct’).value,
-explanation: document.getElementById(‘f-exp’).value.trim(),
-module_name: document.getElementById(‘f-mod’).value.trim(),
-year_level: document.getElementById(‘f-year’).value,
-block: document.getElementById(‘f-block’).value.trim(),
-bank: document.getElementById(‘f-bank’).value,
-difficulty: parseInt(document.getElementById(‘f-diff’).value),
-is_active: true
+async function SAVE_Q() {
+var q=document.getElementById(‘AQ’).value.trim();
+var a=document.getElementById(‘AA’).value.trim();
+var b=document.getElementById(‘AB’).value.trim();
+var cc=document.getElementById(‘AC’).value.trim();
+var d=document.getElementById(‘AD’).value.trim();
+var m=document.getElementById(‘AM’);
+if(!q||!a||!b||!cc||!d){m.innerHTML=’<div class="err">Fill all required fields (*)</div>’;return;}
+m.innerHTML=’<div style="font-size:12px;color:#8A9BB5;">Saving…</div>’;
+var r=await SB.from(‘questions’).insert({
+question_text:q,option_a:a,option_b:b,option_c:cc,option_d:d,
+correct_option:document.getElementById(‘ACOR’).value,
+explanation:document.getElementById(‘AEXP’).value.trim(),
+module_name:document.getElementById(‘AMOD’).value.trim(),
+year_level:document.getElementById(‘AYEAR’).value,
+block:document.getElementById(‘ABLK’).value.trim(),
+bank:document.getElementById(‘ABNK’).value,
+difficulty:parseInt(document.getElementById(‘ADIF’).value),
+is_active:true
 });
+if(r.error){m.innerHTML=’<div class="err">Error: ‘+r.error.message+’</div>’;}
+else{
+m.innerHTML=’<div class="ok">✅ Question saved!</div>’;
+[‘AQ’,‘AA’,‘AB’,‘AC’,‘AD’,‘AEXP’,‘AMOD’,‘ABLK’].forEach(function(id){var el=document.getElementById(id);if(el)el.value=’’;});
+}
+}
 
-if (result.error) {
-msg.innerHTML = ’<p style="color:red;font-size:12px;font-weight:600;">Error: ’ + result.error.message + ‘</p>’;
+/* ── USERS ── */
+async function LOAD_U() {
+var c=document.getElementById(‘TC’);if(!c)return;
+c.innerHTML=’<div style="color:#8A9BB5;font-size:13px;">Loading…</div>’;
+var r=await SB.from(‘profiles’).select(’*’).order(‘created_at’,{ascending:false});
+var users=r.data||[];
+var h=’<div style="font-size:16px;font-weight:700;margin-bottom:14px;">Students (’+users.length+’)</div>’ +
+‘<div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">’;
+if(!users.length){
+h+=’<div style="text-align:center;padding:30px;color:#8A9BB5;">No users yet</div>’;
 } else {
-msg.innerHTML = ‘<p style="color:#0D7A4A;font-size:12px;font-weight:600;">✅ Question saved!</p>’;
-[‘f-q’,‘f-a’,‘f-b’,‘f-c’,‘f-d’,‘f-exp’,‘f-mod’,‘f-block’].forEach(function(id) {
-document.getElementById(id).value = ‘’;
-});
+h+=users.map(function(u,i){
+return ‘<div style="padding:12px 16px;border-bottom:1px solid #f0f4f8;display:flex;justify-content:space-between;align-items:center;'+(i%2?'background:#fafcff':'')+'">’ +
+‘<div>’ +
+‘<div style="font-size:13px;font-weight:600;">’+(u.first_name||’’)+’ ‘+(u.last_name||’’)+’</div>’ +
+‘<div style="font-size:11px;color:#8A9BB5;">’+(u.email||’’)+’·’+(u.university||’—’)+’·Y’+(u.year||’?’)+’</div>’ +
+‘</div>’ +
+‘<select onchange="UPD_PLAN(\''+u.id+'\',this.value)" style="padding:6px 10px;border-radius:7px;border:1px solid #ddd;font-size:12px;">’ +
+‘<option value=“basic”’+(u.plan===‘basic’?’ selected’:’’)+’>Basic</option>’ +
+‘<option value=“pro”’+(u.plan===‘pro’?’ selected’:’’)+’>Pro</option>’ +
+‘<option value=“elite”’+(u.plan===‘elite’?’ selected’:’’)+’>Elite</option>’ +
+‘</select></div>’;
+}).join(’’);
 }
-}
-
-// ── USERS TAB ──
-async function loadUsers() {
-var c = document.getElementById(‘tab-content’);
-c.innerHTML = ‘<p style="color:#8A9BB5;font-size:13px;">Loading users…</p>’;
-
-var result = await sb.from(‘profiles’).select(’*’).order(‘created_at’, {ascending: false});
-var users = result.data || [];
-
-var html = ‘<h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">All Students (’ + users.length + ‘)</h3>’;
-
-if (!users.length) {
-html += ‘<div style="background:white;border-radius:12px;padding:40px;text-align:center;color:#8A9BB5;">No users yet.</div>’;
-} else {
-html += ‘<div style="background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">’;
-users.forEach(function(u, i) {
-html += [
-‘<div style="padding:14px 18px;border-bottom:1px solid #f0f4f8;display:flex;justify-content:space-between;align-items:center;' + (i % 2 === 0 ? '' : 'background:#fafcff') + '">’,
-‘<div>’,
-‘<div style="font-size:13px;font-weight:600;">’ + (u.first_name || ‘’) + ’ ’ + (u.last_name || ‘’) + ‘</div>’,
-‘<div style="font-size:11px;color:#8A9BB5;">’ + (u.email || ‘’) + ’ · ’ + (u.university || ‘—’) + ’ · Year ’ + (u.year || ‘?’) + ‘</div>’,
-‘</div>’,
-‘<select onchange="updatePlan(\'' + u.id + '\',this.value)" style="padding:6px 10px;border-radius:7px;border:1px solid #ddd;font-size:12px;cursor:pointer;">’,
-‘<option value=“basic”’ + (u.plan === ‘basic’ ? ’ selected’ : ‘’) + ‘>Basic</option>’,
-‘<option value=“pro”’ + (u.plan === ‘pro’ ? ’ selected’ : ‘’) + ‘>Pro</option>’,
-‘<option value=“elite”’ + (u.plan === ‘elite’ ? ’ selected’ : ‘’) + ‘>Elite</option>’,
-‘</select>’,
-‘</div>’
-].join(’’);
-});
-html += ‘</div>’;
+h+=’</div>’;
+c.innerHTML=h;
 }
 
-c.innerHTML = html;
-}
-
-async function updatePlan(id, plan) {
-await sb.from(‘profiles’).update({plan: plan}).eq(‘id’, id);
-}
-
-async function doLogout() {
-await sb.auth.signOut();
-showLogin();
-}
+async function UPD_PLAN(id,plan){await SB.from(‘profiles’).update({plan:plan}).eq(‘id’,id);}
 </script>
 
 </body>
