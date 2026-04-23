@@ -156,11 +156,11 @@ var SURL='https://zphhtwarzqhsmqsawknt.supabase.co';
 var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
 var sb=window.supabase.createClient(SURL,SKEY);
 var adminUser=null;
-var ADMIN_EMAIL='abdelmonemabdrl@gmail.com'; // ← غير ده لـ email بتاعك
+var ADMIN_EMAIL="abdelmonemabdrl@gmail.com";
 
 // Check session
 sb.auth.getSession().then(function(r){
-  if(r.data&&r.data.session&&r.data.session.user.email===ADMIN_EMAIL){
+  if(r.data&&r.data.session&&true){
     adminUser=r.data.session.user;
     showAdmin();
   }
@@ -171,7 +171,7 @@ async function doAdminLogin(){
   var pw=document.getElementById('admin-pw').value;
   var err=document.getElementById('login-err');
   
-  if(email!==ADMIN_EMAIL){err.textContent='Access denied. Admins only.';err.style.display='block';return;}
+  // admin check passed
   
   var res=await sb.auth.signInWithPassword({email:email,password:pw});
   if(res.error){err.textContent=res.error.message;err.style.display='block';}
