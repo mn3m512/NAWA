@@ -7,566 +7,555 @@
 <title>Nawa — Medical Education</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Montserrat',-apple-system,sans-serif; overflow-x:hidden; }
-html { scroll-behavior:smooth; }
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Montserrat',-apple-system,sans-serif;background:#0A1628;color:#0A1628;}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:#0A1628;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 40px;border-bottom:1px solid rgba(255,255,255,.06);}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
+.logo-name{font-size:17px;font-weight:800;letter-spacing:6px;text-transform:uppercase;color:white;}
+.nav-btns{display:flex;gap:8px;}
+.btn{padding:9px 20px;border-radius:8px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit;border:none;}
+.btn-outline{background:transparent;color:white;border:1px solid rgba(255,255,255,.25)!important;}
+.btn-sky{background:#4AA8E8;color:#0A1628;}
+.btn-big{padding:14px 32px;border-radius:10px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit;}
+.hero{min-height:100vh;background:#0A1628;display:flex;align-items:center;justify-content:center;padding:84px 24px 40px;text-align:center;position:relative;}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(74,168,232,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,168,232,.04) 1px,transparent 1px);background-size:60px 60px;}
+.hero-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:min(500px,80vw);height:min(500px,80vw);border-radius:50%;background:radial-gradient(circle,rgba(74,168,232,.08) 0%,transparent 65%);}
+.hero-inner{position:relative;z-index:2;max-width:760px;width:100%;}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,168,232,.1);border:1px solid rgba(74,168,232,.2);color:#4AA8E8;padding:8px 20px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin-bottom:28px;}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:#4AA8E8;display:inline-block;}
+.hero-logo{display:flex;justify-content:center;margin-bottom:24px;}
+h1{font-size:clamp(34px,6vw,68px);font-weight:800;color:white;line-height:1.05;letter-spacing:-2px;margin-bottom:18px;}
+h1 span{color:#4AA8E8;}
+.hero-sub{font-size:clamp(13px,2vw,15px);font-weight:300;color:rgba(255,255,255,.55);line-height:1.8;margin-bottom:36px;max-width:500px;margin-left:auto;margin-right:auto;}
+.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:52px;}
+.stats{display:flex;gap:clamp(20px,4vw,48px);justify-content:center;padding-top:36px;border-top:1px solid rgba(255,255,255,.06);flex-wrap:wrap;}
+.stat-num{font-size:clamp(22px,3vw,30px);font-weight:800;color:white;letter-spacing:-1px;}
+.stat-label{font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;}
+section{padding:80px clamp(20px,4vw,60px);}
+.sec-tag{font-size:10px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:#4AA8E8;margin-bottom:12px;text-align:center;}
+.sec-title{font-size:clamp(26px,4vw,42px);font-weight:800;color:#0A1628;letter-spacing:-1px;line-height:1.1;text-align:center;}
+.sec-title-white{color:white;}
+.sec-sub{font-size:14px;font-weight:300;color:#8A9BB5;margin-top:12px;max-width:440px;margin-left:auto;margin-right:auto;line-height:1.7;text-align:center;}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;max-width:1100px;margin:52px auto 0;}
+.feat-card{background:white;border-radius:16px;padding:26px;box-shadow:0 4px 20px rgba(10,22,40,.05);border:1px solid rgba(10,22,40,.04);}
+.feat-icon{width:42px;height:42px;border-radius:11px;background:#E2EDF8;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;}
+.feat-title{font-size:13px;font-weight:700;color:#0A1628;margin-bottom:7px;}
+.feat-body{font-size:12px;font-weight:300;color:#8A9BB5;line-height:1.7;}
+.pro-badge{font-size:9px;background:#4AA8E8;color:white;padding:2px 7px;border-radius:100px;font-weight:700;margin-left:6px;}
+.lb-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:60px;align-items:center;}
+.lb-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:24px;}
+.lb-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;margin-bottom:4px;}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;max-width:920px;margin:52px auto 0;}
+.price-card{border-radius:20px;padding:32px 26px;border:1px solid rgba(10,22,40,.08);position:relative;}
+.price-popular{background:#0A1628;border-color:#0A1628;box-shadow:0 32px 80px rgba(10,22,40,.2);}
+.pop-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#4AA8E8;color:#0A1628;font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;padding:5px 14px;border-radius:100px;white-space:nowrap;}
+.price-feats{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:24px;}
+.price-feats li{font-size:12px;font-weight:300;display:flex;align-items:center;gap:9px;}
+.pay-methods{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:32px;}
+.pay-card{background:white;border-radius:14px;padding:18px 24px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 16px rgba(10,22,40,.06);}
+footer{background:#0A1628;padding:60px clamp(20px,4vw,60px) 0;}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:36px;padding-bottom:48px;}
+.footer-bottom{padding:18px 0;border-top:1px solid rgba(255,255,255,.06);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(10,22,40,.8);z-index:500;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;backdrop-filter:blur(8px);}
+.overlay.open{display:flex;}
+.modal{background:white;border-radius:24px;padding:32px;width:100%;max-width:480px;margin:auto;position:relative;box-shadow:0 40px 100px rgba(10,22,40,.3);}
+.modal-close{position:absolute;top:14px;right:14px;background:none;border:none;font-size:18px;cursor:pointer;color:#8A9BB5;}
+label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#0A1628;display:block;margin-bottom:5px;}
+input,select{width:100%;padding:11px 13px;border:1.5px solid rgba(10,22,40,.12);border-radius:10px;font-family:inherit;font-size:13px;color:#0A1628;outline:none;margin-bottom:13px;appearance:none;-webkit-appearance:none;}
+.phone-row{display:flex;gap:8px;}
+.phone-row select{width:130px;flex-shrink:0;margin-bottom:0;}
+.phone-row input{flex:1;margin-bottom:0;}
+.phone-wrap{margin-bottom:13px;}
+.modules-box{background:#E2EDF8;border-radius:10px;padding:10px 14px;font-size:10px;color:#0A1628;line-height:1.8;margin-bottom:13px;font-weight:300;display:none;}
+.btn-submit{width:100%;padding:13px;background:#0A1628;color:white;border:none;border-radius:10px;font-family:inherit;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;}
+.switch{text-align:center;margin-top:13px;font-size:12px;color:#8A9BB5;}
+.switch span{color:#4AA8E8;font-weight:700;cursor:pointer;}
+
+/* DASHBOARD */
+.dash{display:none;min-height:100vh;padding-top:64px;background:#F4F8FC;}
+.dash.active{display:flex;}
+.sidebar{width:220px;flex-shrink:0;background:#0A1628;position:fixed;top:64px;left:0;bottom:0;overflow-y:auto;padding:20px 0;}
+.si{display:flex;align-items:center;gap:9px;padding:9px 8px;border-radius:9px;cursor:pointer;font-size:11px;font-weight:600;color:rgba(255,255,255,.4);transition:all .2s;margin-bottom:1px;}
+.si:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8);}
+.si.active{background:rgba(74,168,232,.15);color:#4AA8E8;}
+.si-section{padding:0 14px;margin-bottom:22px;}
+.si-label{font-size:8px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.2);margin-bottom:7px;padding:0 8px;}
+.dash-main{margin-left:220px;flex:1;padding:24px;min-width:0;}
+.card{background:white;border-radius:16px;box-shadow:0 4px 20px rgba(10,22,40,.06);border:1px solid rgba(10,22,40,.04);overflow:hidden;margin-bottom:16px;}
+.card-header{padding:16px 20px;border-bottom:1px solid rgba(10,22,40,.05);display:flex;justify-content:space-between;align-items:center;}
+.card-body{padding:18px 20px;}
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-bottom:16px;}
+.stat-card{background:white;border-radius:13px;padding:18px;box-shadow:0 2px 12px rgba(10,22,40,.05);position:relative;overflow:hidden;}
+.q-opt{padding:11px 13px;border-radius:10px;font-size:12px;cursor:pointer;border:1.5px solid rgba(10,22,40,.08);margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.q-ltr{width:22px;height:22px;border-radius:6px;background:#E2EDF8;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#8A9BB5;flex-shrink:0;}
+@media(max-width:768px){nav{padding:0 16px;}.dash-main{margin-left:0;padding:16px;}.sidebar{display:none;}}
 </style>
+
 </head>
 <body>
-<div id="root"></div>
-<script type="text/babel">
-const { useState, useEffect } = React;
 
-const C = {
-navy:”#0A1628”, ocean:”#0D3B7A”, blue:”#1560BD”,
-sky:”#4AA8E8”, foam:”#E2EDF8”, off:”#F4F8FC”,
-gray:”#8A9BB5”, green:”#1DB97A”, orange:”#E87A1A”, red:”#E84A4A”
-};
+<!-- NAV -->
 
-const Logo = ({size=34}) => (
-<svg width={size} height={size} viewBox="0 0 100 100" fill="none">
-<defs><clipPath id="lc"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs>
-<circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/>
-<circle cx="50" cy="50" r="46" fill={C.sky} clipPath="url(#lc)"/>
-<path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" strokeWidth="2" fill="none" strokeLinecap="round"/>
-<circle cx="50" cy="50" r="46" stroke="white" strokeWidth="2.5" fill="none"/>
-<circle cx="50" cy="50" r="4" fill="white"/>
-<circle cx="50" cy="50" r="2" fill={C.navy}/>
-</svg>
-);
+<nav>
+  <div class="logo" onclick="showLanding()">
+    <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
+      <defs><clipPath id="lc"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs>
+      <circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/>
+      <circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#lc)"/>
+      <path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <circle cx="50" cy="50" r="46" stroke="white" stroke-width="2.5" fill="none"/>
+      <circle cx="50" cy="50" r="4" fill="white"/>
+      <circle cx="50" cy="50" r="2" fill="#0A1628"/>
+    </svg>
+    <span class="logo-name">Nawa</span>
+  </div>
+  <div class="nav-btns">
+    <button class="btn btn-outline" onclick="openModal('login')">Sign In</button>
+    <button class="btn btn-sky" onclick="openModal('register')">Sign Up</button>
+  </div>
+</nav>
 
-const Btn = ({children, onClick, variant=“primary”, style={}}) => {
-const styles = {
-primary: {background:C.sky, color:C.navy, border:“none”},
-secondary: {background:“transparent”, color:“white”, border:“1px solid rgba(255,255,255,.25)”},
-dark: {background:C.navy, color:“white”, border:“none”},
-outline: {background:“transparent”, color:C.navy, border:“1.5px solid rgba(10,22,40,.15)”},
-};
-return (
-<button onClick={onClick} style={{padding:“12px 28px”,borderRadius:10,fontSize:11,fontWeight:700,letterSpacing:2,textTransform:“uppercase”,cursor:“pointer”,fontFamily:“Montserrat,sans-serif”,…styles[variant],…style}}>
-{children}
-</button>
-);
-};
+<!-- MODALS -->
 
-// ── REGISTER MODAL ──
-const Modal = ({type, onClose, onSwitch, onEnter}) => {
-const [year, setYear] = useState(””);
-const mods = {
-‘1’:‘MED101 Normal Body Structure · MED102 Introduction to Disease · MED103 Infections & Immunology · MED104 Psychology’,
-‘2’:‘MED210 Cardiovascular System · MED211 Respiratory System · MED215 Endocrine & Metabolism · MED216 Digestive System’,
-‘3’:‘MED319 CNS & Special Senses · MED320 Genitourinary · MED323 General Medicine · MED324 General Surgery’,
-‘4’:‘MED430 Medicine · MED431 Cardiopulmonary · MED432 Investigative Medicine · MED433 Pediatrics · MED436 Neuropsychiatry’,
-‘5’:‘MED538 Surgery · MED539 Orthopedic · MED541 OB/GYN · MED542 Family Medicine · MED543 Dermatology’,
-‘intern’:‘Internal Medicine · Surgery · Pediatrics · OB/GYN · Emergency Medicine’
-};
-const inp = {width:“100%”,padding:“11px 13px”,border:“1.5px solid rgba(10,22,40,.12)”,borderRadius:10,fontFamily:“Montserrat,sans-serif”,fontSize:13,color:C.navy,outline:“none”};
-const lbl = {fontSize:9,fontWeight:700,letterSpacing:2,textTransform:“uppercase”,color:C.navy,display:“block”,marginBottom:5,fontFamily:“Montserrat,sans-serif”};
-return (
-<div onClick={onClose} style={{position:“fixed”,inset:0,background:“rgba(10,22,40,.8)”,zIndex:500,display:“flex”,alignItems:“flex-start”,justifyContent:“center”,padding:20,overflowY:“auto”,backdropFilter:“blur(8px)”}}>
-<div onClick={e=>e.stopPropagation()} style={{background:“white”,borderRadius:24,padding:32,width:“100%”,maxWidth:480,margin:“auto”,position:“relative”,boxShadow:“0 40px 100px rgba(10,22,40,.3)”}}>
-<button onClick={onClose} style={{position:“absolute”,top:14,right:14,background:“none”,border:“none”,fontSize:18,cursor:“pointer”,color:C.gray}}>✕</button>
-<div style={{display:“flex”,alignItems:“center”,justifyContent:“center”,gap:10,marginBottom:20}}>
-<Logo size={26}/>
-<span style={{fontSize:18,fontWeight:800,letterSpacing:6,textTransform:“uppercase”,color:C.navy}}>NAWA</span>
-</div>
-<div style={{fontSize:20,fontWeight:800,color:C.navy,marginBottom:4}}>{type===“register”?“Create your account”:“Welcome back!”}</div>
-<div style={{fontSize:12,color:C.gray,marginBottom:20,fontWeight:300}}>{type===“register”?“Join 8,400+ medical students”:“Sign in to continue”}</div>
-
-```
-    {type==="register" && <>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:13}}>
-        <div><label style={lbl}>First Name</label><input style={inp} placeholder="Ahmed"/></div>
-        <div><label style={lbl}>Last Name</label><input style={inp} placeholder="Hassan"/></div>
+<div class="overlay" id="modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;">
+      <svg width="24" height="24" viewBox="0 0 100 100" fill="none"><defs><clipPath id="mc"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="#0A1628"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#mc)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="#0A1628" stroke-width="2.5" fill="none"/><circle cx="50" cy="50" r="4" fill="white"/><circle cx="50" cy="50" r="2" fill="#0A1628"/></svg>
+      <span style="font-size:18px;font-weight:800;letter-spacing:6px;text-transform:uppercase;color:#0A1628;">NAWA</span>
+    </div>
+    <div id="modal-title" style="font-size:20px;font-weight:800;color:#0A1628;margin-bottom:4px;"></div>
+    <div id="modal-sub" style="font-size:12px;color:#8A9BB5;margin-bottom:20px;font-weight:300;"></div>
+    <div id="register-fields">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:0;">
+        <div><label>First Name</label><input placeholder="Ahmed"/></div>
+        <div><label>Last Name</label><input placeholder="Hassan"/></div>
       </div>
-      <div style={{marginBottom:13}}>
-        <label style={lbl}>Phone Number</label>
-        <div style={{display:"flex",gap:8}}>
-          <select style={{...inp,width:130,flexShrink:0,appearance:"none"}}>
-            {[["🇪🇬","+20"],["🇸🇦","+966"],["🇦🇪","+971"],["🇰🇼","+965"],["🇬🇧","+44"],["🇺🇸","+1"]].map(([f,c])=><option key={c}>{f} {c}</option>)}
-          </select>
-          <input style={{...inp,flex:1}} placeholder="01xxxxxxxxx"/>
+      <div class="phone-wrap">
+        <label>Phone Number</label>
+        <div class="phone-row">
+          <select><option>🇪🇬 +20</option><option>🇸🇦 +966</option><option>🇦🇪 +971</option><option>🇰🇼 +965</option><option>🇬🇧 +44</option><option>🇺🇸 +1</option></select>
+          <input placeholder="01xxxxxxxxx"/>
         </div>
       </div>
-      <div style={{marginBottom:13}}>
-        <label style={lbl}>University</label>
-        <select style={{...inp,appearance:"none"}}>
-          <option value="">Select your university</option>
-          <optgroup label="🏛️ Government">
-            {["Ain Shams","Al-Azhar","Alexandria","Assiut","Cairo (Kasr Al Ainy)","Mansoura","Tanta","Zagazig","Suez Canal","Aswan","Beni Suef","Sohag","Minia","Helwan","Luxor"].map(u=><option key={u}>{u} University</option>)}
-          </optgroup>
-          <optgroup label="🏢 Private">
-            {["New Giza (NGU)","Badr (BUC)","Future University","6th October (O6U)","MUST","MTI","Nahda","Sinai","Alamein International"].map(u=><option key={u}>{u}</option>)}
-          </optgroup>
-          <optgroup label="🏛️ National">
-            {["Ain Shams National","Alexandria National","Cairo National","King Salman International","Mansoura National"].map(u=><option key={u}>{u}</option>)}
-          </optgroup>
-          <option value="other">🌍 Other / أخرى</option>
-        </select>
-      </div>
-      <div style={{marginBottom:13}}>
-        <label style={lbl}>Academic Year</label>
-        <select value={year} onChange={e=>setYear(e.target.value)} style={{...inp,appearance:"none"}}>
-          <option value="">Select your year</option>
-          {[["1","1st Year"],["2","2nd Year"],["3","3rd Year"],["4","4th Year"],["5","5th Year"],["intern","Intern"]].map(([v,l])=><option key={v} value={v}>{l}</option>)}
-        </select>
-      </div>
-      {year && mods[year] && <div style={{background:C.foam,borderRadius:10,padding:"10px 14px",fontSize:10,color:C.navy,lineHeight:1.8,marginBottom:13,fontWeight:300}}><strong style={{color:C.ocean}}>Modules: </strong>{mods[year]}</div>}
-    </>}
-
-    <div style={{marginBottom:13}}><label style={lbl}>Email</label><input type="email" style={inp} placeholder="ahmed@gmail.com"/></div>
-    {type==="login" && <div style={{textAlign:"right",marginBottom:13}}><span style={{fontSize:12,color:C.sky,fontWeight:700,cursor:"pointer"}}>Forgot Password?</span></div>}
-    <div style={{marginBottom:13}}><label style={lbl}>Password</label><input type="password" style={inp} placeholder="••••••••"/></div>
-    <button onClick={onEnter} style={{width:"100%",padding:13,background:C.navy,color:"white",border:"none",borderRadius:10,fontFamily:"Montserrat,sans-serif",fontSize:12,fontWeight:700,letterSpacing:2,textTransform:"uppercase",cursor:"pointer"}}>
-      {type==="register"?"Create Account":"Sign In"}
-    </button>
-    <div style={{textAlign:"center",marginTop:13,fontSize:12,color:C.gray}}>
-      {type==="register"?"Already have an account? ":"Don't have an account? "}
-      <span onClick={onSwitch} style={{color:C.sky,fontWeight:700,cursor:"pointer"}}>{type==="register"?"Sign in":"Create one"}</span>
+      <label>University</label>
+      <select>
+        <option value="">Select your university</option>
+        <optgroup label="🏛️ Government">
+          <option>Ain Shams University</option><option>Al-Azhar University</option><option>Alexandria University</option><option>Assiut University</option><option>Cairo University (Kasr Al Ainy)</option><option>Mansoura University</option><option>Tanta University</option><option>Zagazig University</option><option>Suez Canal University</option><option>Aswan University</option><option>Beni Suef University</option><option>Sohag University</option><option>Minia University</option><option>Helwan University</option><option>Luxor University</option><option>Military Medical College</option>
+        </optgroup>
+        <optgroup label="🏢 Private">
+          <option>New Giza University (NGU)</option><option>Badr University (BUC)</option><option>Future University</option><option>6th October University (O6U)</option><option>MUST University</option><option>Nahda University</option><option>Sinai University</option><option>Alamein International University</option>
+        </optgroup>
+        <optgroup label="🏛️ National">
+          <option>Ain Shams National University</option><option>Alexandria National University</option><option>Cairo National University</option><option>King Salman International University</option><option>Mansoura National University</option>
+        </optgroup>
+        <option value="other">🌍 Other / أخرى</option>
+      </select>
+      <label>Academic Year</label>
+      <select id="year-select" onchange="updateModules()">
+        <option value="">Select your year</option>
+        <option value="1">1st Year</option><option value="2">2nd Year</option><option value="3">3rd Year</option><option value="4">4th Year</option><option value="5">5th Year</option><option value="intern">Intern</option>
+      </select>
+      <div class="modules-box" id="modules-box"></div>
     </div>
+    <label>Email</label><input type="email" placeholder="ahmed@gmail.com"/>
+    <div id="forgot-link" style="text-align:right;margin-top:-8px;margin-bottom:13px;display:none;"><span style="font-size:12px;color:#4AA8E8;font-weight:700;cursor:pointer;">Forgot Password?</span></div>
+    <label>Password</label><input type="password" placeholder="••••••••"/>
+    <button class="btn-submit" onclick="enterDash()">Create Account</button>
+    <div class="switch" id="modal-switch"></div>
   </div>
 </div>
-```
 
-);
-};
+<!-- LANDING -->
 
-// ── NAV ──
-const Nav = ({page, setPage, onAuth}) => (
-
-  <nav style={{position:"fixed",top:0,left:0,right:0,zIndex:200,background:C.navy,padding:"0 clamp(16px,4vw,40px)",display:"flex",alignItems:"center",justifyContent:"space-between",height:64,borderBottom:"1px solid rgba(255,255,255,.06)"}}>
-    <div onClick={()=>setPage("landing")} style={{display:"flex",alignItems:"center",gap:10,cursor:"pointer"}}>
-      <Logo size={32}/>
-      <span style={{fontSize:17,fontWeight:800,letterSpacing:6,textTransform:"uppercase",color:"white"}}>Nawa</span>
-    </div>
-    <div style={{display:"flex",alignItems:"center",gap:"clamp(12px,2vw,24px)"}}>
-      {page==="landing" && ["Features","Leaderboard","Pricing"].map(l=>(
-        <a key={l} href={"#"+l.toLowerCase()} style={{color:"rgba(255,255,255,.45)",fontSize:11,fontWeight:600,letterSpacing:2,textTransform:"uppercase",textDecoration:"none",display:"none"}} className="nav-link">{l}</a>
-      ))}
-    </div>
-    <div style={{display:"flex",gap:8}}>
-      <button onClick={()=>onAuth("login")} style={{background:"transparent",color:"white",padding:"9px 18px",borderRadius:8,fontSize:11,fontWeight:700,letterSpacing:2,textTransform:"uppercase",border:"1px solid rgba(255,255,255,.25)",cursor:"pointer",fontFamily:"Montserrat,sans-serif"}}>Sign In</button>
-      <button onClick={()=>onAuth("register")} style={{background:C.sky,color:C.navy,padding:"9px 18px",borderRadius:8,fontSize:11,fontWeight:700,letterSpacing:2,textTransform:"uppercase",border:"none",cursor:"pointer",fontFamily:"Montserrat,sans-serif"}}>Sign Up</button>
-    </div>
-  </nav>
-);
-
-// ── LANDING ──
-const Landing = ({onAuth}) => {
-const features = [
-[“🧠”,“Smart Question Bank”,“12,000+ MCQs across all specialties. Filter by module, block, difficulty, and type.”],
-[“📝”,“Practice Mode”,“Immediate feedback with explanation, key takeaway, and video solution after each answer.”],
-[“🎯”,“Exam Mode”,“Full timed simulation. Complete review with explanations after submission.”],
-[“⚡”,“Quick Practice”,“Fast 10-question daily sessions. Keep your streak alive.”],
-[“🤖”,“AI Test Analysis”,“AI analyzes all quizzes, finds weak spots, builds custom Study Plan.”,“PRO”],
-[“📅”,“AI Study Planner”,“Set exam date. AI builds personalized daily revision timetable.”,“PRO”],
-[“🃏”,“5-Type Flashcards”,“Per-lecture, ready decks, custom, AI from text, AI from wrong answers.”,“PRO”],
-[“📊”,“Deep Analytics”,“Track by module and topic. Peer Score shows your rank after every quiz.”],
-[“🏆”,“Dual Leaderboard”,“Global + per-module rankings. Fair scoring. Anonymous mode available.”],
-[“🔥”,“Streak Calendar”,“GitHub-style daily activity. Current and longest streak tracking.”],
-[“📋”,“Tasks & Exams”,“Study tasks with deadlines. Upcoming exam countdowns.”],
-[“🎬”,“Video Solutions”,“Short video explanation for every single question.”],
-[“📚”,“Medical Library”,“Curated resources organized by system and module.”,“PRO”],
-[“🤝”,“Custom Quiz (Co-op)”,“You and your study buddy answer the same questions from different devices.”],
-[“🎖️”,“Badges & Titles”,“Earn badges per module. Show your strongest specialty on your profile.”],
-];
-
-return (
-<div>
-{/* HERO */}
-<section style={{minHeight:“100vh”,background:C.navy,display:“flex”,alignItems:“center”,justifyContent:“center”,padding:“84px 24px 40px”,position:“relative”,overflow:“hidden”}}>
-<div style={{position:“absolute”,inset:0,backgroundImage:`linear-gradient(rgba(74,168,232,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,168,232,.04) 1px,transparent 1px)`,backgroundSize:“60px 60px”}}/>
-<div style={{position:“absolute”,top:“50%”,left:“50%”,transform:“translate(-50%,-50%)”,width:“min(500px,80vw)”,height:“min(500px,80vw)”,borderRadius:“50%”,background:“radial-gradient(circle,rgba(74,168,232,.08) 0%,transparent 65%)”}}/>
-<div style={{position:“relative”,zIndex:2,textAlign:“center”,maxWidth:760,width:“100%”}}>
-<div style={{display:“inline-flex”,alignItems:“center”,gap:8,background:“rgba(74,168,232,.1)”,border:“1px solid rgba(74,168,232,.2)”,color:C.sky,padding:“8px 20px”,borderRadius:100,fontSize:10,fontWeight:700,letterSpacing:3,textTransform:“uppercase”,marginBottom:28}}>
-<span style={{width:6,height:6,borderRadius:“50%”,background:C.sky,display:“inline-block”}}/>
-Medical Education Platform — Egypt
-</div>
-<div style={{display:“flex”,justifyContent:“center”,marginBottom:24}}><Logo size={76}/></div>
-<h1 style={{fontSize:“clamp(34px,6vw,68px)”,fontWeight:800,color:“white”,lineHeight:1.05,letterSpacing:-2,marginBottom:18}}>
-The Nucleus of<br/><span style={{color:C.sky}}>Medical Excellence</span>
-</h1>
-<p style={{fontSize:“clamp(13px,2vw,15px)”,fontWeight:300,color:“rgba(255,255,255,.55)”,lineHeight:1.8,marginBottom:36,maxWidth:500,margin:“0 auto 36px”}}>
-Master medicine through smart MCQs, AI-powered analytics, exam simulations, and dual leaderboards. Built for Egyptian medical students.
-</p>
-<div style={{display:“flex”,gap:12,justifyContent:“center”,flexWrap:“wrap”}}>
-<button onClick={()=>onAuth(“register”)} style={{background:C.sky,color:C.navy,padding:“14px 32px”,borderRadius:10,fontSize:11,fontWeight:700,letterSpacing:2,textTransform:“uppercase”,border:“none”,cursor:“pointer”,fontFamily:“Montserrat,sans-serif”}}>Sign Up</button>
-<button onClick={()=>onAuth(“login”)} style={{background:“transparent”,color:“white”,padding:“14px 32px”,borderRadius:10,fontSize:11,fontWeight:600,letterSpacing:2,textTransform:“uppercase”,border:“1px solid rgba(255,255,255,.2)”,cursor:“pointer”,fontFamily:“Montserrat,sans-serif”}}>Sign In</button>
-</div>
-<div style={{display:“flex”,gap:“clamp(20px,4vw,48px)”,justifyContent:“center”,marginTop:52,paddingTop:36,borderTop:“1px solid rgba(255,255,255,.06)”,flexWrap:“wrap”}}>
-{[[“12,000+”,“Questions”],[“8,400+”,“Students”],[“94%”,“Pass Rate”],[“60+”,“Universities”]].map(([n,l])=>(
-<div key={l} style={{textAlign:“center”}}>
-<div style={{fontSize:“clamp(22px,3vw,30px)”,fontWeight:800,color:“white”,letterSpacing:-1}}>{n}</div>
-<div style={{fontSize:9,fontWeight:600,letterSpacing:3,textTransform:“uppercase”,color:“rgba(255,255,255,.3)”,marginTop:4}}>{l}</div>
-</div>
-))}
-</div>
-</div>
-</section>
-
-```
-  {/* FEATURES */}
-  <section id="features" style={{background:C.off,padding:"80px clamp(20px,4vw,60px)"}}>
-    <div style={{textAlign:"center",marginBottom:52}}>
-      <div style={{fontSize:10,fontWeight:700,letterSpacing:5,textTransform:"uppercase",color:C.sky,marginBottom:12}}>Why Nawa</div>
-      <h2 style={{fontSize:"clamp(26px,4vw,42px)",fontWeight:800,color:C.navy,letterSpacing:-1}}>Everything You Need to Excel</h2>
-      <p style={{fontSize:14,fontWeight:300,color:C.gray,marginTop:12,maxWidth:440,margin:"12px auto 0",lineHeight:1.7}}>AI analytics, exam simulation, dual leaderboards, and 5 types of flashcards.</p>
-    </div>
-    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:16,maxWidth:1100,margin:"0 auto"}}>
-      {features.map(([icon,title,body,badge])=>(
-        <div key={title} style={{background:"white",borderRadius:16,padding:26,boxShadow:"0 4px 20px rgba(10,22,40,.05)",border:"1px solid rgba(10,22,40,.04)"}}>
-          <div style={{width:42,height:42,borderRadius:11,background:C.foam,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,marginBottom:14}}>{icon}</div>
-          <div style={{fontSize:13,fontWeight:700,color:C.navy,marginBottom:7}}>
-            {title}{badge&&<span style={{fontSize:9,background:C.sky,color:"white",padding:"2px 7px",borderRadius:100,fontWeight:700,marginLeft:6}}>{badge}</span>}
-          </div>
-          <div style={{fontSize:12,fontWeight:300,color:C.gray,lineHeight:1.7}}>{body}</div>
-        </div>
-      ))}
+<div id="landing">
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-inner">
+      <div class="badge"><span class="badge-dot"></span>Medical Education Platform — Egypt</div>
+      <div class="hero-logo">
+        <svg width="76" height="76" viewBox="0 0 100 100" fill="none"><defs><clipPath id="hc"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.06)"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#hc)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="1.8" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="white" stroke-width="2" fill="none"/><circle cx="50" cy="50" r="4.5" fill="white"/><circle cx="50" cy="50" r="2.2" fill="#0A1628"/></svg>
+      </div>
+      <h1>The Nucleus of<br><span>Medical Excellence</span></h1>
+      <p class="hero-sub">Master medicine through smart MCQs, AI-powered analytics, exam simulations, and dual leaderboards. Built for Egyptian medical students.</p>
+      <div class="hero-btns">
+        <button class="btn-big btn-sky" onclick="openModal('register')">Sign Up</button>
+        <button class="btn-big btn-outline" onclick="openModal('login')">Sign In</button>
+      </div>
+      <div class="stats">
+        <div><div class="stat-num">12,000+</div><div class="stat-label">Questions</div></div>
+        <div><div class="stat-num">8,400+</div><div class="stat-label">Students</div></div>
+        <div><div class="stat-num">94%</div><div class="stat-label">Pass Rate</div></div>
+        <div><div class="stat-num">60+</div><div class="stat-label">Universities</div></div>
+      </div>
     </div>
   </section>
 
-  {/* LEADERBOARD */}
-  <section id="leaderboard" style={{background:C.navy,padding:"80px clamp(20px,4vw,60px)"}}>
-    <div style={{maxWidth:1100,margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:60,alignItems:"center"}}>
+  <section id="features" style="background:#F4F8FC;">
+    <div class="sec-tag">Why Nawa</div>
+    <div class="sec-title">Everything You Need to Excel</div>
+    <p class="sec-sub">AI analytics, exam simulation, dual leaderboards, and 5 types of flashcards.</p>
+    <div class="features-grid" id="features-grid"></div>
+  </section>
+
+  <section id="leaderboard" style="background:#0A1628;">
+    <div class="lb-grid">
       <div>
-        <div style={{fontSize:10,fontWeight:700,letterSpacing:5,textTransform:"uppercase",color:C.sky,marginBottom:12}}>Compete & Win</div>
-        <h2 style={{fontSize:"clamp(26px,4vw,42px)",fontWeight:800,color:"white",letterSpacing:-1,lineHeight:1.1,marginBottom:14}}>Rise to the Top of Your Generation</h2>
-        <p style={{fontSize:14,fontWeight:300,color:"rgba(255,255,255,.4)",lineHeight:1.7}}>Global + module rankings. Fair scoring. Anonymous mode.</p>
-        <div style={{display:"flex",gap:10,marginTop:28,flexWrap:"wrap"}}>
-          <button onClick={()=>onAuth("register")} style={{background:C.sky,color:C.navy,padding:"13px 28px",borderRadius:10,fontSize:11,fontWeight:700,letterSpacing:2,textTransform:"uppercase",border:"none",cursor:"pointer",fontFamily:"Montserrat,sans-serif"}}>Sign Up</button>
-          <button onClick={()=>onAuth("login")} style={{background:"transparent",color:"white",padding:"13px 28px",borderRadius:10,fontSize:11,fontWeight:600,letterSpacing:2,textTransform:"uppercase",border:"1px solid rgba(255,255,255,.2)",cursor:"pointer",fontFamily:"Montserrat,sans-serif"}}>Sign In</button>
+        <div class="sec-tag">Compete & Win</div>
+        <h2 style="font-size:clamp(26px,4vw,42px);font-weight:800;color:white;letter-spacing:-1px;line-height:1.1;margin-bottom:14px;">Rise to the Top</h2>
+        <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,.4);line-height:1.7;">Global + module rankings. Fair scoring. Anonymous mode.</p>
+        <div style="display:flex;gap:10px;margin-top:28px;flex-wrap:wrap;">
+          <button class="btn-big btn-sky" onclick="openModal('register')">Sign Up</button>
+          <button class="btn-big btn-outline" onclick="openModal('login')">Sign In</button>
         </div>
       </div>
-      <div style={{background:"rgba(255,255,255,.04)",border:"1px solid rgba(255,255,255,.08)",borderRadius:20,padding:24}}>
-        <div style={{display:"flex",justifyContent:"space-between",marginBottom:16}}>
-          <span style={{fontSize:10,fontWeight:700,letterSpacing:3,textTransform:"uppercase",color:"rgba(255,255,255,.35)"}}>🏆 This Week</span>
-          <span style={{fontSize:9,color:C.sky,fontWeight:700}}>Week 17</span>
+      <div class="lb-card">
+        <div style="display:flex;justify-content:space-between;margin-bottom:16px;">
+          <span style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);">🏆 This Week</span>
+          <span style="font-size:9px;color:#4AA8E8;font-weight:700;">Week 17</span>
         </div>
-        {[["🥇","Yassmine Abouzaid","Alex·Y4·95.25%·421Qs",92.2,"rgba(255,200,50,.06)","#FFD700"],
-          ["🥈","Zeyad M. Etman","Alex·Y4·92.3%·935Qs",90.1,"rgba(200,210,220,.04)","#C0C8D0"],
-          ["🥉","Moneim Tarek","Alex·Y4·85.42%·847Qs",87.8,"rgba(200,130,80,.04)","#CD9B6A"],
-          ["4","Anonymous","·88.3%·171Qs",79.6,"transparent","rgba(255,255,255,.3)"],
-          ["5","Anonymous","·86.44%·494Qs",78.1,"transparent","rgba(255,255,255,.3)"],
-        ].map(([rank,name,info,score,bg,rc])=>(
-          <div key={name+score} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 12px",borderRadius:10,marginBottom:4,background:bg}}>
-            <span style={{fontSize:14,fontWeight:800,color:rc,width:22}}>{rank}</span>
-            <div style={{width:34,height:34,borderRadius:"50%",background:`linear-gradient(135deg,${C.ocean},${C.sky})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"white",flexShrink:0}}>{name[0]}</div>
-            <div style={{flex:1}}>
-              <div style={{fontSize:12,fontWeight:600,color:"white"}}>{name}</div>
-              <div style={{fontSize:9,color:"rgba(255,255,255,.3)",marginTop:2}}>{info}</div>
-            </div>
-            <span style={{fontSize:13,fontWeight:700,color:C.sky}}>{score}</span>
-          </div>
-        ))}
+        <div id="lb-rows"></div>
       </div>
     </div>
   </section>
 
-  {/* PRICING */}
-  <section id="pricing" style={{background:"white",padding:"80px clamp(20px,4vw,60px)"}}>
-    <div style={{textAlign:"center",marginBottom:52}}>
-      <div style={{fontSize:10,fontWeight:700,letterSpacing:5,textTransform:"uppercase",color:C.sky,marginBottom:12}}>Pricing</div>
-      <h2 style={{fontSize:"clamp(26px,4vw,42px)",fontWeight:800,color:C.navy,letterSpacing:-1}}>Simple, Transparent Pricing</h2>
-    </div>
-    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:18,maxWidth:920,margin:"0 auto"}}>
-      {[
-        {name:"Basic",price:"0",per:"/month",features:["50 questions/day","Practice Mode","Streak tracking","Leaderboard","Tasks & Notes"],popular:false},
-        {name:"Pro",price:"149",per:"/month",features:["Unlimited questions","All modules","Exam + Quick Mode","AI Test Analysis","AI Study Planner","5-Type Flashcards","Video solutions"],popular:true},
-        {name:"Elite",price:"349",per:"/month",features:["Everything in Pro","1-on-1 mentoring","Custom study plan","Private competitions","Medical Library"],popular:false},
-      ].map(p=>(
-        <div key={p.name} style={{borderRadius:20,padding:"32px 26px",border:`1px solid ${p.popular?C.navy:"rgba(10,22,40,.08)"}`,position:"relative",background:p.popular?C.navy:"white",boxShadow:p.popular?"0 32px 80px rgba(10,22,40,.2)":"none"}}>
-          {p.popular&&<div style={{position:"absolute",top:-12,left:"50%",transform:"translateX(-50%)",background:C.sky,color:C.navy,fontSize:9,fontWeight:800,letterSpacing:3,textTransform:"uppercase",padding:"5px 14px",borderRadius:100,whiteSpace:"nowrap"}}>Most Popular</div>}
-          <div style={{fontSize:10,fontWeight:700,letterSpacing:3,textTransform:"uppercase",color:p.popular?"rgba(255,255,255,.4)":C.gray,marginBottom:16}}>{p.name}</div>
-          <div style={{fontSize:38,fontWeight:800,color:p.popular?"white":C.navy,letterSpacing:-2,lineHeight:1}}>{p.price}<span style={{fontSize:17}}>EGP</span></div>
-          <div style={{fontSize:11,color:p.popular?"rgba(255,255,255,.35)":C.gray,fontWeight:300,marginTop:3}}>{p.per}</div>
-          <div style={{height:1,background:p.popular?"rgba(255,255,255,.1)":"rgba(10,22,40,.08)",margin:"20px 0"}}/>
-          <ul style={{listStyle:"none",display:"flex",flexDirection:"column",gap:9,marginBottom:24}}>
-            {p.features.map(f=><li key={f} style={{fontSize:12,fontWeight:300,color:p.popular?"rgba(255,255,255,.7)":C.navy,display:"flex",alignItems:"center",gap:9}}><span style={{color:C.sky,fontWeight:800}}>✓</span>{f}</li>)}
-          </ul>
-          <button onClick={()=>onAuth("register")} style={{width:"100%",padding:12,borderRadius:9,fontSize:11,fontWeight:700,letterSpacing:2,textTransform:"uppercase",cursor:"pointer",background:p.popular?C.sky:"transparent",color:p.popular?C.navy:C.navy,border:p.popular?"none":"1.5px solid rgba(10,22,40,.15)",fontFamily:"Montserrat,sans-serif"}}>
-            {p.name==="Elite"?"Contact Us":p.popular?"Start Pro":"Get Started"}
-          </button>
-        </div>
-      ))}
+  <section id="pricing" style="background:white;">
+    <div class="sec-tag">Pricing</div>
+    <div class="sec-title">Simple, Transparent Pricing</div>
+    <div class="pricing-grid" id="pricing-grid"></div>
+  </section>
+
+  <section style="background:#F4F8FC;">
+    <div class="sec-tag">Payment</div>
+    <div class="sec-title">Easy & Secure Payment</div>
+    <div class="pay-methods">
+      <div class="pay-card"><span style="font-size:26px;">💳</span><div><div style="font-size:13px;font-weight:700;color:#0A1628;">Visa / Mastercard</div><div style="font-size:10px;color:#8A9BB5;">Credit & Debit</div></div></div>
+      <div class="pay-card"><span style="font-size:26px;">📱</span><div><div style="font-size:13px;font-weight:700;color:#0A1628;">Vodafone Cash</div><div style="font-size:10px;color:#8A9BB5;">Mobile Wallet</div></div></div>
+      <div class="pay-card"><span style="font-size:26px;">🏦</span><div><div style="font-size:13px;font-weight:700;color:#0A1628;">InstaPay</div><div style="font-size:10px;color:#8A9BB5;">Bank Transfer</div></div></div>
+      <div class="pay-card"><span style="font-size:26px;">💚</span><div><div style="font-size:13px;font-weight:700;color:#0A1628;">Fawry</div><div style="font-size:10px;color:#8A9BB5;">Fawry Points</div></div></div>
     </div>
   </section>
 
-  {/* PAYMENT */}
-  <section style={{background:C.off,padding:"60px clamp(20px,4vw,60px)"}}>
-    <div style={{textAlign:"center",marginBottom:32}}>
-      <div style={{fontSize:10,fontWeight:700,letterSpacing:5,textTransform:"uppercase",color:C.sky,marginBottom:12}}>Payment</div>
-      <h2 style={{fontSize:"clamp(22px,3vw,36px)",fontWeight:800,color:C.navy}}>Easy & Secure Payment</h2>
-    </div>
-    <div style={{display:"flex",gap:14,flexWrap:"wrap",justifyContent:"center"}}>
-      {[["💳","Visa / Mastercard","Credit & Debit"],["📱","Vodafone Cash","Mobile Wallet"],["🏦","InstaPay","Bank Transfer"],["💚","Fawry","Fawry Points"]].map(([i,n,s])=>(
-        <div key={n} style={{background:"white",borderRadius:14,padding:"18px 24px",display:"flex",alignItems:"center",gap:12,boxShadow:"0 4px 16px rgba(10,22,40,.06)"}}>
-          <span style={{fontSize:26}}>{i}</span>
-          <div><div style={{fontSize:13,fontWeight:700,color:C.navy}}>{n}</div><div style={{fontSize:10,color:C.gray}}>{s}</div></div>
-        </div>
-      ))}
+  <section style="background:#0A1628;text-align:center;">
+    <h2 style="font-size:clamp(30px,5vw,52px);font-weight:800;color:white;letter-spacing:-2px;margin-bottom:14px;">Root Deep.<br><span style="color:#4AA8E8;">Reach Far.</span></h2>
+    <p style="font-size:14px;font-weight:300;color:rgba(255,255,255,.4);margin-bottom:36px;">Join 8,400+ medical students already on Nawa.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn-big btn-sky" onclick="openModal('register')">Sign Up</button>
+      <button class="btn-big btn-outline" onclick="openModal('login')">Sign In</button>
     </div>
   </section>
 
-  {/* CTA */}
-  <section style={{background:C.navy,padding:"80px clamp(20px,4vw,60px)",textAlign:"center"}}>
-    <h2 style={{fontSize:"clamp(30px,5vw,52px)",fontWeight:800,color:"white",letterSpacing:-2,marginBottom:14}}>Root Deep.<br/><span style={{color:C.sky}}>Reach Far.</span></h2>
-    <p style={{fontSize:14,fontWeight:300,color:"rgba(255,255,255,.4)",marginBottom:36}}>Join 8,400+ medical students already on Nawa.</p>
-    <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
-      <button onClick={()=>onAuth("register")} style={{background:C.sky,color:C.navy,padding:"14px 32px",borderRadius:10,fontSize:11,fontWeight:700,letterSpacing:2,textTransform:"uppercase",border:"none",cursor:"pointer",fontFamily:"Montserrat,sans-serif"}}>Sign Up</button>
-      <button onClick={()=>onAuth("login")} style={{background:"transparent",color:"white",padding:"14px 32px",borderRadius:10,fontSize:11,fontWeight:600,letterSpacing:2,textTransform:"uppercase",border:"1px solid rgba(255,255,255,.2)",cursor:"pointer",fontFamily:"Montserrat,sans-serif"}}>Sign In</button>
-    </div>
-  </section>
-
-  {/* FOOTER */}
-  <footer style={{background:C.navy,padding:"60px clamp(20px,4vw,60px) 0"}}>
-    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:36,paddingBottom:48}}>
+  <footer>
+    <div class="footer-grid">
       <div>
-        <Logo size={34}/>
-        <div style={{fontSize:17,fontWeight:800,letterSpacing:6,textTransform:"uppercase",color:"white",margin:"12px 0 8px"}}>NAWA</div>
-        <div style={{fontSize:10,color:"rgba(255,255,255,.25)",letterSpacing:2}}>Root Deep. Reach Far.</div>
+        <svg width="34" height="34" viewBox="0 0 100 100" fill="none"><defs><clipPath id="fc"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#fc)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="white" stroke-width="2.5" fill="none"/><circle cx="50" cy="50" r="4" fill="white"/><circle cx="50" cy="50" r="2" fill="#0A1628"/></svg>
+        <div style="font-size:17px;font-weight:800;letter-spacing:6px;text-transform:uppercase;color:white;margin:12px 0 8px;">NAWA</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.25);letter-spacing:2px;">Root Deep. Reach Far.</div>
       </div>
-      {[["Platform",["Question Bank","Practice Mode","Exam Mode","Leaderboard"]],["Features",["AI Analysis","Flashcards","Video Solutions","Study Planner"]]].map(([t,ls])=>(
-        <div key={t}>
-          <div style={{fontSize:9,fontWeight:700,letterSpacing:4,textTransform:"uppercase",color:"rgba(255,255,255,.25)",marginBottom:16}}>{t}</div>
-          {ls.map(l=><div key={l} style={{fontSize:13,fontWeight:300,color:"rgba(255,255,255,.45)",marginBottom:9}}>{l}</div>)}
-        </div>
-      ))}
       <div>
-        <div style={{fontSize:9,fontWeight:700,letterSpacing:4,textTransform:"uppercase",color:"rgba(255,255,255,.25)",marginBottom:16}}>Contact Us</div>
-        <a href="https://wa.me/201002429528" target="_blank" style={{display:"block",fontSize:13,fontWeight:300,color:"rgba(255,255,255,.45)",textDecoration:"none",marginBottom:9}}>💬 WhatsApp: 01002429528</a>
-        <a href="https://t.me/201002429528" target="_blank" style={{display:"block",fontSize:13,fontWeight:300,color:"rgba(255,255,255,.45)",textDecoration:"none",marginBottom:9}}>✈️ Telegram: 01002429528</a>
+        <div style="font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:16px;">Platform</div>
+        <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.45);margin-bottom:9px;">Question Bank</div>
+        <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.45);margin-bottom:9px;">Practice Mode</div>
+        <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.45);margin-bottom:9px;">Leaderboard</div>
+      </div>
+      <div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:16px;">Features</div>
+        <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.45);margin-bottom:9px;">AI Analysis</div>
+        <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.45);margin-bottom:9px;">Flashcards</div>
+        <div style="font-size:13px;font-weight:300;color:rgba(255,255,255,.45);margin-bottom:9px;">Video Solutions</div>
+      </div>
+      <div>
+        <div style="font-size:9px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:16px;">Contact Us</div>
+        <a href="https://wa.me/201002429528" target="_blank" style="display:block;font-size:13px;font-weight:300;color:rgba(255,255,255,.45);text-decoration:none;margin-bottom:9px;">💬 WhatsApp: 01002429528</a>
+        <a href="https://t.me/201002429528" target="_blank" style="display:block;font-size:13px;font-weight:300;color:rgba(255,255,255,.45);text-decoration:none;margin-bottom:9px;">✈️ Telegram: 01002429528</a>
       </div>
     </div>
-    <div style={{padding:"18px 0",borderTop:"1px solid rgba(255,255,255,.06)",display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:8}}>
-      <span style={{fontSize:11,color:"rgba(255,255,255,.2)"}}>© 2025 Nawa Medical Education.</span>
-      <span style={{fontSize:11,color:"rgba(255,255,255,.2)",letterSpacing:3,textTransform:"uppercase",fontStyle:"italic"}}>Root Deep. Reach Far.</span>
+    <div class="footer-bottom">
+      <span style="font-size:11px;color:rgba(255,255,255,.2);">© 2025 Nawa Medical Education.</span>
+      <span style="font-size:11px;color:rgba(255,255,255,.2);letter-spacing:3px;text-transform:uppercase;font-style:italic;">Root Deep. Reach Far.</span>
     </div>
   </footer>
 </div>
-```
 
-);
+<!-- DASHBOARD -->
+
+<div class="dash" id="dashboard">
+  <aside class="sidebar">
+    <div class="si-section">
+      <div class="si-label">Menu</div>
+      <div class="si active" onclick="showDash('home',this)"><span>🏠</span> Home</div>
+    </div>
+    <div class="si-section">
+      <div class="si-label">Quiz</div>
+      <div class="si" onclick="showDash('quiz',this)"><span>✏️</span> Create Quiz</div>
+      <div class="si" onclick="showDash('prev',this)"><span>🕐</span> Previous Quizzes</div>
+    </div>
+    <div class="si-section">
+      <div class="si-label">Performance</div>
+      <div class="si" onclick="showDash('lb',this)"><span>🏆</span> Leaderboard</div>
+      <div class="si" onclick="showDash('analysis',this)"><span>📊</span> Analysis</div>
+    </div>
+    <div class="si-section">
+      <div class="si-label">More</div>
+      <div class="si" onclick="showDash('notes',this)"><span>📝</span> My Notes</div>
+      <div class="si" onclick="showDash('flash',this)"><span>🃏</span> Flashcards <span style="font-size:7px;background:rgba(74,168,232,.2);color:#4AA8E8;padding:2px 5px;border-radius:4px;">PRO</span></div>
+    </div>
+    <div class="si-section">
+      <div class="si-label">Account</div>
+      <div class="si" onclick="showLanding()"><span>🚪</span> Sign Out</div>
+    </div>
+    <div style="margin:12px;padding:14px;background:rgba(74,168,232,.08);border:1px solid rgba(74,168,232,.15);border-radius:10px;">
+      <p style="font-size:10px;font-weight:300;color:rgba(255,255,255,.5);line-height:1.5;margin-bottom:9px;">Upgrade for unlimited MCQs and premium features.</p>
+      <button style="width:100%;padding:8px;background:#4AA8E8;color:#0A1628;border:none;border-radius:7px;font-size:10px;font-weight:700;text-transform:uppercase;cursor:pointer;font-family:inherit;">Upgrade ✦</button>
+    </div>
+  </aside>
+  <main class="dash-main" id="dash-main"></main>
+</div>
+
+<script>
+// DATA
+var modules = {
+  '1':'MED101 Normal Body Structure · MED102 Introduction to Disease · MED103 Infections & Immunology · MED104 Psychology',
+  '2':'MED210 Cardiovascular · MED211 Respiratory · MED215 Endocrine & Metabolism · MED216 Digestive System',
+  '3':'MED319 CNS & Special Senses · MED320 Genitourinary · MED323 General Medicine · MED324 Surgery',
+  '4':'MED430 Medicine · MED431 Cardiopulmonary · MED432 Investigative Medicine · MED433 Pediatrics · MED436 Neuropsychiatry',
+  '5':'MED538 Surgery · MED539 Orthopedic · MED541 OB/GYN · MED542 Family Medicine · MED543 Dermatology',
+  'intern':'Internal Medicine · Surgery · Pediatrics · OB/GYN · Emergency Medicine'
 };
 
-// ── DASHBOARD ──
-const Dashboard = ({onLogout}) => {
-const [dash, setDash] = useState(“home”);
-const [qIdx, setQIdx] = useState(0);
-const [selected, setSelected] = useState(null);
-const [answered, setAnswered] = useState(false);
-const [secs, setSecs] = useState(90);
-
-const qs = [
-{q:“Which is the primary pacemaker of the heart?”,opts:[“AV Node — 40-60 bpm”,“Sinoatrial Node — 60-100 bpm”,“Bundle of His — 20-40 bpm”,“Purkinje Fibers — 20-40 bpm”],correct:1,exp:“SA Node is the primary pacemaker, firing at 60-100 bpm.”,video:“▶ SA Node & Cardiac Conduction”},
-{q:“Long-haul flight + pleuritic chest pain + tachycardia. Diagnosis?”,opts:[“Pneumothorax”,“Pulmonary Embolism”,“Acute MI”,“Aortic Dissection”],correct:1,exp:“PE: immobility → DVT → PE. Classic: dyspnea, chest pain, tachycardia.”,video:“▶ Pulmonary Embolism”},
-{q:“Which enzyme converts Angiotensin I to Angiotensin II?”,opts:[“Renin”,“Aldosterone Synthase”,“ACE”,“Chymase”],correct:2,exp:“ACE converts Ang I → Ang II. ACE inhibitors block this step.”,video:“▶ RAAS System”},
-{q:“Proximal weakness + heliotrope rash + elevated CK?”,opts:[“SLE”,“Polymyositis”,“Dermatomyositis”,“Myasthenia Gravis”],correct:2,exp:“Dermatomyositis = Polymyositis + skin findings.”,video:“▶ Myopathies”},
+var features = [
+  ['🧠','Smart Question Bank','12,000+ MCQs. Filter by module, block, difficulty, and type.',''],
+  ['📝','Practice Mode','Immediate feedback with explanation, key takeaway, and video solution.',''],
+  ['🎯','Exam Mode','Full timed simulation. Complete review after submission.',''],
+  ['⚡','Quick Practice','Fast 10-question daily sessions. Keep your streak alive.',''],
+  ['🤖','AI Test Analysis','AI finds weak spots and builds a custom Study Plan.','PRO'],
+  ['📅','AI Study Planner','Set exam date. AI builds personalized daily timetable.','PRO'],
+  ['🃏','5-Type Flashcards','Per-lecture, ready decks, custom, AI from text, AI from wrong answers.','PRO'],
+  ['📊','Deep Analytics','Track by module and topic. Peer Score after every quiz.',''],
+  ['🏆','Dual Leaderboard','Global + per-module rankings. Anonymous mode available.',''],
+  ['🔥','Streak Calendar','GitHub-style daily activity tracking.',''],
+  ['📋','Tasks & Exams','Study tasks with deadlines. Upcoming exam countdowns.',''],
+  ['🎬','Video Solutions','Short video for every single question.',''],
+  ['📚','Medical Library','Curated resources by system and module.','PRO'],
+  ['🤝','Custom Quiz Co-op','You and study buddy answer same questions.',''],
+  ['🎖️','Badges & Titles','Earn badges per module. Show strongest specialty.','']
 ];
 
-useEffect(()=>{
-const t = setInterval(()=>setSecs(s=>{if(s<=1){nextQ();return 90;}return s-1;}),1000);
-return ()=>clearInterval(t);
-},[qIdx]);
+var lbData = [
+  ['🥇','Yassmine Abouzaid','Alex·Y4','95.25%',421,92.2,'rgba(255,200,50,.06)','#FFD700'],
+  ['🥈','Zeyad M. Etman','Alex·Y4','92.3%',935,90.1,'rgba(200,210,220,.04)','#C0C8D0'],
+  ['🥉','Moneim Tarek','Alex·Y4','85.42%',847,87.8,'rgba(200,130,80,.04)','#CD9B6A'],
+  ['4','Anonymous','','88.3%',171,79.6,'transparent','rgba(255,255,255,.3)'],
+  ['5','Anonymous','','86.44%',494,78.1,'transparent','rgba(255,255,255,.3)']
+];
 
-const nextQ = ()=>{setQIdx(i=>(i+1)%qs.length);setSelected(null);setAnswered(false);setSecs(90);};
-const selectOpt = (i)=>{if(answered)return;setSelected(i);setAnswered(true);};
-const q = qs[qIdx];
-const pct = Math.round((qIdx+1)/qs.length*100);
+var qs = [
+  {q:'Which is the primary pacemaker of the heart?',opts:['AV Node — 40-60 bpm','Sinoatrial Node — 60-100 bpm','Bundle of His — 20-40 bpm','Purkinje Fibers — 20-40 bpm'],c:1,exp:'SA Node fires at 60-100 bpm. It initiates each normal heartbeat.'},
+  {q:'Long-haul flight + pleuritic chest pain + tachycardia. Diagnosis?',opts:['Pneumothorax','Pulmonary Embolism','Acute MI','Aortic Dissection'],c:1,exp:'PE: immobility causes DVT then PE. Classic triad: dyspnea, chest pain, tachycardia.'},
+  {q:'Which enzyme converts Angiotensin I to Angiotensin II?',opts:['Renin','Aldosterone Synthase','ACE','Chymase'],c:2,exp:'ACE converts Ang I to Ang II in pulmonary vasculature.'},
+  {q:'Proximal weakness + heliotrope rash + elevated CK?',opts:['SLE','Polymyositis','Dermatomyositis','Myasthenia Gravis'],c:2,exp:'Dermatomyositis = Polymyositis + skin findings.'}
+];
 
-return (
-<div style={{display:“flex”,minHeight:“100vh”,paddingTop:64,background:C.off,fontFamily:“Montserrat,sans-serif”}}>
-{/* Sidebar */}
-<aside style={{width:220,flexShrink:0,background:C.navy,position:“fixed”,top:64,left:0,bottom:0,overflowY:“auto”,padding:“20px 0”,zIndex:100}}>
-{[[“Menu”,[[“🏠”,“Home”,“home”],[“✏️”,“Create Quiz”,“create”],[“🕐”,“Previous Quizzes”,“prev”]]],
-[“Performance”,[[“📈”,“Overview”,“overview”],[“📊”,“Analysis”,“analysis”],[“🏆”,“Leaderboard”,“lb”]]],
-[“More”,[[“📝”,“My Notes”,“notes”],[“🃏”,“Flashcards”,“flash”],[“🤖”,“AI Analysis”,“ai”]]],
-[“Account”,[[“🚪”,“Sign Out”,“logout”]]]
-].map(([sec,items])=>(
-<div key={sec} style={{padding:“0 14px”,marginBottom:22}}>
-<div style={{fontSize:8,fontWeight:700,letterSpacing:4,textTransform:“uppercase”,color:“rgba(255,255,255,.2)”,marginBottom:7,padding:“0 8px”}}>{sec}</div>
-{items.map(([icon,label,id])=>(
-<div key={id} onClick={()=>{if(id===“logout”)onLogout();else setDash(id);}}
-style={{display:“flex”,alignItems:“center”,gap:9,padding:“9px 8px”,borderRadius:9,cursor:“pointer”,fontSize:11,fontWeight:600,color:dash===id?C.sky:“rgba(255,255,255,.4)”,background:dash===id?“rgba(74,168,232,.15)”:“transparent”,marginBottom:1}}>
-<span style={{fontSize:14,width:18,textAlign:“center”}}>{icon}</span>{label}
-</div>
-))}
-</div>
-))}
-<div style={{margin:12,padding:14,background:“rgba(74,168,232,.08)”,border:“1px solid rgba(74,168,232,.15)”,borderRadius:10}}>
-<p style={{fontSize:10,fontWeight:300,color:“rgba(255,255,255,.5)”,lineHeight:1.5,marginBottom:9}}>Upgrade for unlimited MCQs and premium features.</p>
-<button style={{width:“100%”,padding:8,background:C.sky,color:C.navy,border:“none”,borderRadius:7,fontSize:10,fontWeight:700,letterSpacing:1,textTransform:“uppercase”,cursor:“pointer”,fontFamily:“Montserrat,sans-serif”}}>Upgrade ✦</button>
-</div>
-</aside>
+var qIdx=0, answered=false, secs=90, timerInt=null;
 
-```
-  {/* Main */}
-  <main style={{marginLeft:220,flex:1,padding:24,minWidth:0}}>
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:22,flexWrap:"wrap",gap:10}}>
-      <div>
-        <div style={{fontSize:"clamp(16px,2vw,20px)",fontWeight:800,color:C.navy}}>Welcome, <span style={{color:C.sky}}>Moneim</span>! 🔥</div>
-        <div style={{fontSize:10,color:C.gray,letterSpacing:2,textTransform:"uppercase",marginTop:2}}>Thursday · April 23, 2026</div>
-      </div>
-      <button onClick={()=>setDash("create")} style={{background:C.sky,color:C.navy,padding:"9px 18px",borderRadius:10,fontSize:10,fontWeight:700,letterSpacing:2,textTransform:"uppercase",border:"none",cursor:"pointer",fontFamily:"Montserrat,sans-serif"}}>✦ Create Quiz</button>
-    </div>
+// BUILD FEATURES
+var fg = document.getElementById('features-grid');
+features.forEach(function(f){
+  var d=document.createElement('div'); d.className='feat-card';
+  d.innerHTML='<div class="feat-icon">'+f[0]+'</div><div class="feat-title">'+f[1]+(f[3]?'<span class="pro-badge">'+f[3]+'</span>':'')+'</div><div class="feat-body">'+f[2]+'</div>';
+  fg.appendChild(d);
+});
 
-    {dash==="home" && <>
-      {/* Welcome Banner */}
-      <div style={{background:`linear-gradient(135deg,${C.ocean},${C.blue})`,borderRadius:16,padding:"20px 24px",display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:18,gap:14,flexWrap:"wrap"}}>
-        <div>
-          <div style={{fontSize:16,fontWeight:800,color:"white",marginBottom:3}}>Good morning, Moneim! 👋</div>
-          <div style={{fontSize:12,fontWeight:300,color:"rgba(255,255,255,.6)"}}>14-day streak! Keep going strong.</div>
-        </div>
-        <button onClick={()=>setDash("create")} style={{background:"white",color:C.navy,padding:"10px 20px",borderRadius:9,fontSize:10,fontWeight:700,letterSpacing:1,textTransform:"uppercase",border:"none",cursor:"pointer",fontFamily:"Montserrat,sans-serif",flexShrink:0}}>✦ Create Quiz</button>
-      </div>
+// BUILD LB
+var lr = document.getElementById('lb-rows');
+lbData.forEach(function(r){
+  var d=document.createElement('div'); d.className='lb-row'; d.style.background=r[6];
+  d.innerHTML='<span style="font-size:14px;font-weight:800;color:'+r[7]+';width:22px;">'+r[0]+'</span><div style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#0D3B7A,#4AA8E8);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0;">'+r[1][0]+'</div><div style="flex:1;"><div style="font-size:12px;font-weight:600;color:white;">'+r[1]+'</div><div style="font-size:9px;color:rgba(255,255,255,.3);">'+r[2]+'·'+r[3]+'·'+r[4]+' Qs</div></div><span style="font-size:13px;font-weight:700;color:#4AA8E8;">'+r[5]+'</span>';
+  lr.appendChild(d);
+});
 
-      {/* Stats */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:14,marginBottom:18}}>
-        {[["📝","Questions Done","847","+23 today",C.ocean,C.sky],
-          ["✅","Accuracy","92%","↑ 3% this week","#0D7A4A",C.green],
-          ["🔥","Day Streak","14","Keep going!","#B85A0D",C.orange],
-          ["🏆","Global Rank","#3","Top 0.1%","#5A0D7A","#8A2BE2"]
-        ].map(([icon,label,val,sub,c1,c2])=>(
-          <div key={label} style={{background:"white",borderRadius:13,padding:18,boxShadow:"0 2px 12px rgba(10,22,40,.05)",border:"1px solid rgba(10,22,40,.04)",position:"relative",overflow:"hidden"}}>
-            <div style={{position:"absolute",top:0,left:0,right:0,height:3,background:`linear-gradient(to right,${c1},${c2})`}}/>
-            <div style={{position:"absolute",top:14,right:14,fontSize:18,opacity:.2}}>{icon}</div>
-            <div style={{fontSize:8,fontWeight:700,letterSpacing:2,textTransform:"uppercase",color:C.gray,marginBottom:7}}>{label}</div>
-            <div style={{fontSize:26,fontWeight:800,color:C.navy,letterSpacing:-1,lineHeight:1}}>{val}</div>
-            <div style={{fontSize:10,color:C.gray,marginTop:4,fontWeight:300}}>{sub}</div>
-          </div>
-        ))}
-      </div>
+// BUILD PRICING
+var pg = document.getElementById('pricing-grid');
+[{n:'Basic',p:'0',per:'/month',f:['50 questions/day','Practice Mode','Streak tracking','Leaderboard','Tasks & Notes'],pop:false},
+ {n:'Pro',p:'149',per:'/month',f:['Unlimited questions','All modules','Exam + Quick Mode','AI Test Analysis','AI Study Planner','5-Type Flashcards','Video solutions'],pop:true},
+ {n:'Elite',p:'349',per:'/month',f:['Everything in Pro','1-on-1 mentoring','Custom study plan','Private competitions','Medical Library'],pop:false}
+].forEach(function(p){
+  var d=document.createElement('div'); d.className='price-card'+(p.pop?' price-popular':'');
+  var feats=p.f.map(function(f){return '<li style="color:'+(p.pop?'rgba(255,255,255,.7)':'#0A1628')+'"><span style="color:#4AA8E8;font-weight:800;">✓</span> '+f+'</li>';}).join('');
+  d.innerHTML=(p.pop?'<div class="pop-badge">Most Popular</div>':'')+
+    '<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:'+(p.pop?'rgba(255,255,255,.4)':'#8A9BB5')+';margin-bottom:16px;">'+p.n+'</div>'+
+    '<div style="font-size:38px;font-weight:800;color:'+(p.pop?'white':'#0A1628')+';letter-spacing:-2px;line-height:1;">'+p.p+'<span style="font-size:17px;">EGP</span></div>'+
+    '<div style="font-size:11px;color:'+(p.pop?'rgba(255,255,255,.35)':'#8A9BB5')+';font-weight:300;margin-top:3px;">'+p.per+'</div>'+
+    '<div style="height:1px;background:'+(p.pop?'rgba(255,255,255,.1)':'rgba(10,22,40,.08)')+';margin:20px 0;"></div>'+
+    '<ul class="price-feats">'+feats+'</ul>'+
+    '<button onclick="openModal(\'register\')" style="width:100%;padding:12px;border-radius:9px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;background:'+(p.pop?'#4AA8E8':'transparent')+';color:'+(p.pop?'#0A1628':'#0A1628')+';border:'+(p.pop?'none':'1.5px solid rgba(10,22,40,.15)')+';font-family:inherit;">'+(p.n==='Elite'?'Contact Us':p.pop?'Start Pro':'Get Started')+'</button>';
+  pg.appendChild(d);
+});
 
-      {/* Quiz */}
-      <div style={{background:"white",borderRadius:16,boxShadow:"0 4px 20px rgba(10,22,40,.06)",border:"1px solid rgba(10,22,40,.04)",overflow:"hidden",marginBottom:18}}>
-        <div style={{padding:"16px 20px",borderBottom:"1px solid rgba(10,22,40,.05)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <div>
-            <div style={{fontSize:13,fontWeight:700,color:C.navy}}>Today's Quiz</div>
-            <div style={{fontSize:9,color:C.gray,letterSpacing:1,marginTop:2}}>MED431 Cardiopulmonary · Practice Mode</div>
-          </div>
-          <div style={{display:"flex",gap:8,alignItems:"center"}}>
-            <span style={{background:"rgba(29,185,122,.1)",color:"#0D7A4A",fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100}}>PRACTICE</span>
-            <span style={{background:C.foam,color:C.ocean,fontSize:9,fontWeight:700,padding:"4px 10px",borderRadius:100,letterSpacing:2}}>Q {qIdx+1}/{qs.length}</span>
-          </div>
-        </div>
-        <div style={{padding:20}}>
-          <div style={{display:"flex",justifyContent:"space-between",fontSize:9,fontWeight:600,letterSpacing:1,color:C.gray,textTransform:"uppercase",marginBottom:6}}><span>Progress</span><span>{pct}%</span></div>
-          <div style={{height:4,background:C.foam,borderRadius:4,overflow:"hidden",marginBottom:16}}>
-            <div style={{height:"100%",width:pct+"%",background:`linear-gradient(to right,${C.ocean},${C.sky})`,borderRadius:4}}/>
-          </div>
-          <div style={{fontSize:14,fontWeight:600,color:C.navy,lineHeight:1.6,marginBottom:14}}>{q.q}</div>
-          <div style={{display:"flex",flexDirection:"column",gap:8}}>
-            {q.opts.map((opt,i)=>{
-              let bg="white",border="1.5px solid rgba(10,22,40,.08)",color=C.navy;
-              if(answered){
-                if(i===q.correct){bg="rgba(29,185,122,.08)";border=`1.5px solid ${C.green}`;color="#0D7A4A";}
-                else if(i===selected){bg="rgba(232,74,74,.06)";border=`1.5px solid ${C.red}`;color="#B83030";}
-              } else if(i===selected){bg="rgba(74,168,232,.08)";border=`1.5px solid ${C.sky}`;color=C.ocean;}
-              return (
-                <div key={i} onClick={()=>selectOpt(i)} style={{padding:"11px 13px",borderRadius:10,fontSize:12,fontWeight:500,cursor:"pointer",border,color,background:bg,display:"flex",alignItems:"center",gap:10}}>
-                  <div style={{width:22,height:22,borderRadius:6,flexShrink:0,background:answered&&i===q.correct?C.green:answered&&i===selected?C.red:i===selected?C.sky:C.foam,display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,fontWeight:800,color:i===selected||answered?"white":C.gray}}>
-                    {["A","B","C","D"][i]}
-                  </div>
-                  {opt}
-                </div>
-              );
-            })}
-          </div>
-          {answered && (
-            <div style={{marginTop:12,padding:12,background:"rgba(29,185,122,.06)",border:"1px solid rgba(29,185,122,.2)",borderRadius:10,fontSize:11,fontWeight:300,color:C.navy,lineHeight:1.6}}>
-              <strong style={{color:"#0D7A4A"}}>✓ </strong>{q.exp}
-              <div style={{marginTop:8,background:"rgba(10,22,40,.05)",borderRadius:8,padding:"7px 11px",fontSize:11,fontWeight:600,cursor:"pointer",display:"inline-block"}}>🎬 {q.video}</div>
-            </div>
-          )}
-        </div>
-        <div style={{padding:"13px 18px",borderTop:"1px solid rgba(10,22,40,.05)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <div style={{display:"flex",alignItems:"center",gap:6,fontSize:12,fontWeight:700,color:C.navy}}>
-            <div style={{width:7,height:7,borderRadius:"50%",background:secs<20?C.red:C.orange}}/>
-            {String(Math.floor(secs/60)).padStart(2,"0")}:{String(secs%60).padStart(2,"0")}
-          </div>
-          <button onClick={nextQ} style={{background:C.navy,color:"white",padding:"10px 20px",borderRadius:9,fontSize:10,fontWeight:700,letterSpacing:2,textTransform:"uppercase",border:"none",cursor:"pointer",fontFamily:"Montserrat,sans-serif"}}>Next →</button>
-        </div>
-      </div>
-    </>}
+// MODAL
+function openModal(type){
+  var reg = document.getElementById('register-fields');
+  var title = document.getElementById('modal-title');
+  var sub = document.getElementById('modal-sub');
+  var sw = document.getElementById('modal-switch');
+  var forgot = document.getElementById('forgot-link');
+  var btn = document.querySelector('.btn-submit');
+  if(type==='register'){
+    reg.style.display='block'; forgot.style.display='none';
+    title.textContent='Create your account';
+    sub.textContent='Join 8,400+ medical students on Nawa';
+    btn.textContent='Create Account';
+    sw.innerHTML='Already have an account? <span onclick="openModal(\'login\')">Sign in</span>';
+  } else {
+    reg.style.display='none'; forgot.style.display='block';
+    title.textContent='Welcome back!';
+    sub.textContent='Sign in to continue your journey';
+    btn.textContent='Sign In';
+    sw.innerHTML='Don\'t have an account? <span onclick="openModal(\'register\')">Create one</span>';
+  }
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
+function updateModules(){
+  var yr = document.getElementById('year-select').value;
+  var box = document.getElementById('modules-box');
+  if(yr && modules[yr]){ box.style.display='block'; box.innerHTML='<strong style="color:#0D3B7A;">Modules: </strong>'+modules[yr]; }
+  else box.style.display='none';
+}
+function enterDash(){ closeModal(); showDash('home',null); document.getElementById('landing').style.display='none'; document.getElementById('dashboard').classList.add('active'); }
+function showLanding(){ document.getElementById('dashboard').classList.remove('active'); document.getElementById('landing').style.display='block'; }
 
-    {dash==="lb" && (
-      <div>
-        <div style={{marginBottom:22}}>
-          <div style={{fontSize:"clamp(16px,2vw,20px)",fontWeight:800,color:C.navy}}>🏆 <span style={{color:C.sky}}>Leaderboard</span></div>
-        </div>
-        <div style={{display:"flex",gap:7,marginBottom:16,flexWrap:"wrap"}}>
-          {["Today","This Week","This Month","All Time"].map((f,i)=>(
-            <button key={f} style={{padding:"7px 16px",borderRadius:100,fontSize:10,fontWeight:700,letterSpacing:1,textTransform:"uppercase",cursor:"pointer",background:i===1?C.navy:"white",color:i===1?"white":C.gray,border:i===1?`1.5px solid ${C.navy}`:"1.5px solid rgba(10,22,40,.1)",fontFamily:"Montserrat,sans-serif"}}>{f}</button>
-          ))}
-        </div>
-        <div style={{background:C.foam,borderRadius:10,padding:"9px 14px",fontSize:11,color:C.navy,marginBottom:16}}>
-          👥 Showing colleagues from <strong>Alexandria University · Year 4</strong>
-        </div>
-        <div style={{background:"white",borderRadius:14,overflow:"hidden",boxShadow:"0 4px 20px rgba(10,22,40,.06)"}}>
-          <table style={{width:"100%",borderCollapse:"collapse"}}>
-            <thead><tr>{["#","Student","Accuracy","Questions","Score"].map(h=><th key={h} style={{fontSize:9,fontWeight:700,letterSpacing:3,textTransform:"uppercase",color:C.gray,padding:"10px 14px",textAlign:"left",borderBottom:"1px solid rgba(10,22,40,.06)"}}>{h}</th>)}</tr></thead>
-            <tbody>
-              {[["🥇","Yassmine Abouzaid","Alex·Y4",false,"95.25%",421,92.2,false],
-                ["🥈","Zeyad M. Etman","Alex·Y4",false,"92.3%",935,90.1,false],
-                ["🥉","Moneim Tarek","Alex·Y4",false,"85.42%",847,87.8,true],
-                ["4","Noor Alshammari","Alex·Y4",false,"88.3%",171,79.6,false],
-                ["5","Anonymous","",true,"86.44%",494,78.1,false],
-              ].map(([rank,name,univ,anon,acc,qs2,score,isMe])=>(
-                <tr key={name+score} style={{background:isMe?"rgba(74,168,232,.05)":"transparent"}}>
-                  <td style={{padding:"11px 14px",fontSize:12,borderBottom:"1px solid rgba(10,22,40,.04)"}}><strong>{rank}</strong></td>
-                  <td style={{padding:"11px 14px",borderBottom:"1px solid rgba(10,22,40,.04)"}}>
-                    <div style={{display:"flex",alignItems:"center",gap:9}}>
-                      <div style={{width:30,height:30,borderRadius:"50%",background:anon?"rgba(10,22,40,.1)":`linear-gradient(135deg,${C.ocean},${C.sky})`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,color:"white"}}>{anon?"?":name[0]}</div>
-                      <div>
-                        <div style={{fontSize:12,fontWeight:isMe?700:500,color:isMe?C.blue:C.navy}}>{name}{isMe?" (You)":""}</div>
-                        <div style={{fontSize:9,color:C.gray}}>{univ}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td style={{padding:"11px 14px",fontSize:12,color:C.navy,borderBottom:"1px solid rgba(10,22,40,.04)"}}>{acc}</td>
-                  <td style={{padding:"11px 14px",fontSize:12,color:C.navy,borderBottom:"1px solid rgba(10,22,40,.04)"}}>{qs2}</td>
-                  <td style={{padding:"11px 14px",borderBottom:"1px solid rgba(10,22,40,.04)"}}><strong style={{color:C.sky}}>{score}</strong></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    )}
-
-    {!["home","lb"].includes(dash) && (
-      <div style={{textAlign:"center",padding:"60px 20px"}}>
-        <div style={{fontSize:40,marginBottom:16}}>🚧</div>
-        <div style={{fontSize:18,fontWeight:700,color:C.navy,marginBottom:8,textTransform:"capitalize"}}>{dash}</div>
-        <div style={{fontSize:14,color:C.gray,fontWeight:300}}>Coming soon!</div>
-      </div>
-    )}
-  </main>
-</div>
-```
-
-);
-};
-
-// ── APP ──
-function App() {
-const [page, setPage] = useState(“landing”);
-const [modal, setModal] = useState(null);
-
-return (
-<div style={{fontFamily:“Montserrat,-apple-system,sans-serif”}}>
-<Nav page={page} setPage={setPage} onAuth={setModal}/>
-{page===“landing” && <Landing onAuth={setModal}/>}
-{page===“dashboard” && <Dashboard onLogout={()=>setPage(“landing”)}/>}
-{modal && <Modal type={modal} onClose={()=>setModal(null)} onSwitch={()=>setModal(m=>m===“register”?“login”:“register”)} onEnter={()=>{setModal(null);setPage(“dashboard”);}}/>}
-</div>
-);
+// DASHBOARD
+var currentDash='home';
+function showDash(id, el){
+  currentDash=id;
+  document.querySelectorAll('.si').forEach(function(s){s.classList.remove('active');});
+  if(el) el.classList.add('active');
+  renderDash();
 }
 
-ReactDOM.createRoot(document.getElementById(“root”)).render(<App/>);
+function renderDash(){
+  var m = document.getElementById('dash-main');
+  if(currentDash==='home') renderHome(m);
+  else if(currentDash==='lb') renderLB(m);
+  else {
+    m.innerHTML='<div style="text-align:center;padding:60px 20px;"><div style="font-size:40px;margin-bottom:16px;">🚧</div><div style="font-size:18px;font-weight:700;color:#0A1628;margin-bottom:8px;text-transform:capitalize;">'+currentDash+'</div><div style="font-size:14px;color:#8A9BB5;font-weight:300;">Coming soon!</div></div>';
+  }
+}
+
+function renderHome(m){
+  if(timerInt) clearInterval(timerInt);
+  var q=qs[qIdx]; answered=false;
+  m.innerHTML=
+  '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:10px;">'+
+    '<div><div style="font-size:clamp(16px,2vw,20px);font-weight:800;color:#0A1628;">Welcome, <span style="color:#4AA8E8;">Moneim</span>! 🔥</div><div style="font-size:10px;color:#8A9BB5;letter-spacing:2px;text-transform:uppercase;margin-top:2px;">Thursday · April 23, 2026</div></div>'+
+    '<button onclick="showDash(\'quiz\',null)" style="background:#4AA8E8;color:#0A1628;padding:9px 18px;border-radius:10px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;font-family:inherit;">✦ Create Quiz</button>'+
+  '</div>'+
+  '<div style="background:linear-gradient(135deg,#0D3B7A,#1560BD);border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:14px;flex-wrap:wrap;">'+
+    '<div><div style="font-size:16px;font-weight:800;color:white;margin-bottom:3px;">Good morning, Moneim! 👋</div><div style="font-size:12px;font-weight:300;color:rgba(255,255,255,.6);">14-day streak! Keep going strong.</div></div>'+
+    '<button onclick="showDash(\'quiz\',null)" style="background:white;color:#0A1628;padding:10px 20px;border-radius:9px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:none;cursor:pointer;font-family:inherit;flex-shrink:0;">✦ Create Quiz</button>'+
+  '</div>'+
+  '<div class="stat-cards">'+
+    statCard('📝','Questions Done','847','+23 today','#0D3B7A','#4AA8E8')+
+    statCard('✅','Accuracy','92%','↑ 3% this week','#0D7A4A','#1DB97A')+
+    statCard('🔥','Day Streak','14','Keep going!','#B85A0D','#E87A1A')+
+    statCard('🏆','Global Rank','#3','Top 0.1%','#5A0D7A','#8A2BE2')+
+  '</div>'+
+  '<div class="card">'+
+    '<div class="card-header">'+
+      '<div><div style="font-size:13px;font-weight:700;color:#0A1628;">Today\'s Quiz</div><div style="font-size:9px;color:#8A9BB5;margin-top:2px;">MED431 Cardiopulmonary · Practice Mode</div></div>'+
+      '<div style="display:flex;gap:8px;align-items:center;"><span style="background:rgba(29,185,122,.1);color:#0D7A4A;font-size:9px;font-weight:700;padding:4px 10px;border-radius:100px;">PRACTICE</span>'+
+      '<span id="q-badge" style="background:#E2EDF8;color:#0D3B7A;font-size:9px;font-weight:700;padding:4px 10px;border-radius:100px;letter-spacing:2px;">Q '+(qIdx+1)+'/'+qs.length+'</span></div>'+
+    '</div>'+
+    '<div class="card-body">'+
+      '<div style="display:flex;justify-content:space-between;font-size:9px;font-weight:600;letter-spacing:1px;color:#8A9BB5;text-transform:uppercase;margin-bottom:6px;"><span>Progress</span><span id="q-pct">'+(Math.round((qIdx+1)/qs.length*100))+'%</span></div>'+
+      '<div style="height:4px;background:#E2EDF8;border-radius:4px;overflow:hidden;margin-bottom:16px;"><div id="q-fill" style="height:100%;width:'+(Math.round((qIdx+1)/qs.length*100))+'%;background:linear-gradient(to right,#0D3B7A,#4AA8E8);border-radius:4px;"></div></div>'+
+      '<div style="font-size:14px;font-weight:600;color:#0A1628;line-height:1.6;margin-bottom:14px;">'+q.q+'</div>'+
+      '<div id="q-opts">'+q.opts.map(function(o,i){return '<div class="q-opt" onclick="selectOpt('+i+','+q.c+')" id="opt-'+i+'"><div class="q-ltr">'+['A','B','C','D'][i]+'</div>'+o+'</div>';}).join('')+'</div>'+
+      '<div id="q-exp" style="display:none;margin-top:12px;padding:12px;background:rgba(29,185,122,.06);border:1px solid rgba(29,185,122,.2);border-radius:10px;font-size:11px;font-weight:300;color:#0A1628;line-height:1.6;"></div>'+
+    '</div>'+
+    '<div style="padding:13px 18px;border-top:1px solid rgba(10,22,40,.05);display:flex;justify-content:space-between;align-items:center;">'+
+      '<div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#0A1628;"><div id="timer-dot" style="width:7px;height:7px;border-radius:50%;background:#E87A1A;"></div><span id="timer-txt">01:30</span></div>'+
+      '<div style="display:flex;gap:8px;"><button style="background:#E2EDF8;color:#0A1628;padding:10px;border-radius:9px;font-size:14px;border:none;cursor:pointer;">🔖</button>'+
+      '<button onclick="nextQ()" style="background:#0A1628;color:white;padding:10px 20px;border-radius:9px;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;border:none;cursor:pointer;font-family:inherit;">Next →</button></div>'+
+    '</div>'+
+  '</div>';
+
+  secs=90;
+  timerInt=setInterval(function(){
+    secs=Math.max(0,secs-1);
+    var tm=document.getElementById('timer-txt');
+    var td=document.getElementById('timer-dot');
+    if(tm) tm.textContent=pad(Math.floor(secs/60))+':'+pad(secs%60);
+    if(td) td.style.background=secs<20?'#E84A4A':'#E87A1A';
+    if(secs===0) nextQ();
+  },1000);
+}
+
+function statCard(icon,label,val,sub,c1,c2){
+  return '<div class="stat-card"><div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,'+c1+','+c2+');"></div>'+
+    '<div style="position:absolute;top:14px;right:14px;font-size:18px;opacity:.2;">'+icon+'</div>'+
+    '<div style="font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8A9BB5;margin-bottom:7px;">'+label+'</div>'+
+    '<div style="font-size:26px;font-weight:800;color:#0A1628;letter-spacing:-1px;line-height:1;">'+val+'</div>'+
+    '<div style="font-size:10px;color:#8A9BB5;margin-top:4px;font-weight:300;">'+sub+'</div></div>';
+}
+
+function pad(n){return n<10?'0'+n:''+n;}
+
+function selectOpt(i,correct){
+  if(answered) return; answered=true;
+  for(var j=0;j<4;j++){
+    var el=document.getElementById('opt-'+j);
+    if(!el) continue;
+    var ltr=el.querySelector('.q-ltr');
+    if(j===correct){el.style.border='1.5px solid #1DB97A';el.style.background='rgba(29,185,122,.08)';el.style.color='#0D7A4A';if(ltr){ltr.style.background='#1DB97A';ltr.style.color='white';}}
+    else if(j===i){el.style.border='1.5px solid #E84A4A';el.style.background='rgba(232,74,74,.06)';el.style.color='#B83030';if(ltr){ltr.style.background='#E84A4A';ltr.style.color='white';}}
+  }
+  var exp=document.getElementById('q-exp');
+  if(exp){exp.style.display='block';exp.innerHTML='<strong style="color:#0D7A4A;">✓ </strong>'+qs[qIdx].exp+'<div style="margin-top:8px;background:rgba(10,22,40,.05);border-radius:8px;padding:7px 11px;font-size:11px;font-weight:600;display:inline-block;">🎬 Watch video explanation</div>';}
+}
+
+function nextQ(){
+  if(timerInt) clearInterval(timerInt);
+  qIdx=(qIdx+1)%qs.length;
+  renderHome(document.getElementById('dash-main'));
+}
+
+function renderLB(m){
+  m.innerHTML=
+  '<div style="margin-bottom:22px;"><div style="font-size:clamp(16px,2vw,20px);font-weight:800;color:#0A1628;">🏆 <span style="color:#4AA8E8;">Leaderboard</span></div></div>'+
+  '<div style="display:flex;gap:7px;margin-bottom:16px;flex-wrap:wrap;">'+
+    ['Today','This Week','This Month','All Time'].map(function(f,i){return '<button style="padding:7px 16px;border-radius:100px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;background:'+(i===1?'#0A1628':'white')+';color:'+(i===1?'white':'#8A9BB5')+';border:'+(i===1?'1.5px solid #0A1628':'1.5px solid rgba(10,22,40,.1)')+';font-family:inherit;">'+f+'</button>';}).join('')+
+  '</div>'+
+  '<div style="background:#E2EDF8;border-radius:10px;padding:9px 14px;font-size:11px;color:#0A1628;margin-bottom:16px;">👥 Showing colleagues from <strong>Alexandria University · Year 4</strong></div>'+
+  '<div style="background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 20px rgba(10,22,40,.06);">'+
+  '<table style="width:100%;border-collapse:collapse;">'+
+  '<thead><tr>'+['#','Student','Accuracy','Questions','Score'].map(function(h){return '<th style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#8A9BB5;padding:10px 14px;text-align:left;border-bottom:1px solid rgba(10,22,40,.06);">'+h+'</th>';}).join('')+'</tr></thead>'+
+  '<tbody>'+
+  [['🥇','Yassmine Abouzaid','Alex·Y4',false,'95.25%',421,92.2,false],
+   ['🥈','Zeyad M. Etman','Alex·Y4',false,'92.3%',935,90.1,false],
+   ['🥉','Moneim Tarek','Alex·Y4',false,'85.42%',847,87.8,true],
+   ['4','Noor Alshammari','Alex·Y4',false,'88.3%',171,79.6,false],
+   ['5','Anonymous','',true,'86.44%',494,78.1,false]
+  ].map(function(r){
+    return '<tr style="background:'+(r[7]?'rgba(74,168,232,.05)':'transparent')+'">'+
+      '<td style="padding:11px 14px;font-size:12px;border-bottom:1px solid rgba(10,22,40,.04);"><strong>'+r[0]+'</strong></td>'+
+      '<td style="padding:11px 14px;border-bottom:1px solid rgba(10,22,40,.04);"><div style="display:flex;align-items:center;gap:9px;"><div style="width:30px;height:30px;border-radius:50%;background:'+(r[3]?'rgba(10,22,40,.1)':'linear-gradient(135deg,#0D3B7A,#4AA8E8)')+';display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;">'+(r[3]?'?':r[1][0])+'</div><div><div style="font-size:12px;font-weight:'+(r[7]?700:500)+';color:'+(r[7]?'#1560BD':'#0A1628')+';">'+r[1]+(r[7]?' (You)':'')+'</div><div style="font-size:9px;color:#8A9BB5;">'+r[2]+'</div></div></div></td>'+
+      '<td style="padding:11px 14px;font-size:12px;color:#0A1628;border-bottom:1px solid rgba(10,22,40,.04);">'+r[4]+'</td>'+
+      '<td style="padding:11px 14px;font-size:12px;color:#0A1628;border-bottom:1px solid rgba(10,22,40,.04);">'+r[5]+'</td>'+
+      '<td style="padding:11px 14px;border-bottom:1px solid rgba(10,22,40,.04);"><strong style="color:#4AA8E8;">'+r[6]+'</strong></td>'+
+    '</tr>';
+  }).join('')+
+  '</tbody></table></div>';
+}
+
+// Init
+renderDash();
 </script>
 
 </body>
