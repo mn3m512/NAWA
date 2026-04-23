@@ -5,13 +5,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nawa — Medical Education</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;600;700;800&display=swap" rel="stylesheet">
-<style>
-/* Fallback while fonts load */
-body{font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;}
-/* Ensure hero content always visible */
-.hero-content>*{opacity:1!important;}
-</style>
 <style>
 :root{--navy:#0A1628;--ocean:#0D3B7A;--blue:#1560BD;--sky:#4AA8E8;--foam:#E2EDF8;--white:#FFFFFF;--off:#F4F8FC;--gray:#8A9BB5;--green:#1DB97A;--orange:#E87A1A;--red:#E84A4A;--purple:#8A2BE2;}
 *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}
@@ -449,9 +445,8 @@ footer{background:var(–navy);padding:60px 40px 0;}
 @media(max-width:1024px){.dash-grid{grid-template-columns:1fr;}.dash-right{display:grid;grid-template-columns:1fr 1fr;}.stats-row{grid-template-columns:1fr 1fr;}.lb-inner{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr 1fr;}.lb-page-grid{grid-template-columns:1fr;}}
 @media(max-width:768px){nav{padding:0 16px;}.nav-links{display:none;}.nav-btns{display:none;}.nav-hamburger{display:flex;}.sidebar{transform:translateX(-100%);}.sidebar.open{transform:translateX(0);}.sidebar-overlay.open{display:block;}.dash-main{margin-left:0;padding:16px;}.dash-right{grid-template-columns:1fr;}.features{padding:60px 20px;}.lb-section{padding:60px 20px;}.pricing{padding:60px 20px;}.payment-section{padding:50px 20px;}.cta-section{padding:60px 20px;}footer{padding:48px 20px 0;}.footer-grid{grid-template-columns:1fr;gap:24px;}.form-row{grid-template-columns:1fr;}.welcome-banner{flex-direction:column;align-items:flex-start;}.blocks-grid{grid-template-columns:repeat(2,1fr);}.pq-grid{grid-template-columns:1fr;}}
 @media(max-width:480px){.stats-row{grid-template-columns:1fr 1fr;gap:10px;}.sc-value{font-size:22px;}.hero-stats{gap:18px;}.modal-box{padding:24px 16px;}.pricing-grid{grid-template-columns:1fr;}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.hero-content>*{animation:fadeUp .4s ease both;}
-.hero-badge{animation-delay:.05s}.hero-logo-big{animation-delay:.1s}.hero-title{animation-delay:.15s}.hero-sub{animation-delay:.2s}.hero-btns{animation-delay:.25s}.hero-stats{animation-delay:.3s}
+/* No animations - always visible */
+.hero-content>*{opacity:1;transform:none;}
 </style>
 
 </head>
