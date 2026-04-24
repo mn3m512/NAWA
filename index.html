@@ -649,13 +649,30 @@ function renderDash(){
 
 // ── HOME ──
 var quizOpen=false;
-var qIdx=0,answered=false,secs=90,timerInt=null;
-var qs=[
-  {q:'Which is the primary pacemaker of the heart?',opts:['AV Node — 40-60 bpm','Sinoatrial Node — 60-100 bpm','Bundle of His — 20-40 bpm','Purkinje Fibers — 20-40 bpm'],c:1,exp:'The SA Node fires at 60-100 bpm and initiates each heartbeat.'},
-  {q:'Long-haul flight + pleuritic chest pain + tachycardia. Diagnosis?',opts:['Pneumothorax','Pulmonary Embolism','Acute MI','Aortic Dissection'],c:1,exp:'PE: immobility causes DVT then PE. Classic triad: dyspnea, chest pain, tachycardia.'},
-  {q:'Which enzyme converts Angiotensin I to Angiotensin II?',opts:['Renin','Aldosterone Synthase','ACE','Chymase'],c:2,exp:'ACE converts Ang I to Ang II in pulmonary vasculature.'},
-  {q:'Proximal weakness + heliotrope rash + elevated CK?',opts:['SLE','Polymyositis','Dermatomyositis','Myasthenia Gravis'],c:2,exp:'Dermatomyositis = Polymyositis + skin findings.'}
-];
+var qIdx=0,answered=false,timerInt=null;
+var qs=[];
+var dbQsLoaded=false;
+
+// Load questions from Supabase
+async function loadDBQuestions(moduleCode){
+  if(!currentUser)return;
+  var year=window.userProfile?.year||'1';
+  var url=URL+'/rest/v1/questions?select=*&is_active=eq.true&order=random()&limit=10';
+  if(moduleCode) url+='&module_code=eq.'+moduleCode;
+  else url+='&year_level=eq.'+year;
+  try {
+    var r=await fetch(url,{headers:{'apikey':SKEY,'Authorization':'Bearer '+(TOKEN||SKEY)}});
+    var data=await r.json();
+    if(data&&data.length){
+      qs=data.map(function(q){
+        var opts=[q.option_a,q.option_b,q.option_c,q.option_d];
+        var cIdx=['a','b','c','d'].indexOf(q.correct_option);
+        return {q:q.question_text,opts:opts,c:cIdx>=0?cIdx:0,exp:q.explanation||'',id:q.id};
+      });
+      dbQsLoaded=true;
+    }
+  } catch(e){ console.log('DB load error:',e); }
+}
 
 function renderHome(m){
   if(timerInt){clearInterval(timerInt);timerInt=null;}
@@ -797,7 +814,17 @@ function toggleQuiz(){
   if(quizOpen){
     icon.textContent='▼';
     content.style.display='block';
-    renderQuizContent();
+    // Load from DB then render
+    if(!dbQsLoaded){
+      content.innerHTML='<div style="padding:20px;text-align:center;color:#8A9BB5;font-size:13px;">Loading questions...</div>';
+      loadDBQuestions(null).then(function(){
+        qIdx=0;
+        if(qs.length>0) renderQuizContent();
+        else content.innerHTML='<div style="padding:20px;text-align:center;color:#8A9BB5;font-size:13px;">No questions found. Add questions first!</div>';
+      });
+    } else {
+      renderQuizContent();
+    }
   } else {
     icon.textContent='▶';
     content.style.display='none';
@@ -837,7 +864,16 @@ function selOpt(i,correct){
   var exp=document.getElementById('q-exp');
   if(exp){exp.style.display='block';exp.style.padding='12px';exp.style.margin='0 0 4px';exp.style.background='rgba(29,185,122,.06)';exp.style.border='1px solid rgba(29,185,122,.2)';exp.style.borderRadius='10px';exp.style.fontSize='11px';exp.style.color='#0A1628';exp.style.lineHeight='1.6';exp.innerHTML='<strong style="color:#0D7A4A;">✓ </strong>'+qs[qIdx].exp+'<div style="margin-top:8px;background:rgba(10,22,40,.05);border-radius:8px;padding:7px 11px;font-size:11px;font-weight:600;display:inline-block;cursor:pointer;">🎬 Watch video explanation</div>';}
 }
-function nextQ2(){qIdx=(qIdx+1)%qs.length;renderQuizContent();}
+function nextQ2(){
+  qIdx=(qIdx+1)%qs.length;
+  // Reload fresh questions when we reach the end
+  if(qIdx===0){
+    dbQsLoaded=false;
+    loadDBQuestions(null).then(function(){ renderQuizContent(); });
+  } else {
+    renderQuizContent();
+  }
+}
 
 function sCard(icon,label,val,sub,c1,c2){
   return '<div class="stat-card"><div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(to right,'+c1+','+c2+');"></div>'+
