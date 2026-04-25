@@ -206,7 +206,7 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
 .sel-summary{background:var(–foam);border-radius:10px;padding:12px 14px;font-size:12px;color:var(–navy);margin-bottom:16px;line-height:1.7;}
 
 /* QUIZ SCREEN */
-.quiz-screen{display:none;position:fixed;inset:0;background:var(–off);z-index:300;overflow-y:auto;flex-direction:column;}
+.quiz-screen{display:none;position:fixed;inset:0;background:#F5F8FC;z-index:1000;overflow-y:hidden;flex-direction:column;}
 .quiz-screen.open{display:flex;}
 .quiz-top{background:var(–navy);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:10;flex-shrink:0;}
 .q-badge{font-size:10px;font-weight:700;padding:4px 12px;border-radius:100px;}
@@ -216,7 +216,7 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
 .q-prog{height:5px;background:rgba(255,255,255,.15);border-radius:5px;overflow:hidden;}
 .q-prog-fill{height:100%;background:var(–sky);border-radius:5px;transition:width .5s;}
 .q-exit{background:rgba(255,255,255,.1);border:none;color:white;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:‘Outfit’,sans-serif;flex-shrink:0;}
-.quiz-body{max-width:720px;margin:0 auto;padding:28px 20px;flex:1;width:100%;}
+.quiz-body{max-width:720px;margin:0 auto;padding:28px 20px;flex:1;width:100%;overflow-y:auto;}
 .q-num{font-size:12px;font-weight:600;color:var(–gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
 .q-text{font-size:17px;font-weight:700;color:var(–navy);line-height:1.55;margin-bottom:22px;}
 .q-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
@@ -228,7 +228,7 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
 .q-opt.correct .q-ltr{background:var(–green);color:white;}
 .q-opt.wrong .q-ltr{background:var(–red);color:white;}
 .q-exp{padding:15px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:12px;margin-bottom:16px;font-size:13px;color:var(–navy);line-height:1.6;display:none;}
-.quiz-footer{background:white;border-top:1px solid rgba(10,22,40,.06);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;position:sticky;bottom:0;}
+.quiz-footer{background:white;border-top:1px solid rgba(10,22,40,.06);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
 .q-next{background:var(–navy);color:white;border:none;padding:12px 26px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:‘Outfit’,sans-serif;}
 .q-bm{background:var(–foam);color:var(–navy);border:none;padding:12px 14px;border-radius:10px;font-size:16px;cursor:pointer;}
 
