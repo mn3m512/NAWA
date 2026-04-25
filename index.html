@@ -35,8 +35,8 @@ body{font-family:'Outfit',sans-serif;overflow-x:hidden;}
 .stat-n{font-size:clamp(26px,4vw,36px);font-weight:900;color:white;letter-spacing:-2px;}
 .stat-l{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;}
 /* MODAL */
-.overlay{display:none;position:fixed;inset:0;background:rgba(6,14,26,.85);z-index:500;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;backdrop-filter:blur(16px);}
-.overlay.open{display:flex;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(6,14,26,.85);z-index:500;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;backdrop-filter:blur(16px);pointer-events:none;}
+.overlay.open{display:flex;pointer-events:all;}
 .modal{background:white;border-radius:24px;padding:36px;width:100%;max-width:500px;margin:auto;position:relative;}
 .modal-x{position:absolute;top:16px;right:16px;background:#f0f4f8;border:none;border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:16px;}
 .modal-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;}
@@ -247,8 +247,8 @@ body{font-family:'Outfit',sans-serif;overflow-x:hidden;}
 .hs-v{font-size:18px;font-weight:800;color:var(--navy);}
 .hs-l{font-size:10px;color:var(--gray);margin-top:2px;}
 /* UPGRADE MODAL */
-.up-overlay{display:none;position:fixed;inset:0;background:rgba(6,14,26,.85);z-index:600;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;backdrop-filter:blur(16px);}
-.up-overlay.open{display:flex;}
+.up-overlay{display:none;position:fixed;inset:0;background:rgba(6,14,26,.85);z-index:600;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;backdrop-filter:blur(16px);pointer-events:none;}
+.up-overlay.open{display:flex;pointer-events:all;}
 .up-modal{background:var(--navy);border-radius:28px;padding:32px;width:100%;max-width:820px;margin:auto;position:relative;}
 .up-x{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.1);border:none;border-radius:9px;width:34px;height:34px;cursor:pointer;font-size:16px;color:white;}
 .up-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
@@ -300,7 +300,7 @@ body{font-family:'Outfit',sans-serif;overflow-x:hidden;}
       <svg width="30" height="30" viewBox="0 0 100 100" fill="none"><defs><clipPath id="c1"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#c1)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="white" stroke-width="2.5" fill="none"/></svg>
       <span class="logo-text">Nawa</span>
     </div>
-    <button class="nav-btn" id="nav-start-btn">Get Started</button>
+    <button class="nav-btn" onclick="openModal('reg')">Get Started</button>
   </nav>
   <section class="hero">
     <div class="hero-bg"></div><div class="hero-grid"></div>
@@ -312,8 +312,8 @@ body{font-family:'Outfit',sans-serif;overflow-x:hidden;}
       <h1 class="hero-title">The Nucleus of<br><span>Medical Excellence</span></h1>
       <p class="hero-tagline">Root Deep. Reach Far.</p>
       <p class="hero-sub">Master medicine through smart MCQs organized by module, subject, and lecture.</p>
-      <button class="btn-start" id="hero-start-btn">Start Now &rarr;</button>
-      <p class="hero-signin">Already have an account? <span id="hero-signin-link">Sign in</span></p>
+      <button class="btn-start" onclick="openModal('reg')">Start Now &rarr;</button>
+      <p class="hero-signin">Already have an account? <span onclick="openModal('login')" style="cursor:pointer">Sign in</span></p>
       <div class="hero-stats">
         <div><div class="stat-n">344+</div><div class="stat-l">Questions</div></div>
         <div><div class="stat-n">28</div><div class="stat-l">Lectures</div></div>
@@ -326,16 +326,16 @@ body{font-family:'Outfit',sans-serif;overflow-x:hidden;}
 
 <!-- AUTH MODAL -->
 
-<div class="overlay" id="auth-modal">
+<div class="overlay" id="auth-modal" onclick="closeModal()">
   <div class="modal" onclick="event.stopPropagation()">
-    <button class="modal-x" id="modal-close-btn">&#10005;</button>
+    <button class="modal-x" onclick="closeModal()">&#10005;</button>
     <div class="modal-logo">
       <svg width="26" height="26" viewBox="0 0 100 100" fill="none"><defs><clipPath id="c3"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="#0A1628"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#c3)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="#0A1628" stroke-width="2.5" fill="none"/></svg>
       <span class="modal-logo-text">NAWA</span>
     </div>
     <div class="tabs">
-      <button class="tab on" id="tab-reg">Sign Up</button>
-      <button class="tab" id="tab-login">Sign In</button>
+      <button class="tab on" onclick="switchTab('reg')">Sign Up</button>
+      <button class="tab" onclick="switchTab('login')">Sign In</button>
     </div>
     <div id="auth-msg"></div>
     <div id="auth-form"></div>
@@ -346,11 +346,11 @@ body{font-family:'Outfit',sans-serif;overflow-x:hidden;}
 
 <div class="up-overlay" id="up-overlay">
   <div class="up-modal" onclick="event.stopPropagation()">
-    <button class="up-x" id="up-close-btn">&#10005;</button>
+    <button class="up-x" onclick="document.getElementById('up-overlay').classList.remove('open')">&#10005;</button>
     <div style="text-align:center;margin-bottom:24px;"><div style="font-size:22px;font-weight:900;color:white;">Upgrade Your Plan</div></div>
     <div class="up-grid">
-      <div class="up-card pro"><div class="up-name">Pro</div><div class="up-price">150 <span style="font-size:18px">EGP</span></div><div class="up-per">per month</div><div class="up-line"></div><ul class="up-feats"><li>Unlimited questions</li><li>All modules</li><li>Exam Mode</li><li>Flashcards (SRS)</li><li>Full Analytics</li></ul><button class="up-btn" id="up-pro-btn">Start Pro</button></div>
-      <div class="up-card elite"><div class="up-name">Elite</div><div class="up-price">350 <span style="font-size:18px">EGP</span></div><div class="up-per">per month</div><div class="up-line"></div><ul class="up-feats"><li>Everything in Pro</li><li>Video explanations</li><li>1-on-1 mentoring</li><li>Priority support</li></ul><button class="up-btn" id="up-elite-btn">Go Elite</button></div>
+      <div class="up-card pro"><div class="up-name">Pro</div><div class="up-price">150 <span style="font-size:18px">EGP</span></div><div class="up-per">per month</div><div class="up-line"></div><ul class="up-feats"><li>Unlimited questions</li><li>All modules</li><li>Exam Mode</li><li>Flashcards (SRS)</li><li>Full Analytics</li></ul><button class="up-btn" onclick="document.getElementById('up-overlay').classList.remove('open')">Start Pro</button></div>
+      <div class="up-card elite"><div class="up-name">Elite</div><div class="up-price">350 <span style="font-size:18px">EGP</span></div><div class="up-per">per month</div><div class="up-line"></div><ul class="up-feats"><li>Everything in Pro</li><li>Video explanations</li><li>1-on-1 mentoring</li><li>Priority support</li></ul><button class="up-btn" onclick="document.getElementById('up-overlay').classList.remove('open')">Go Elite</button></div>
     </div>
   </div>
 </div>
@@ -361,14 +361,14 @@ body{font-family:'Outfit',sans-serif;overflow-x:hidden;}
   <div class="q-top">
     <span id="q-badge" class="q-badge qp">PRACTICE</span>
     <div class="q-prog-wrap"><div class="q-prog"><div class="q-prog-fill" id="q-prog" style="width:0%"></div></div></div>
-    <button class="q-exit" id="q-exit-btn">&#10005; Exit</button>
+    <button class="q-exit" onclick="exitQuiz()">&#10005; Exit</button>
   </div>
   <div class="q-body" id="q-body"></div>
   <div class="q-footer" id="q-footer">
     <span class="q-counter" id="q-counter">Q 1/10</span>
     <div class="q-btns">
-      <button class="q-bm" id="q-bm-btn">&#128278;</button>
-      <button class="q-next" id="q-next-btn">Next &rarr;</button>
+      <button class="q-bm" id="q-bm-btn" onclick="var q=QS[Qi];if(q){BMs[q.id]=!BMs[q.id];this.className='q-bm'+(BMs[q.id]?' on':'');}">&#128278;</button>
+      <button class="q-next" onclick="nextQ()">Next &rarr;</button>
     </div>
   </div>
 </div>
@@ -377,17 +377,17 @@ body{font-family:'Outfit',sans-serif;overflow-x:hidden;}
 
 <div id="app">
   <nav class="d-nav">
-    <div class="d-logo" id="d-logo">
+    <div class="d-logo" onclick="showLanding()" style="cursor:pointer">
       <svg width="28" height="28" viewBox="0 0 100 100" fill="none"><defs><clipPath id="c4"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#c4)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="white" stroke-width="2.5" fill="none"/></svg>
       <span class="d-logo-text">Nawa</span>
     </div>
     <div class="d-nav-r">
-      <button class="icon-btn menu-btn" id="menu-btn">&#9776;</button>
-      <button class="icon-btn" id="notif-btn">&#128276;</button>
-      <div class="u-av" id="nav-av">M</div>
+      <button class="icon-btn menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open');document.getElementById('sb-ov').classList.toggle('open')">&#9776;</button>
+      <button class="icon-btn" onclick="goto('history')">&#128276;</button>
+      <div class="u-av" id="nav-av" onclick="goto('profile')">M</div>
     </div>
   </nav>
-  <div class="sb-ov" id="sb-ov"></div>
+  <div class="sb-ov" id="sb-ov" onclick="document.getElementById('sidebar').classList.remove('open');document.getElementById('sb-ov').classList.remove('open')"></div>
   <aside class="sidebar" id="sidebar">
     <div class="sb-user">
       <div class="sb-av" id="sb-av">M</div>
@@ -397,24 +397,24 @@ body{font-family:'Outfit',sans-serif;overflow-x:hidden;}
       <div class="si on" data-page="home"><span class="si-ico">&#127968;</span>Home</div>
     </div>
     <div class="si-sec"><div class="si-lbl">Study</div>
-      <div class="si" data-page="modules"><span class="si-ico">&#128218;</span>My Modules</div>
-      <div class="si" data-page="history"><span class="si-ico">&#128336;</span>Quiz History</div>
-      <div class="si" data-page="bookmarks"><span class="si-ico">&#128278;</span>Bookmarks</div>
-      <div class="si" data-page="wrong"><span class="si-ico">&#10060;</span>Wrong Answers</div>
+      <div class="si" data-page="modules" onclick="goto('modules')"><span class="si-ico">&#128218;</span>My Modules</div>
+      <div class="si" data-page="history" onclick="goto('history')"><span class="si-ico">&#128336;</span>Quiz History</div>
+      <div class="si" data-page="bookmarks" onclick="goto('bookmarks')"><span class="si-ico">&#128278;</span>Bookmarks</div>
+      <div class="si" data-page="wrong" onclick="goto('wrong')"><span class="si-ico">&#10060;</span>Wrong Answers</div>
     </div>
     <div class="si-sec"><div class="si-lbl">Performance</div>
-      <div class="si" data-page="stats"><span class="si-ico">&#128202;</span>My Stats</div>
-      <div class="si" data-page="lb"><span class="si-ico">&#127942;</span>Leaderboard</div>
+      <div class="si" data-page="stats" onclick="goto('stats')"><span class="si-ico">&#128202;</span>My Stats</div>
+      <div class="si" data-page="lb" onclick="goto('lb')"><span class="si-ico">&#127942;</span>Leaderboard</div>
     </div>
     <div class="si-sec"><div class="si-lbl">Tools</div>
-      <div class="si" data-page="notes"><span class="si-ico">&#128221;</span>My Notes</div>
-      <div class="si" data-page="flash"><span class="si-ico">&#127183;</span>Flashcards<span class="si-badge">PRO</span></div>
+      <div class="si" data-page="notes" onclick="goto('notes')"><span class="si-ico">&#128221;</span>My Notes</div>
+      <div class="si" data-page="flash" onclick="goto('flash')"><span class="si-ico">&#127183;</span>Flashcards<span class="si-badge">PRO</span></div>
     </div>
     <div class="si-sec"><div class="si-lbl">Account</div>
-      <div class="si" data-page="profile"><span class="si-ico">&#128100;</span>My Profile</div>
-      <div class="si" id="logout-btn"><span class="si-ico">&#128682;</span>Sign Out</div>
+      <div class="si" data-page="profile" onclick="goto('profile')"><span class="si-ico">&#128100;</span>My Profile</div>
+      <div class="si" onclick="doLogout()"><span class="si-ico">&#128682;</span>Sign Out</div>
     </div>
-    <div class="sb-up"><p>Upgrade to unlock unlimited questions and all premium features.</p><button class="sb-up-btn" id="sb-up-btn">&#10022; Upgrade Plan</button></div>
+    <div class="sb-up"><p>Upgrade to unlock unlimited questions and all premium features.</p><button class="sb-up-btn" onclick="document.getElementById('up-overlay').classList.add('open')">&#10022; Upgrade Plan</button></div>
   </aside>
   <div class="d-content" id="d-content">Loading...</div>
 </div>
@@ -976,39 +976,6 @@ c.innerHTML=’<div class="page-hd"><div><div class="page-title">👤 My <span>P
 function upAv(inp){if(!inp.files||!inp.files[0])return;if(inp.files[0].size>2*1024*1024){alert(‘Max 2MB’);return;}var reader=new FileReader();reader.onload=async function(e){var b64=e.target.result;await api(‘PATCH’,’/rest/v1/profiles?id=eq.’+CU.id,{avatar_url:b64});if(UP)UP.avatar_url=b64;var av=document.getElementById(‘prof-av’);if(av)av.innerHTML=’<img src="'+b64+'">’;};reader.readAsDataURL(inp.files[0]);}
 async function saveProf(){var fn=gv(‘p-fn’),ln=gv(‘p-ln’),uni=(document.getElementById(‘p-uni’).value||’’).trim(),yr=document.getElementById(‘p-yr’).value,msg=document.getElementById(‘prof-msg’);if(!fn){if(msg)msg.innerHTML=’<div class="msg-er">First name required</div>’;return;}var r=await api(‘PATCH’,’/rest/v1/profiles?id=eq.’+CU.id,{first_name:fn,last_name:ln,university:uni,year:yr});if(r.ok){if(UP){UP.first_name=fn;UP.last_name=ln;UP.university=uni;UP.year=yr;}if(msg)msg.innerHTML=’<div class="msg-ok">✓ Saved!</div>’;var sn=document.getElementById(‘sb-name’);if(sn)sn.textContent=fn+(ln?’ ‘+ln:’’);}else{if(msg)msg.innerHTML=’<div class="msg-er">Error saving</div>’;}}
 async function chgPw(){var np=prompt(‘New password (min 6 characters):’);if(!np||np.length<6){alert(‘Min 6 characters’);return;}var r=await api(‘PUT’,’/auth/v1/user’,{password:np});if(r.ok)alert(’✓ Password changed!’);else alert(‘Error.’);}
-
-// EVENT LISTENERS
-document.addEventListener(‘DOMContentLoaded’,function(){
-// Landing
-document.getElementById(‘nav-start-btn’).addEventListener(‘click’,function(){openModal(‘reg’);});
-document.getElementById(‘hero-start-btn’).addEventListener(‘click’,function(){openModal(‘reg’);});
-document.getElementById(‘hero-signin-link’).addEventListener(‘click’,function(){openModal(‘login’);});
-// Modal
-document.getElementById(‘modal-close-btn’).addEventListener(‘click’,closeModal);
-document.getElementById(‘auth-modal’).addEventListener(‘click’,closeModal);
-document.getElementById(‘tab-reg’).addEventListener(‘click’,function(){switchTab(‘reg’);});
-document.getElementById(‘tab-login’).addEventListener(‘click’,function(){switchTab(‘login’);});
-// Upgrade
-document.getElementById(‘up-close-btn’).addEventListener(‘click’,function(){document.getElementById(‘up-overlay’).classList.remove(‘open’);});
-document.getElementById(‘up-pro-btn’).addEventListener(‘click’,function(){document.getElementById(‘up-overlay’).classList.remove(‘open’);});
-document.getElementById(‘up-elite-btn’).addEventListener(‘click’,function(){document.getElementById(‘up-overlay’).classList.remove(‘open’);});
-// Dashboard
-document.getElementById(‘d-logo’).addEventListener(‘click’,function(){showLanding();});
-document.getElementById(‘menu-btn’).addEventListener(‘click’,function(){document.getElementById(‘sidebar’).classList.toggle(‘open’);document.getElementById(‘sb-ov’).classList.toggle(‘open’);});
-document.getElementById(‘sb-ov’).addEventListener(‘click’,function(){closeSidebar();});
-document.getElementById(‘notif-btn’).addEventListener(‘click’,function(){goto(‘history’);});
-document.getElementById(‘nav-av’).addEventListener(‘click’,function(){goto(‘profile’);});
-document.getElementById(‘logout-btn’).addEventListener(‘click’,doLogout);
-document.getElementById(‘sb-up-btn’).addEventListener(‘click’,function(){document.getElementById(‘up-overlay’).classList.add(‘open’);});
-// Sidebar items
-document.querySelectorAll(’.si[data-page]’).forEach(function(el){
-el.addEventListener(‘click’,function(){goto(el.getAttribute(‘data-page’));});
-});
-// Quiz
-document.getElementById(‘q-exit-btn’).addEventListener(‘click’,exitQuiz);
-document.getElementById(‘q-next-btn’).addEventListener(‘click’,function(){nextQ();});
-document.getElementById(‘q-bm-btn’).addEventListener(‘click’,function(){var q=QS[Qi];if(!q)return;BMs[q.id]=!BMs[q.id];this.className=‘q-bm’+(BMs[q.id]?’ on’:’’);});
-});
 
 function nextQ(){Qi++;if(Qi>=QS.length){showResult();return;}renderQ();}
 </script>
