@@ -378,9 +378,10 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
   </div>
   <div class="quiz-body" id="quiz-body"></div>
   <div class="quiz-footer">
-    <span id="q-counter" style="font-size:12px;font-weight:600;color:var(--gray);">Q 1/10</span>
+    <span id="q-counter" style="font-size:12px;font-weight:600;color:#8A9BB5;">Q 1/10</span>
     <div style="display:flex;gap:8px;">
       <button class="q-bm" id="q-bm-btn" onclick="toggleBM()">🔖</button>
+      <button id="q-prev-btn" onclick="prevQ()" style="background:#F5F8FC;color:#0A1628;border:none;padding:11px 16px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;display:none;">← Back</button>
       <button class="q-next" onclick="nextQ()">Next →</button>
     </div>
   </div>
@@ -831,7 +832,8 @@ function startExamWithTimer(minutes){
   if(minutes>0){
     examTimeLeft=minutes*60;
     startTimer=true;
-    var td=g('q-timer-display');if(td)td.style.display='block';
+    var td=g('q-timer-display');
+    if(td){td.style.display='inline-block';td.style.minWidth='50px';td.style.textAlign='center';}
     updateTimerDisplay();
     examTimer=setInterval(function(){
       examTimeLeft--;
@@ -861,6 +863,7 @@ function renderQuestion(){
   var pct=Math.round((quizIdx/quizQs.length)*100);
   g('q-prog-fill').style.width=pct+'%';
   g('q-counter').textContent='Q '+(quizIdx+1)+'/'+quizQs.length;
+  var prevBtn=g('q-prev-btn');if(prevBtn)prevBtn.style.display=quizIdx>0?'block':'none';
 
   var opts=['a','b','c','d'];
   var optsHTML=opts.map(function(o,i){
@@ -878,14 +881,20 @@ function renderQuestion(){
 }
 
 function answerQ(idx,letter){
-  if(quizAnswered&&quizMode==='practice')return;
+  if(quizAnswered)return;
   quizAnswered=true;
   var q=quizQs[quizIdx];
   quizAnswers.push({qid:q.id,selected:letter,correct:q.correct_option,isCorrect:letter===q.correct_option});
 
-  // Always highlight selected in both modes
+  // Highlight selected answer
   var selOpt=g('opt-'+idx);
-  if(selOpt)selOpt.style.borderColor='#4AA8E8';
+  if(selOpt){selOpt.style.borderColor='#4AA8E8';selOpt.style.background='rgba(74,168,232,.08)';}
+  // In exam mode, dim other options
+  if(quizMode==='exam'){
+    for(var j=0;j<4;j++){
+      if(j!==idx){var o=g('opt-'+j);if(o)o.style.opacity='.5';}
+    }
+  }
   if(quizMode==='practice'){
     var correctIdx=['a','b','c','d'].indexOf(q.correct_option);
     for(var i=0;i<4;i++){
@@ -1077,6 +1086,14 @@ async function loadHistory(filter){
       if(det)det.style.display=det.style.display==='block'?'none':'block';
     });
   });
+}
+
+
+function prevQ(){
+  if(quizIdx<=0)return;
+  quizIdx--;
+  quizAnswered=false;
+  renderQuestion();
 }
 
 </script>
