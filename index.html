@@ -404,6 +404,8 @@ body.dark .card-title,.body.dark .sc-val,.body.dark .q-text,.body.dark .mod-name
 .sidebar{transform:translateX(0);}
 .main{margin-left:var(–sidebar);}
 .menu-btn{display:none;}
+.main{margin-left:var(–sidebar);}
+.menu-btn{display:none;}
 }
 @media(max-width:768px){
 .result-stats{grid-template-columns:1fr 1fr 1fr;}
@@ -713,6 +715,7 @@ window.addEventListener('load',async function(){
   if(!r.ok){localStorage.removeItem('nawa_tk');showLandingScreen();return;}
   CU=r.data;
   await loadProfile();
+  hideLandingScreen();
   goto('home');
 });
 
