@@ -185,7 +185,7 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
 .lec-item:hover{background:var(–foam);}
 .lec-item:last-child{border:none;}
 .lec-check{width:20px;height:20px;border-radius:6px;border:2px solid #C8D8E8;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.15s;}
-.lec-check.on{background:var(–sky);border-color:var(–sky);color:white;font-size:11px;font-weight:800;}
+.lec-check.on{background:#4AA8E8;border-color:#4AA8E8;color:white;font-size:11px;font-weight:800;}
 .lec-name{font-size:13px;font-weight:600;color:var(–navy);flex:1;}
 
 /* QUIZ SETTINGS */
@@ -783,7 +783,10 @@ async function startQuiz(code,subjectKey){
   var data=(r.ok&&Array.isArray(r.data))?r.data:[];
 
   if(!data.length){
-    alert('No questions found for this selection! Try selecting all lectures or a different subject.');
+    var errMsg='No questions found!';
+    if(!r.ok){errMsg='API Error: '+JSON.stringify(r.data).substring(0,100);}
+    else if(Array.isArray(r.data)&&r.data.length===0){errMsg='No questions in DB for this selection. Try "All Subjects".';}
+    alert(errMsg);
     return;
   }
 
