@@ -193,14 +193,14 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
 .qs-title{font-size:14px;font-weight:700;color:var(–navy);margin-bottom:14px;}
 .qs-opts{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
 .qs-opt{flex:1;min-width:70px;padding:10px;border-radius:10px;border:2px solid rgba(10,22,40,.08);cursor:pointer;text-align:center;transition:.15s;}
-.qs-opt.on{border-color:var(–sky);background:var(–foam);}
+.qs-opt.on{border-color:#4AA8E8;background:#E8F4FD;}
 .qs-n{font-size:20px;font-weight:900;color:var(–navy);}
-.qs-opt.on .qs-n{color:var(–sky);}
+.qs-opt.on .qs-n{color:#4AA8E8;}
 .qs-l{font-size:10px;color:var(–gray);margin-top:2px;}
 .mode-row{display:flex;gap:10px;margin-bottom:16px;}
 .mode-btn{flex:1;padding:11px;border-radius:10px;border:2px solid rgba(10,22,40,.08);cursor:pointer;text-align:center;font-family:‘Outfit’,sans-serif;font-size:13px;font-weight:600;transition:.15s;background:white;color:var(–gray);}
-.mode-btn.on{border-color:var(–sky);background:var(–foam);color:var(–navy);}
-.start-btn{width:100%;padding:15px;background:var(–navy);color:white;border:none;border-radius:12px;font-family:‘Outfit’,sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;}
+.mode-btn.on{border-color:#4AA8E8;background:#E8F4FD;color:#0A1628;}
+.start-btn{width:100%;padding:15px;background:linear-gradient(135deg,#0A1628,#0D3B7A);color:white;border:none;border-radius:12px;font-family:‘Outfit’,sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:.2s;}
 .start-btn:hover{background:#0D3B7A;}
 .start-btn:disabled{opacity:.5;cursor:not-allowed;}
 .sel-summary{background:var(–foam);border-radius:10px;padding:12px 14px;font-size:12px;color:var(–navy);margin-bottom:16px;line-height:1.7;}
@@ -757,7 +757,7 @@ function buildQuizSettings(code,subjectKey){
   '<button class="mode-btn on" id="mode-practice" onclick="setMode(\'practice\')">📝 Practice<br><span style="font-size:10px;font-weight:400;">Instant feedback</span></button>'+
   '<button class="mode-btn" id="mode-exam" onclick="setMode(\'exam\')">🎯 Exam<br><span style="font-size:10px;font-weight:400;">Submit to see results</span></button>'+
   '</div>'+
-  '<button class="start-btn" onclick="startQuiz(\''+code+'\','+(subjectKey?'\''+subjectKey+'\'':'null')+')">Start Quiz →</button>'+
+  '<button style="width:100%;padding:15px;background:linear-gradient(135deg,#0A1628,#0D3B7A);color:white;border:none;border-radius:12px;font-family:Outfit,sans-serif;font-size:15px;font-weight:700;cursor:pointer;" onclick="startQuiz(\''+code+'\','+(subjectKey?'\''+subjectKey+'\'':'null')+')">Start Quiz →</button>'+
   '</div>';
 }
 
