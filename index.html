@@ -802,19 +802,23 @@ function setMode(m){quizMode=m;g('mode-practice').className='mode-btn'+(m==='pra
 var quizQs=[],quizIdx=0,quizAnswers=[],quizAnswered=false;
 
 async function startQuiz(code,subjectKey){
-  var url=SURL+'/rest/v1/questions?select=*&module_code=eq.'+code+'&limit='+quizNq;
-  if(subjectKey&&subjectKey!=='all'){url+='&block=eq.'+subjectKey;}
+  // Fetch all questions for this module (max 500)
+  var url='/rest/v1/questions?select=*&module_code=eq.'+code+'&limit=500';
+  if(subjectKey&&subjectKey!=='all') url+='&block=eq.'+subjectKey;
 
+  var r=await api('GET',url);
+  var all=(r.ok&&Array.isArray(r.data))?r.data:[];
+
+  // Filter by selected lectures client-side (avoids URL encoding issues)
   var lecNames=Object.values(selLectures);
-  // If specific lectures selected, filter
+  var data=all;
   if(lecNames.length>0){
-    url=SURL+'/rest/v1/questions?select=*&module_code=eq.'+code+'&limit='+quizNq;
-    // Add lecture filter
-    url+='&module_name=in.('+lecNames.join(',')+')';;
+    data=all.filter(function(q){
+      return lecNames.indexOf(q.module_name)>=0;
+    });
   }
-
-  var r=await api('GET',url.replace(SURL,''));
-  var data=(r.ok&&Array.isArray(r.data))?r.data:[];
+  // Limit to quizNq
+  data=data.sort(function(){return Math.random()-.5;}).slice(0,quizNq);
 
   if(!data.length){
     var errMsg='No questions found!';
