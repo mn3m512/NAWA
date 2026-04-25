@@ -277,7 +277,7 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
     <span class="logo-text">Nawa</span>
   </div>
   <div class="nav-btns">
-    <button class="btn btn-outline" onclick="openModal('login')">Sign In</button>
+    <button class="btn btn-outline" onclick="openModal('login')" style="color:white;border-color:rgba(255,255,255,.4)">Sign In</button>
     <button class="btn btn-sky" onclick="openModal('register')">Sign Up</button>
   </div>
 </nav>
@@ -285,13 +285,10 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
 <section class="hero">
   <div class="hero-bg"></div><div class="hero-grid"></div>
   <div class="hero-inner">
-    <div class="badge"><span style="width:6px;height:6px;border-radius:50%;background:var(--sky);display:inline-block;"></span> Medical Education — Egypt</div>
+    <div class="badge"><span style="width:6px;height:6px;border-radius:50%;background:var(--sky);display:inline-block;"></span> Medical Education Platform</div>
     <h1>The Nucleus of<br><span>Medical Excellence</span></h1>
     <p class="hero-sub">Smart MCQ platform for Egyptian medical students.<br>Practice by module, subject, or lecture. Track your progress.</p>
-    <div class="hero-btns">
-      <button class="btn-big btn-primary" onclick="openModal('register')">Start Now →</button>
-      <button class="btn-big btn-secondary" onclick="openModal('login')">Sign In</button>
-    </div>
+    <div class="hero-btns"><button onclick="openModal('register')" style="padding:16px 52px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;border:none;font-family:Outfit,sans-serif;background:linear-gradient(135deg,#4AA8E8,#1560BD);color:white;box-shadow:0 8px 32px rgba(74,168,232,.4);letter-spacing:.5px;">Start Now →</button></div>
     <div class="stats-row">
       <div><div class="stat-n">344+</div><div class="stat-l">Questions</div></div>
       <div><div class="stat-n">28</div><div class="stat-l">Lectures</div></div>
@@ -305,12 +302,12 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
   <div class="sec-tag">Features</div>
   <div class="sec-title">Everything You Need</div>
   <div class="feat-grid">
-    <div class="feat"><div class="feat-ico">??</div><div class="feat-name">Module-Based Learning</div><div class="feat-desc">Practice by module, subject, or specific lecture. Target exactly what you need.</div></div>
-    <div class="feat"><div class="feat-ico">??</div><div class="feat-name">Practice & Exam Mode</div><div class="feat-desc">Practice shows instant feedback. Exam mode simulates real test conditions.</div></div>
-    <div class="feat"><div class="feat-ico">??</div><div class="feat-name">Performance Tracking</div><div class="feat-desc">Track your accuracy per lecture. See weak spots and improve.</div></div>
-    <div class="feat"><div class="feat-ico">??</div><div class="feat-name">Daily Streak</div><div class="feat-desc">Build consistent study habits with daily streak tracking.</div></div>
-    <div class="feat"><div class="feat-ico">??</div><div class="feat-name">Leaderboard</div><div class="feat-desc">Compete with classmates. Global and per-module rankings.</div></div>
-    <div class="feat"><div class="feat-ico">??</div><div class="feat-name">Flashcards <span class="pro-tag">PRO</span></div><div class="feat-desc">Spaced Repetition System for maximum memory retention.</div></div>
+    <div class="feat"><div class="feat-ico">📚</div><div class="feat-name">Module-Based Learning</div><div class="feat-desc">Practice by module, subject, or specific lecture. Target exactly what you need.</div></div>
+    <div class="feat"><div class="feat-ico">🎯</div><div class="feat-name">Practice & Exam Mode</div><div class="feat-desc">Practice shows instant feedback. Exam mode simulates real test conditions.</div></div>
+    <div class="feat"><div class="feat-ico">📊</div><div class="feat-name">Performance Tracking</div><div class="feat-desc">Track your accuracy per lecture. See weak spots and improve.</div></div>
+    <div class="feat"><div class="feat-ico">🔥</div><div class="feat-name">Daily Streak</div><div class="feat-desc">Build consistent study habits with daily streak tracking.</div></div>
+    <div class="feat"><div class="feat-ico">🏆</div><div class="feat-name">Leaderboard</div><div class="feat-desc">Compete with classmates. Global and per-module rankings.</div></div>
+    <div class="feat"><div class="feat-ico">🃏</div><div class="feat-name">Flashcards <span class="pro-tag">PRO</span></div><div class="feat-desc">Spaced Repetition System for maximum memory retention.</div></div>
   </div>
 </section>
 
@@ -331,7 +328,7 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
       <div class="footer-brand">NAWA</div><div class="footer-tag">Root Deep. Reach Far.</div>
     </div>
     <div class="footer-col"><h4>Platform</h4><a>Question Bank</a><a>Practice Mode</a><a>Leaderboard</a></div>
-    <div class="footer-col"><h4>Contact</h4><a href="https://wa.me/201002429528" target="_blank">?? WhatsApp</a><a href="https://t.me/201002429528" target="_blank">✈️ Telegram</a></div>
+    <div class="footer-col"><h4>Contact</h4><a href="https://wa.me/201002429528" target="_blank">💬 WhatsApp</a><a href="https://t.me/201002429528" target="_blank">✈️ Telegram</a></div>
   </div>
   <div class="footer-bottom"><span class="footer-copy">© 2025 Nawa Medical Education</span><span class="footer-copy">Root Deep. Reach Far.</span></div>
 </footer>
@@ -361,11 +358,11 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
   </nav>
   <div class="sb-ov" id="sb-ov" onclick="closeSB()"></div>
   <aside class="sidebar" id="sidebar">
-    <div class="si-sec"><div class="si-lbl">Menu</div><div class="si on" id="si-home" onclick="goto('home')"><span class="si-ico">??</span>Home</div></div>
-    <div class="si-sec"><div class="si-lbl">Study</div><div class="si" id="si-modules" onclick="goto('modules')"><span class="si-ico">??</span>My Modules</div><div class="si" id="si-history" onclick="goto('history')"><span class="si-ico">??</span>Quiz History</div></div>
-    <div class="si-sec"><div class="si-lbl">Performance</div><div class="si" id="si-stats" onclick="goto('stats')"><span class="si-ico">??</span>My Stats</div><div class="si" id="si-lb" onclick="goto('lb')"><span class="si-ico">??</span>Leaderboard</div></div>
-    <div class="si-sec"><div class="si-lbl">More</div><div class="si" id="si-notes" onclick="goto('notes')"><span class="si-ico">??</span>My Notes</div><div class="si" id="si-flash" onclick="goto('flash')"><span class="si-ico">??</span>Flashcards<span class="si-badge">PRO</span></div></div>
-    <div class="si-sec"><div class="si-lbl">Account</div><div class="si" id="si-profile" onclick="goto('profile')"><span class="si-ico">??</span>My Profile</div><div class="si" onclick="doLogout()"><span class="si-ico">??</span>Sign Out</div></div>
+    <div class="si-sec"><div class="si-lbl">Menu</div><div class="si on" id="si-home" onclick="goto('home')"><span class="si-ico">🏠</span>Home</div></div>
+    <div class="si-sec"><div class="si-lbl">Study</div><div class="si" id="si-modules" onclick="goto('modules')"><span class="si-ico">📚</span>My Modules</div><div class="si" id="si-history" onclick="goto('history')"><span class="si-ico">🕐</span>Quiz History</div></div>
+    <div class="si-sec"><div class="si-lbl">Performance</div><div class="si" id="si-stats" onclick="goto('stats')"><span class="si-ico">📊</span>My Stats</div><div class="si" id="si-lb" onclick="goto('lb')"><span class="si-ico">🏆</span>Leaderboard</div></div>
+    <div class="si-sec"><div class="si-lbl">More</div><div class="si" id="si-notes" onclick="goto('notes')"><span class="si-ico">📝</span>My Notes</div><div class="si" id="si-flash" onclick="goto('flash')"><span class="si-ico">🃏</span>Flashcards<span class="si-badge">PRO</span></div></div>
+    <div class="si-sec"><div class="si-lbl">Account</div><div class="si" id="si-profile" onclick="goto('profile')"><span class="si-ico">👤</span>My Profile</div><div class="si" onclick="doLogout()"><span class="si-ico">🚪</span>Sign Out</div></div>
     <div class="sb-upgrade"><p>Upgrade to unlock unlimited questions and premium features.</p><button>Upgrade ✦</button></div>
   </aside>
   <div class="dash-main" id="dash-main"></div>
@@ -383,7 +380,7 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
   <div class="quiz-footer">
     <span id="q-counter" style="font-size:12px;font-weight:600;color:var(--gray);">Q 1/10</span>
     <div style="display:flex;gap:8px;">
-      <button class="q-bm" id="q-bm-btn" onclick="toggleBM()">??</button>
+      <button class="q-bm" id="q-bm-btn" onclick="toggleBM()">🔖</button>
       <button class="q-next" onclick="nextQ()">Next →</button>
     </div>
   </div>
@@ -424,7 +421,7 @@ function renderReg(){
   <div id="amsg"></div>
   <div class="row2"><div><label class="lbl">First Name</label><input class="inp" id="r-fn" placeholder="Ahmed"></div><div><label class="lbl">Last Name</label><input class="inp" id="r-ln" placeholder="Hassan"></div></div>
   <label class="lbl">Phone</label>
-  <div class="phone-row"><select class="phone-code" id="r-code" onchange="chkPhone()"><option value="+20">???? +20</option><option value="+966">???? +966</option><option value="+971">???? +971</option><option value="+44">???? +44</option><option value="+1">???? +1</option></select><input class="phone-inp" id="r-phone" placeholder="01xxxxxxxxx" oninput="chkPhone()"></div>
+  <div class="phone-row"><select class="phone-code" id="r-code" onchange="chkPhone()"><option value="+20">🇪🇬 +20🇪🇬 +20 +20</option><option value="+966">🇸🇦 +966🇸🇦 +966 +966</option><option value="+971">🇦🇪 +971🇦🇪 +971 +971</option><option value="+44">🇬🇧 +44🇬🇧 +44 +44</option><option value="+1">🇺🇸 +1🇺🇸 +1 +1</option></select><input class="phone-inp" id="r-phone" placeholder="01xxxxxxxxx" oninput="chkPhone()"></div>
   <div id="ph-hint" style="font-size:11px;color:var(--gray);margin:-7px 0 11px;"></div>
   <label class="lbl">University</label>
   <select class="sel" id="r-uni"><option value="">Select university</option><optgroup label="Government"><option>Ain Shams University</option><option>Al-Azhar University</option><option>Alexandria University</option><option>Assiut University</option><option>Cairo University (Kasr Al Ainy)</option><option>Mansoura University</option><option>Tanta University</option><option>Zagazig University</option><option>Beni Suef University</option><option>Minia University</option><option>Helwan University</option><option>Military Medical College</option></optgroup><optgroup label="Private"><option>New Giza University (NGU)</option><option>Badr University (BUC)</option><option>Future University</option><option>6th October University (O6U)</option><option>MUST University</option></optgroup><optgroup label="National"><option>Ain Shams National University</option><option>Alexandria National University</option><option>Cairo National University</option><option>King Salman International University</option><option>Mansoura National University</option></optgroup><option value="other">Other</option></select>
@@ -432,8 +429,8 @@ function renderReg(){
   <select class="sel" id="r-year" onchange="showMods()"><option value="">Select year</option><option value="1">1st Year</option><option value="2">2nd Year</option><option value="3">3rd Year</option><option value="4">4th Year</option><option value="5">5th Year</option><option value="intern">Intern</option></select>
   <div class="mods-box" id="mods-box"></div>
   <label class="lbl">Email</label><input class="inp" type="email" id="r-email" placeholder="ahmed@email.com">
-  <label class="lbl">Password</label><div class="pw-wrap"><input type="password" id="r-pw" placeholder="Min 6 characters" oninput="chkPw()"><button class="pw-eye" type="button" onclick="tgPw('r-pw',this)">??</button></div>
-  <label class="lbl">Confirm Password</label><div class="pw-wrap"><input type="password" id="r-pw2" placeholder="Repeat password" oninput="chkPw()"><button class="pw-eye" type="button" onclick="tgPw('r-pw2',this)">??</button></div>
+  <label class="lbl">Password</label><div class="pw-wrap"><input type="password" id="r-pw" placeholder="Min 6 characters" oninput="chkPw()"><button class="pw-eye" type="button" onclick="tgPw('r-pw',this)">👁</button></div>
+  <label class="lbl">Confirm Password</label><div class="pw-wrap"><input type="password" id="r-pw2" placeholder="Repeat password" oninput="chkPw()"><button class="pw-eye" type="button" onclick="tgPw('r-pw2',this)">👁</button></div>
   <div class="pw-hint" id="pw-hint"></div>
   <button class="submit" id="r-btn" onclick="doReg()">Create Account</button>
   <div class="switch">Already have an account? <span onclick="renderLogin()">Sign in</span></div>`;
@@ -444,7 +441,7 @@ function renderLogin(){
   <div class="m-title">Welcome back!</div><div class="m-sub">Sign in to continue</div>
   <div id="amsg"></div>
   <label class="lbl">Email</label><input class="inp" type="email" id="l-email" placeholder="ahmed@email.com">
-  <label class="lbl">Password</label><div class="pw-wrap"><input type="password" id="l-pw" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"><button class="pw-eye" type="button" onclick="tgPw('l-pw',this)">??</button></div>
+  <label class="lbl">Password</label><div class="pw-wrap"><input type="password" id="l-pw" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()"><button class="pw-eye" type="button" onclick="tgPw('l-pw',this)">👁</button></div>
   <div style="text-align:right;margin-bottom:14px;"><span style="font-size:12px;color:var(--sky);font-weight:600;cursor:pointer;">Forgot Password?</span></div>
   <button class="submit" id="l-btn" onclick="doLogin()">Sign In</button>
   <div class="switch">No account? <span onclick="renderReg()">Create one</span></div>`;
@@ -453,7 +450,7 @@ function renderLogin(){
 function showMods(){var y=document.getElementById('r-year').value;var b=document.getElementById('mods-box');if(y&&MODS_DATA[y]){b.style.display='block';b.innerHTML='<strong style="color:#0D3B7A">Modules: </strong>'+MODS_DATA[y];}else b.style.display='none';}
 function chkPhone(){var code=document.getElementById('r-code').value;var num=(document.getElementById('r-phone').value||'').replace(/\D/g,'');var h=document.getElementById('ph-hint');if(!h||!num){if(h)h.textContent='';return;}var exp=PHONE_LEN[code]||10;if(num.length===exp){h.textContent='✓ Valid';h.style.color='var(--green)';}else{h.textContent=exp+' digits required ('+num.length+'/'+exp+')';h.style.color='var(--red)';}}
 function chkPw(){var p1=document.getElementById('r-pw');var p2=document.getElementById('r-pw2');var m=document.getElementById('pw-hint');if(!p1||!p2||!m)return;if(!p2.value){m.textContent='';return;}if(p1.value===p2.value){m.textContent='✓ Passwords match';m.className='pw-hint pw-ok';}else{m.textContent='✗ Do not match';m.className='pw-hint pw-no';}}
-function tgPw(id,btn){var el=document.getElementById(id);if(!el)return;el.type=el.type==='password'?'text':'password';btn.textContent=el.type==='password'?'??':'??';}
+function tgPw(id,btn){var el=document.getElementById(id);if(!el)return;el.type=el.type==='password'?'text':'password';btn.textContent=el.type==='password'?'👁':'🙈';}
 function setMsg(txt,ok){var m=document.getElementById('amsg');if(m)m.innerHTML='<div class="auth-msg '+(ok?'auth-ok':'auth-er')+'">'+txt+'</div>';}
 function setLoad(id,loading,txt){var b=document.getElementById(id);if(!b)return;b.disabled=loading;b.style.opacity=loading?'.6':'1';if(txt)b.textContent=loading?'Please wait...':txt;}
 
@@ -513,7 +510,7 @@ function renderPage(page){
   else if(page==='modules')renderModules(m);
   else if(page==='lb')renderLB(m);
   else if(page==='profile')renderProfile(m);
-  else m.innerHTML='<div style="text-align:center;padding:60px 20px;"><div style="font-size:48px;margin-bottom:16px;">??</div><div style="font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px;">'+page.charAt(0).toUpperCase()+page.slice(1)+'</div><div style="font-size:14px;color:var(--gray);">Coming soon!</div></div>';
+  else m.innerHTML='<div style="text-align:center;padding:60px 20px;"><div style="font-size:48px;margin-bottom:16px;">🚧</div><div style="font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px;">'+page.charAt(0).toUpperCase()+page.slice(1)+'</div><div style="font-size:14px;color:var(--gray);">Coming soon!</div></div>';
 }
 
 // ── HOME ──
@@ -522,26 +519,26 @@ function renderHome(m){
   var year=(userProfile&&userProfile.year)||'1';
   m.innerHTML=
   '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;">'+
-  '<div><div style="font-size:clamp(18px,2vw,22px);font-weight:800;color:var(--navy);">Welcome, <span style="color:var(--sky);">'+name+'</span>! ??</div>'+
+  '<div><div style="font-size:clamp(18px,2vw,22px);font-weight:800;color:var(--navy);">Welcome, <span style="color:var(--sky);">'+name+'</span>! 🔥</div>'+
   '<div style="font-size:11px;color:var(--gray);margin-top:2px;">Year '+year+' · Alexandria National University</div></div>'+
-  '<button onclick="goto(\'modules\')" style="background:var(--sky);color:var(--navy);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:\'Outfit\',sans-serif;">?? Start Quiz</button>'+
+  '<button onclick="goto(\'modules\')" style="background:var(--sky);color:var(--navy);padding:10px 20px;border-radius:10px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:\'Outfit\',sans-serif;">📚 Start Quiz</button>'+
   '</div>'+
   '<div style="background:linear-gradient(135deg,#0D3B7A,#1560BD);border-radius:18px;padding:22px 26px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:14px;flex-wrap:wrap;overflow:hidden;position:relative;">'+
   '<div style="position:absolute;right:-20px;top:-20px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none;"></div>'+
-  '<div><div style="font-size:14px;font-weight:300;color:rgba(255,255,255,.6);margin-bottom:4px;">?? Build your streak!</div>'+
+  '<div><div style="font-size:14px;font-weight:300;color:rgba(255,255,255,.6);margin-bottom:4px;">🔥 Build your streak!</div>'+
   '<div style="font-size:20px;font-weight:800;color:white;">Ready to study today?</div></div>'+
   '<button onclick="goto(\'modules\')" style="background:white;color:var(--navy);padding:11px 22px;border-radius:10px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:\'Outfit\',sans-serif;flex-shrink:0;position:relative;z-index:1;">Start Now →</button>'+
   '</div>'+
   '<div class="stats-g">'+
-  sc('??','Questions Done','0','Start solving!','blue')+
+  sc('📝','Questions Done','0','Start solving!','blue')+
   sc('✅','Accuracy','—','No data yet','green')+
-  sc('??','Day Streak','0','Start today!','orange')+
-  sc('??','Global Rank','—','Solve 20+ Qs','purple')+
+  sc('🔥','Day Streak','0','Start today!','orange')+
+  sc('🏆','Global Rank','—','Solve 20+ Qs','purple')+
   '</div>'+
-  '<div class="card"><div class="card-hd"><div><div class="card-title">?? My Modules</div><div class="card-sub">Year '+year+'</div></div>'+
+  '<div class="card"><div class="card-hd"><div><div class="card-title">📚 My Modules</div><div class="card-sub">Year '+year+'</div></div>'+
   '<button onclick="goto(\'modules\')" style="font-size:12px;color:var(--sky);font-weight:700;background:none;border:none;cursor:pointer;">See All →</button></div>'+
   '<div class="card-bd"><div class="mods-grid" id="home-mods"></div></div></div>'+
-  '<div class="card"><div class="card-hd"><div class="card-title">?? Activity Streak</div>'+
+  '<div class="card"><div class="card-hd"><div class="card-title">🔥 Activity Streak</div>'+
   '<div style="display:flex;gap:20px;"><div style="text-align:center;"><div style="font-size:18px;font-weight:900;color:var(--sky);">0</div><div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gray);">Current</div></div>'+
   '<div style="text-align:center;"><div style="font-size:18px;font-weight:900;color:var(--sky);">0</div><div style="font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gray);">Longest</div></div></div></div>'+
   '<div class="card-bd">'+buildCal()+'</div></div>';
@@ -564,57 +561,57 @@ function buildCal(){
 // ── MODULES DATA ──
 var ALL_MODULES={
   '1':[
-    {code:'MED101',name:'Normal Body Structure',sub:'Anatomy & Physiology',icon:'??',color:'linear-gradient(135deg,#0D3B7A,#1560BD)',qs:0},
-    {code:'MED102',name:'Introduction to Disease',sub:'Pathology Basics',icon:'??',color:'linear-gradient(135deg,#5A0D7A,#8B5CF6)',qs:0},
-    {code:'MED103',name:'Basic Of Infections',sub:'Microbiology · Immunology · Parasitology',icon:'??',color:'linear-gradient(135deg,#0D7A4A,#10B981)',qs:344},
-    {code:'MED104',name:'Psychology & Mental Health',sub:'Psychiatry Basics',icon:'??',color:'linear-gradient(135deg,#7A4A0D,#F59E0B)',qs:0},
-    {code:'MED105',name:'Blood & Lymphatic System',sub:'Hematology',icon:'??',color:'linear-gradient(135deg,#7A0D0D,#EF4444)',qs:0},
-    {code:'MED106',name:'Musculoskeletal System',sub:'Anatomy & Orthopedics',icon:'??',color:'linear-gradient(135deg,#1A4A1A,#10B981)',qs:0}
+    {code:'MED101',name:'Normal Body Structure',sub:'Anatomy & Physiology',icon:'🦴',color:'linear-gradient(135deg,#0D3B7A,#1560BD)',qs:0},
+    {code:'MED102',name:'Introduction to Disease',sub:'Pathology Basics',icon:'🔬',color:'linear-gradient(135deg,#5A0D7A,#8B5CF6)',qs:0},
+    {code:'MED103',name:'Basic Of Infections',sub:'Microbiology · Immunology · Parasitology',icon:'🦠',color:'linear-gradient(135deg,#0D7A4A,#10B981)',qs:344},
+    {code:'MED104',name:'Psychology & Mental Health',sub:'Psychiatry Basics',icon:'🧠',color:'linear-gradient(135deg,#7A4A0D,#F59E0B)',qs:0},
+    {code:'MED105',name:'Blood & Lymphatic System',sub:'Hematology',icon:'🩸',color:'linear-gradient(135deg,#7A0D0D,#EF4444)',qs:0},
+    {code:'MED106',name:'Musculoskeletal System',sub:'Anatomy & Orthopedics',icon:'💪',color:'linear-gradient(135deg,#1A4A1A,#10B981)',qs:0}
   ],
   '2':[
     {code:'MED210',name:'Cardiovascular System',sub:'Cardiology',icon:'❤️',color:'linear-gradient(135deg,#7A0D0D,#EF4444)',qs:0},
-    {code:'MED211',name:'Respiratory System',sub:'Pulmonology',icon:'??',color:'linear-gradient(135deg,#0D3B7A,#4AA8E8)',qs:0},
+    {code:'MED211',name:'Respiratory System',sub:'Pulmonology',icon:'🫁',color:'linear-gradient(135deg,#0D3B7A,#4AA8E8)',qs:0},
     {code:'MED215',name:'Endocrine & Metabolism',sub:'Endocrinology',icon:'⚗️',color:'linear-gradient(135deg,#7A4A0D,#F59E0B)',qs:0},
-    {code:'MED216',name:'Digestive System',sub:'Gastroenterology',icon:'??️',color:'linear-gradient(135deg,#1A4A1A,#10B981)',qs:0}
+    {code:'MED216',name:'Digestive System',sub:'Gastroenterology',icon:'🍽️️',color:'linear-gradient(135deg,#1A4A1A,#10B981)',qs:0}
   ],
   '3':[
-    {code:'MED319',name:'CNS & Special Senses',sub:'Neuroscience',icon:'??',color:'linear-gradient(135deg,#3A1A6A,#8B5CF6)',qs:0},
-    {code:'MED320',name:'Genitourinary System',sub:'Nephrology & Urology',icon:'??',color:'linear-gradient(135deg,#0D3B7A,#1560BD)',qs:0},
-    {code:'MED323',name:'General Medicine',sub:'Internal Medicine',icon:'??',color:'linear-gradient(135deg,#0D7A4A,#10B981)',qs:0},
-    {code:'MED324',name:'General Surgery',sub:'Surgery',icon:'??',color:'linear-gradient(135deg,#4A4A0D,#F59E0B)',qs:0},
-    {code:'MED325',name:'Tropical Medicine',sub:'Infectious Disease',icon:'??',color:'linear-gradient(135deg,#1A4A1A,#10B981)',qs:0},
+    {code:'MED319',name:'CNS & Special Senses',sub:'Neuroscience',icon:'🧠',color:'linear-gradient(135deg,#3A1A6A,#8B5CF6)',qs:0},
+    {code:'MED320',name:'Genitourinary System',sub:'Nephrology & Urology',icon:'🫘',color:'linear-gradient(135deg,#0D3B7A,#1560BD)',qs:0},
+    {code:'MED323',name:'General Medicine',sub:'Internal Medicine',icon:'🩺',color:'linear-gradient(135deg,#0D7A4A,#10B981)',qs:0},
+    {code:'MED324',name:'General Surgery',sub:'Surgery',icon:'🔪',color:'linear-gradient(135deg,#4A4A0D,#F59E0B)',qs:0},
+    {code:'MED325',name:'Tropical Medicine',sub:'Infectious Disease',icon:'🌿',color:'linear-gradient(135deg,#1A4A1A,#10B981)',qs:0},
     {code:'MED326',name:'Forensic Medicine',sub:'Forensics & Toxicology',icon:'⚖️',color:'linear-gradient(135deg,#2A2A2A,#5A5A5A)',qs:0}
   ],
   '4':[
-    {code:'MED430',name:'Medicine',sub:'GIT · Endocrine · Hematology · Nephrology',icon:'??',color:'linear-gradient(135deg,#0D3B7A,#1560BD)',qs:0},
+    {code:'MED430',name:'Medicine',sub:'GIT · Endocrine · Hematology · Nephrology',icon:'🩺',color:'linear-gradient(135deg,#0D3B7A,#1560BD)',qs:0},
     {code:'MED431',name:'Cardiopulmonary',sub:'Cardiology & Pulmonology',icon:'❤️',color:'linear-gradient(135deg,#7A0D0D,#EF4444)',qs:0},
-    {code:'MED432',name:'Investigative Medicine',sub:'Radiology & Lab Medicine',icon:'??',color:'linear-gradient(135deg,#1A3A5C,#4AA8E8)',qs:0},
-    {code:'MED433',name:'Pediatrics',sub:'Child Health',icon:'??',color:'linear-gradient(135deg,#0A4A2A,#10B981)',qs:0},
-    {code:'MED434',name:'Ophthalmology',sub:'Eye Diseases',icon:'??️',color:'linear-gradient(135deg,#0D3B7A,#4AA8E8)',qs:0},
-    {code:'MED435',name:'ENT',sub:'Ear · Nose · Throat',icon:'??',color:'linear-gradient(135deg,#4A1A5A,#8B5CF6)',qs:0},
-    {code:'MED436',name:'Neuropsychiatry',sub:'Neurology & Psychiatry',icon:'??',color:'linear-gradient(135deg,#3A1A6A,#8B5CF6)',qs:0}
+    {code:'MED432',name:'Investigative Medicine',sub:'Radiology & Lab Medicine',icon:'🔬',color:'linear-gradient(135deg,#1A3A5C,#4AA8E8)',qs:0},
+    {code:'MED433',name:'Pediatrics',sub:'Child Health',icon:'👶',color:'linear-gradient(135deg,#0A4A2A,#10B981)',qs:0},
+    {code:'MED434',name:'Ophthalmology',sub:'Eye Diseases',icon:'👁️️',color:'linear-gradient(135deg,#0D3B7A,#4AA8E8)',qs:0},
+    {code:'MED435',name:'ENT',sub:'Ear · Nose · Throat',icon:'👂',color:'linear-gradient(135deg,#4A1A5A,#8B5CF6)',qs:0},
+    {code:'MED436',name:'Neuropsychiatry',sub:'Neurology & Psychiatry',icon:'🧠',color:'linear-gradient(135deg,#3A1A6A,#8B5CF6)',qs:0}
   ],
   '5':[
-    {code:'MED538',name:'Surgery',sub:'General · Cardio · Neuro · Uro',icon:'??',color:'linear-gradient(135deg,#4A4A0D,#F59E0B)',qs:0},
-    {code:'MED539',name:'Orthopedics',sub:'Bones & Joints',icon:'??',color:'linear-gradient(135deg,#1A3A5C,#4AA8E8)',qs:0},
-    {code:'MED541',name:'OB/GYN',sub:'Obstetrics & Gynecology',icon:'??',color:'linear-gradient(135deg,#5A0A2A,#EF4444)',qs:0},
-    {code:'MED542',name:'Family Medicine',sub:'Integrated Clinical',icon:'??',color:'linear-gradient(135deg,#0D4A7A,#10B981)',qs:0},
-    {code:'MED543',name:'Dermatology',sub:'Skin Diseases',icon:'??',color:'linear-gradient(135deg,#7A3A0D,#F59E0B)',qs:0}
+    {code:'MED538',name:'Surgery',sub:'General · Cardio · Neuro · Uro',icon:'🔪',color:'linear-gradient(135deg,#4A4A0D,#F59E0B)',qs:0},
+    {code:'MED539',name:'Orthopedics',sub:'Bones & Joints',icon:'🦴',color:'linear-gradient(135deg,#1A3A5C,#4AA8E8)',qs:0},
+    {code:'MED541',name:'OB/GYN',sub:'Obstetrics & Gynecology',icon:'🤰',color:'linear-gradient(135deg,#5A0A2A,#EF4444)',qs:0},
+    {code:'MED542',name:'Family Medicine',sub:'Integrated Clinical',icon:'🏠',color:'linear-gradient(135deg,#0D4A7A,#10B981)',qs:0},
+    {code:'MED543',name:'Dermatology',sub:'Skin Diseases',icon:'🌡️',color:'linear-gradient(135deg,#7A3A0D,#F59E0B)',qs:0}
   ],
   'intern':[
-    {code:'INT01',name:'Internal Medicine',sub:'Rotation',icon:'??',color:'linear-gradient(135deg,#0D3B7A,#1560BD)',qs:0},
-    {code:'INT02',name:'Surgery',sub:'Rotation',icon:'??',color:'linear-gradient(135deg,#4A4A0D,#F59E0B)',qs:0},
-    {code:'INT03',name:'Pediatrics',sub:'Rotation',icon:'??',color:'linear-gradient(135deg,#0A4A2A,#10B981)',qs:0},
-    {code:'INT04',name:'OB/GYN',sub:'Rotation',icon:'??',color:'linear-gradient(135deg,#5A0A2A,#EF4444)',qs:0},
-    {code:'INT05',name:'Emergency Medicine',sub:'Rotation',icon:'??',color:'linear-gradient(135deg,#7A0D0D,#EF4444)',qs:0}
+    {code:'INT01',name:'Internal Medicine',sub:'Rotation',icon:'🩺',color:'linear-gradient(135deg,#0D3B7A,#1560BD)',qs:0},
+    {code:'INT02',name:'Surgery',sub:'Rotation',icon:'🔪',color:'linear-gradient(135deg,#4A4A0D,#F59E0B)',qs:0},
+    {code:'INT03',name:'Pediatrics',sub:'Rotation',icon:'👶',color:'linear-gradient(135deg,#0A4A2A,#10B981)',qs:0},
+    {code:'INT04',name:'OB/GYN',sub:'Rotation',icon:'🤰',color:'linear-gradient(135deg,#5A0A2A,#EF4444)',qs:0},
+    {code:'INT05',name:'Emergency Medicine',sub:'Rotation',icon:'🚨',color:'linear-gradient(135deg,#7A0D0D,#EF4444)',qs:0}
   ]
 };
 
 // MED103 structure
 var MED103={
-  'MICROBIOLOGY':{label:'Microbiology',icon:'??',color:'linear-gradient(135deg,#0D7A4A,#10B981)',lectures:['Lecture 1: Microbial World & Human Microbiome','Lecture 2 – Bacterial Cell Structure','Lecture 3 – Bacterial Growth, Requirements & Endospores','Lecture 4 – Pathogenesis of Bacterial Infection','Lecture 5 – Bacterial Genetics & Recombinant DNA Technology','Lecture 6 – Antibacterial Drugs & Bacterial Resistance (Part I)','Lecture 7 – Antibacterial Drugs & Bacterial Resistance (Part II)','Lecture 8: Staphylococci','Lecture 9: General Features & Classification of Viruses','Lecture 9: Viral Replication Cycle','Lecture 10: Pathogenesis of Viral Infections','Lecture 11: Outcomes of Viral Infections (Viral Cytopathogenesis)','Lecture 12: Vaccines','Lecture 13: Introduction to Medical Mycology']},
-  'IMMUNOLOGY':{label:'Immunology',icon:'??️',color:'linear-gradient(135deg,#0D3B7A,#4AA8E8)',lectures:['Lecture 1: Introduction to Immunology','Lecture 2: Antigen & Immunogen','Lecture 3: Antibody / Immunoglobulin','Lecture 4: Complement System & Major Histocompatibility Complex (MHC)','Lecture 5 (Rewritten): Innate Immunity','Lecture 6: Cytokines','Lecture 7: Adaptive Immune Response']},
-  'PARASITOLOGY':{label:'Parasitology',icon:'??',color:'linear-gradient(135deg,#4A4A0D,#F59E0B)',lectures:['Lecture 1 – General Parasitology','Lecture 2 – General Helminthology','Lecture 3 – General Protozoology','Lecture 4 – General Entomology','Lecture 5 – Diseases Caused by Arthropods I','Lecture 6 – Pediculosis & Myiasis','Lecture 7 – Laboratory Diagnosis of Parasitic Infections']}
+  'MICROBIOLOGY':{label:'Microbiology',icon:'🦠',color:'linear-gradient(135deg,#0D7A4A,#10B981)',lectures:['Lecture 1: Microbial World & Human Microbiome','Lecture 2 – Bacterial Cell Structure','Lecture 3 – Bacterial Growth, Requirements & Endospores','Lecture 4 – Pathogenesis of Bacterial Infection','Lecture 5 – Bacterial Genetics & Recombinant DNA Technology','Lecture 6 – Antibacterial Drugs & Bacterial Resistance (Part I)','Lecture 7 – Antibacterial Drugs & Bacterial Resistance (Part II)','Lecture 8: Staphylococci','Lecture 9: General Features & Classification of Viruses','Lecture 9: Viral Replication Cycle','Lecture 10: Pathogenesis of Viral Infections','Lecture 11: Outcomes of Viral Infections (Viral Cytopathogenesis)','Lecture 12: Vaccines','Lecture 13: Introduction to Medical Mycology']},
+  'IMMUNOLOGY':{label:'Immunology',icon:'🛡️️',color:'linear-gradient(135deg,#0D3B7A,#4AA8E8)',lectures:['Lecture 1: Introduction to Immunology','Lecture 2: Antigen & Immunogen','Lecture 3: Antibody / Immunoglobulin','Lecture 4: Complement System & Major Histocompatibility Complex (MHC)','Lecture 5 (Rewritten): Innate Immunity','Lecture 6: Cytokines','Lecture 7: Adaptive Immune Response']},
+  'PARASITOLOGY':{label:'Parasitology',icon:'🪱',color:'linear-gradient(135deg,#4A4A0D,#F59E0B)',lectures:['Lecture 1 – General Parasitology','Lecture 2 – General Helminthology','Lecture 3 – General Protozoology','Lecture 4 – General Entomology','Lecture 5 – Diseases Caused by Arthropods I','Lecture 6 – Pediculosis & Myiasis','Lecture 7 – Laboratory Diagnosis of Parasitic Infections']}
 };
 
 function modCardHTML(mod,year){
@@ -633,7 +630,7 @@ function renderModules(m){
   var mods=ALL_MODULES[year]||ALL_MODULES['1'];
   m.innerHTML=
   '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:10px;">'+
-  '<div><div style="font-size:clamp(18px,2vw,22px);font-weight:800;color:var(--navy);">?? My <span style="color:var(--sky);">Modules</span></div>'+
+  '<div><div style="font-size:clamp(18px,2vw,22px);font-weight:800;color:var(--navy);">📚 My <span style="color:var(--sky);">Modules</span></div>'+
   '<div style="font-size:11px;color:var(--gray);margin-top:2px;">Year '+year+' — Tap to start a quiz</div></div></div>'+
   '<div class="mods-grid">'+mods.map(function(mod){return modCardHTML(mod,year);}).join('')+'</div>';
 }
@@ -661,7 +658,7 @@ function openMod(code,year){
     '<div><div class="sel-title">'+mod.icon+' '+mod.name+'</div><div class="sel-sub">Select a subject or all</div></div>'+
     '</div>'+
     '<div onclick="selectSubject(\'all\',\''+code+'\',\''+year+'\')" class="subj-item" style="background:var(--foam);">'+
-    '<div><div class="subj-name">?? All Subjects</div><div class="subj-info">All 344 questions</div></div><span class="subject-arrow">→</span></div>'+
+    '<div><div class="subj-name">📚 All Subjects</div><div class="subj-info">All 344 questions</div></div><span class="subject-arrow">→</span></div>'+
     subjects.map(function(sk){
       var s=MED103[sk];
       return '<div onclick="selectSubject(\''+sk+'\',\''+code+'\',\''+year+'\')" class="subj-item">'+
@@ -675,7 +672,7 @@ function openMod(code,year){
     '<div class="sel-hd"><button class="sel-back" onclick="goto(\'modules\')">←</button>'+
     '<div><div class="sel-title">'+mod.icon+' '+mod.name+'</div><div class="sel-sub">'+mod.sub+'</div></div></div>'+
     '<div style="padding:40px;text-align:center;color:var(--gray);">'+
-    '<div style="font-size:36px;margin-bottom:12px;">??</div>'+
+    '<div style="font-size:36px;margin-bottom:12px;">🚧</div>'+
     '<div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:6px;">Questions Coming Soon</div>'+
     '<div style="font-size:13px;">This module will be available soon!</div></div></div>';
   }
@@ -757,8 +754,8 @@ function buildQuizSettings(code,subjectKey){
   '</div>'+
   '<div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:10px;">Mode</div>'+
   '<div class="mode-row">'+
-  '<button class="mode-btn on" id="mode-practice" onclick="setMode(\'practice\')">?? Practice<br><span style="font-size:10px;font-weight:400;">Instant feedback</span></button>'+
-  '<button class="mode-btn" id="mode-exam" onclick="setMode(\'exam\')">?? Exam<br><span style="font-size:10px;font-weight:400;">Submit to see results</span></button>'+
+  '<button class="mode-btn on" id="mode-practice" onclick="setMode(\'practice\')">📝 Practice<br><span style="font-size:10px;font-weight:400;">Instant feedback</span></button>'+
+  '<button class="mode-btn" id="mode-exam" onclick="setMode(\'exam\')">🎯 Exam<br><span style="font-size:10px;font-weight:400;">Submit to see results</span></button>'+
   '</div>'+
   '<button class="start-btn" onclick="startQuiz(\''+code+'\','+(subjectKey?'\''+subjectKey+'\'':'null')+')">Start Quiz →</button>'+
   '</div>';
@@ -849,7 +846,7 @@ function showResult(){
   g('q-prog-fill').style.width='100%';
   var correct=quizAnswers.filter(function(a){return a.isCorrect;}).length;
   var pct=Math.round((correct/quizAnswers.length)*100);
-  var grade=pct>=90?'Excellent! ??':pct>=75?'Great job! ??':pct>=60?'Good effort! ??':'Keep studying! ??';
+  var grade=pct>=90?'Excellent! 🏆':pct>=75?'Great job! 🎉':pct>=60?'Good effort! 💪':'Keep studying! 📚';
   
   g('quiz-body').innerHTML=
   '<div class="result-wrap">'+
@@ -875,20 +872,20 @@ function toggleBM(){var btn=g('q-bm-btn');if(btn){btn.style.background=btn.style
 // ── LEADERBOARD ──
 function renderLB(m){
   m.innerHTML=
-  '<div style="margin-bottom:18px;"><div style="font-size:clamp(18px,2vw,22px);font-weight:800;color:var(--navy);">?? <span style="color:var(--sky);">Leaderboard</span></div></div>'+
+  '<div style="margin-bottom:18px;"><div style="font-size:clamp(18px,2vw,22px);font-weight:800;color:var(--navy);">🏆 <span style="color:var(--sky);">Leaderboard</span></div></div>'+
   '<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">'+
   ['This Week','This Month','All Time'].map(function(f,i){return'<button style="padding:7px 16px;border-radius:100px;font-size:11px;font-weight:700;border:1.5px solid '+(i===0?'var(--navy)':'rgba(10,22,40,.1)')+';background:'+(i===0?'var(--navy)':'white')+';color:'+(i===0?'white':'var(--gray)')+';cursor:pointer;font-family:\'Outfit\',sans-serif;">'+f+'</button>';}).join('')+
   '</div>'+
   '<div class="card">'+
   '<div class="card-hd"><div class="card-title">Week Rankings</div><span style="font-size:11px;color:var(--gray);">Solve 20+ Qs to appear</span></div>'+
-  [['??','Yassmine A.','95.2%',421,'#FFD700'],['??','Zeyad M.','92.3%',935,'#C0C8D0'],['??','Moneim T.','85.4%',847,'#CD9B6A']].map(function(r,i){
+  [['🥇','Yassmine A.','95.2%',421,'#FFD700'],['🥈','Zeyad M.','92.3%',935,'#C0C8D0'],['🥉','Moneim T.','85.4%',847,'#CD9B6A']].map(function(r,i){
     return'<div class="lb-row" style="background:'+(i%2?'#fafcff':'white')+'">'+
     '<div class="lb-rank" style="color:'+r[4]+'">'+r[0]+'</div>'+
     '<div class="lb-av">'+r[1][0]+'</div>'+
     '<div class="lb-info"><div class="lb-name">'+r[1]+'</div><div class="lb-meta">'+r[3]+' questions answered</div></div>'+
     '<div class="lb-score">'+r[2]+'</div></div>';
   }).join('')+
-  '<div style="padding:30px;text-align:center;color:var(--gray);font-size:13px;">Be the first to reach the top! ??</div>'+
+  '<div style="padding:30px;text-align:center;color:var(--gray);font-size:13px;">Be the first to reach the top! 🔥</div>'+
   '</div>';
 }
 
@@ -900,7 +897,7 @@ function renderProfile(m){
   var uni=(userProfile&&userProfile.university)||'—';
   var year=(userProfile&&userProfile.year)||'1';
   m.innerHTML=
-  '<div style="margin-bottom:18px;"><div style="font-size:clamp(18px,2vw,22px);font-weight:800;color:var(--navy);">?? My <span style="color:var(--sky);">Profile</span></div></div>'+
+  '<div style="margin-bottom:18px;"><div style="font-size:clamp(18px,2vw,22px);font-weight:800;color:var(--navy);">👤 My <span style="color:var(--sky);">Profile</span></div></div>'+
   '<div style="display:grid;grid-template-columns:1fr;max-width:600px;gap:16px;">'+
   '<div class="card">'+
   '<div class="card-bd" style="text-align:center;padding:28px;">'+
