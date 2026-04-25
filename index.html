@@ -768,13 +768,13 @@ function setMode(m){quizMode=m;g('mode-practice').className='mode-btn'+(m==='pra
 var quizQs=[],quizIdx=0,quizAnswers=[],quizAnswered=false;
 
 async function startQuiz(code,subjectKey){
-  var url=SURL+'/rest/v1/questions?select=*&is_active=eq.true&module_code=eq.'+code+'&limit='+quizNq;
+  var url=SURL+'/rest/v1/questions?select=*&module_code=eq.'+code+'&limit='+quizNq;
   if(subjectKey&&subjectKey!=='all'){url+='&block=eq.'+subjectKey;}
 
   var lecNames=Object.values(selLectures);
   // If specific lectures selected, filter
   if(lecNames.length>0){
-    url=SURL+'/rest/v1/questions?select=*&is_active=eq.true&module_code=eq.'+code+'&limit='+quizNq;
+    url=SURL+'/rest/v1/questions?select=*&module_code=eq.'+code+'&limit='+quizNq;
     // Add lecture filter
     url+='&module_name=in.('+lecNames.map(function(l){return '"'+l+'"';}).join(',')+')';
   }
