@@ -776,7 +776,7 @@ async function startQuiz(code,subjectKey){
   if(lecNames.length>0){
     url=SURL+'/rest/v1/questions?select=*&module_code=eq.'+code+'&limit='+quizNq;
     // Add lecture filter
-    url+='&module_name=in.('+lecNames.map(function(l){return '"'+l+'"';}).join(',')+')';
+    url+='&module_name=in.('+lecNames.join(',')+')';;
   }
 
   var r=await api('GET',url.replace(SURL,''));
@@ -803,6 +803,7 @@ async function startQuiz(code,subjectKey){
     showExamTimerPicker();
   } else {
     startTimer=false;
+    g('quiz-footer').style.display='flex';
     renderQuestion();
   }
 }
