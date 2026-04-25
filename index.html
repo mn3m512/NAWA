@@ -764,7 +764,7 @@ async function doReg(){
           headers:{'Content-Type':'application/json','apikey':SKEY,'Authorization':'Bearer '+data.access_token,'Prefer':'return=representation'},
           body:JSON.stringify({id:uid,email:email,first_name:fn,last_name:ln,university:uni,year:year,phone:code+phone,plan:'basic'})});
         localStorage.setItem('nawa_tk',data.access_token);
-        window.location.href='app.html';
+        window.location.href='App.html';
       }else{
         setMsg('✅ Account created! Please sign in.',true);
         setTimeout(renderLogin,1500);
@@ -786,7 +786,7 @@ async function doLogin(){
     var data=await r.json();
     if(data.access_token){
       localStorage.setItem('nawa_tk',data.access_token);
-      window.location.href='app.html';
+      window.location.href='App.html';
     }else{setMsg(data.error_description||'Wrong email or password',false);}
   }catch(e){setMsg('Network error. Please try again.',false);}
   btn.disabled=false;btn.textContent='Sign In →';
@@ -797,7 +797,7 @@ async function doLogin(){
   var tk=localStorage.getItem('nawa_tk');
   if(tk){
     var r=await fetch(SURL+'/auth/v1/user',{headers:{'apikey':SKEY,'Authorization':'Bearer '+tk}});
-    if(r.ok){window.location.href='app.html';}
+    if(r.ok){window.location.href='App.html';}
     else localStorage.removeItem('nawa_tk');
   }
 })();
