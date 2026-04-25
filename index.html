@@ -222,8 +222,8 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
 .q-opts{display:flex;flex-direction:column;gap:10px;margin-bottom:18px;}
 .q-opt{padding:14px 16px;border-radius:12px;border:2px solid rgba(10,22,40,.08);cursor:pointer;display:flex;align-items:center;gap:12px;transition:.15s;background:white;}
 .q-opt:hover{border-color:var(–sky);background:var(–foam);}
-.q-opt.correct{border-color:var(–green);background:rgba(16,185,129,.07);}
-.q-opt.wrong{border-color:var(–red);background:rgba(239,68,68,.06);}
+.q-opt.correct{border-color:#10B981;background:rgba(16,185,129,.1);}
+.q-opt.wrong{border-color:#EF4444;background:rgba(239,68,68,.08);}
 .q-ltr{width:28px;height:28px;border-radius:8px;background:var(–foam);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(–gray);flex-shrink:0;}
 .q-opt.correct .q-ltr{background:var(–green);color:white;}
 .q-opt.wrong .q-ltr{background:var(–red);color:white;}
@@ -374,7 +374,7 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
   <div class="quiz-top">
     <span id="q-badge" class="q-badge q-practice">PRACTICE</span>
     <div class="q-prog-wrap"><div class="q-prog"><div class="q-prog-fill" id="q-prog-fill" style="width:0%"></div></div></div>
-    <button class="q-exit" onclick="exitQuiz()">✕ Exit</button>
+    <span id="q-timer-display" style="font-size:14px;font-weight:700;color:white;min-width:50px;text-align:center;display:none;"></span><button class="q-exit" onclick="exitQuiz()">✕ Exit</button>
   </div>
   <div class="quiz-body" id="quiz-body"></div>
   <div class="quiz-footer">
@@ -510,7 +510,7 @@ function renderPage(page){
   else if(page==='modules')renderModules(m);
   else if(page==='lb')renderLB(m);
   else if(page==='profile')renderProfile(m);
-  else m.innerHTML='<div style="text-align:center;padding:60px 20px;"><div style="font-size:48px;margin-bottom:16px;">🚧</div><div style="font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px;">'+page.charAt(0).toUpperCase()+page.slice(1)+'</div><div style="font-size:14px;color:var(--gray);">Coming soon!</div></div>';
+  else if(page==='history')renderHistory(m);else m.innerHTML='<div style="text-align:center;padding:60px 20px;"><div style="font-size:48px;margin-bottom:16px;">🚧</div><div style="font-size:18px;font-weight:700;color:#0A1628;margin-bottom:8px;">'+page.charAt(0).toUpperCase()+page.slice(1)+'</div><div style="font-size:14px;color:#8A9BB5;">Coming soon!</div></div>';
 }
 
 // ── HOME ──
@@ -797,7 +797,62 @@ async function startQuiz(code,subjectKey){
   g('quiz-screen').classList.add('open');
   g('q-badge').className='q-badge '+(quizMode==='exam'?'q-exam':'q-practice');
   g('q-badge').textContent=quizMode.toUpperCase();
+
+  // Show timer selector for exam mode
+  if(quizMode==='exam'){
+    showExamTimerPicker();
+  } else {
+    startTimer=false;
+    renderQuestion();
+  }
+}
+
+var examTimer=null,examTimeLeft=0,startTimer=false;
+
+function showExamTimerPicker(){
+  var opts='';
+  [10,15,20,30].forEach(function(m){
+    opts+='<div onclick="startExamWithTimer('+m+')" style="padding:18px;border-radius:14px;border:2px solid rgba(10,22,40,.1);cursor:pointer;background:white;text-align:center;"><div style="font-size:28px;font-weight:900;color:#0A1628;">'+m+'</div><div style="font-size:12px;color:#8A9BB5;">minutes</div></div>';
+  });
+  g('quiz-body').innerHTML=
+  '<div style="max-width:480px;margin:60px auto;text-align:center;padding:20px;">'+
+  '<div style="font-size:48px;margin-bottom:16px;">&#9201;</div>'+
+  '<div style="font-size:22px;font-weight:800;color:#0A1628;margin-bottom:8px;">Set Exam Duration</div>'+
+  '<div style="font-size:14px;color:#8A9BB5;margin-bottom:28px;">The quiz will auto-submit when time is up</div>'+
+  '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:24px;">'+opts+'</div>'+
+  '<button onclick="startExamWithTimer(0)" style="width:100%;padding:13px;background:transparent;border:1.5px solid rgba(10,22,40,.1);border-radius:11px;font-family:Outfit,sans-serif;font-size:14px;font-weight:600;cursor:pointer;color:#8A9BB5;">No time limit</button>'+
+  '</div>';
+  g('q-footer').style.display='none';
+}
+
+function startExamWithTimer(minutes){
+  g('q-footer').style.display='flex';
+  if(minutes>0){
+    examTimeLeft=minutes*60;
+    startTimer=true;
+    var td=g('q-timer-display');if(td)td.style.display='block';
+    updateTimerDisplay();
+    examTimer=setInterval(function(){
+      examTimeLeft--;
+      updateTimerDisplay();
+      if(examTimeLeft<=0){
+        clearInterval(examTimer);
+        showResult();
+      }
+    },1000);
+  } else {
+    startTimer=false;
+  }
   renderQuestion();
+}
+
+function updateTimerDisplay(){
+  var el=g('q-timer-display');
+  if(!el)return;
+  var m=Math.floor(examTimeLeft/60);
+  var s=examTimeLeft%60;
+  el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  el.style.color=examTimeLeft<=60?'#EF4444':'white';
 }
 
 function renderQuestion(){
@@ -827,12 +882,15 @@ function answerQ(idx,letter){
   var q=quizQs[quizIdx];
   quizAnswers.push({qid:q.id,selected:letter,correct:q.correct_option,isCorrect:letter===q.correct_option});
 
+  // Always highlight selected in both modes
+  var selOpt=g('opt-'+idx);
+  if(selOpt)selOpt.style.borderColor='#4AA8E8';
   if(quizMode==='practice'){
     var correctIdx=['a','b','c','d'].indexOf(q.correct_option);
     for(var i=0;i<4;i++){
       var opt=g('opt-'+i);var ltr=g('ltr-'+i);
-      if(i===correctIdx){opt.className='q-opt correct';if(ltr){ltr.style.background='var(--green)';ltr.style.color='white';}}
-      else if(i===idx&&idx!==correctIdx){opt.className='q-opt wrong';if(ltr){ltr.style.background='var(--red)';ltr.style.color='white';}}
+      if(i===correctIdx){opt.className='q-opt correct';if(ltr){ltr.style.background='#10B981';ltr.style.color='white';}}
+      else if(i===idx&&idx!==correctIdx){opt.className='q-opt wrong';if(ltr){ltr.style.background='#EF4444';ltr.style.color='white';}}
     }
     var exp=g('q-exp');
     if(exp&&q.explanation){exp.style.display='block';exp.innerHTML='<strong>✓ Explanation: </strong>'+q.explanation;}
@@ -869,7 +927,7 @@ function showResult(){
 }
 
 function retryQuiz(){quizIdx=0;quizAnswers=[];quizAnswered=false;quizQs=quizQs.sort(function(){return Math.random()-.5;});g('quiz-footer').style.display='flex';renderQuestion();}
-function exitQuiz(){g('quiz-screen').classList.remove('open');g('quiz-footer').style.display='flex';}
+function exitQuiz(){if(examTimer)clearInterval(examTimer);examTimer=null;var td=g('q-timer-display');if(td)td.style.display='none';g('quiz-screen').classList.remove('open');g('quiz-footer').style.display='flex';}
 function toggleBM(){var btn=g('q-bm-btn');if(btn){btn.style.background=btn.style.background?'':'rgba(245,158,11,.15)';}}
 
 // ── LEADERBOARD ──
@@ -952,6 +1010,72 @@ function showWelcome(){
     toast.style.opacity='0';
     setTimeout(function(){if(toast.parentNode)toast.parentNode.removeChild(toast);},500);
   },2500);
+}
+
+
+function renderHistory(m){
+  m.innerHTML=
+  '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">'+
+  '<div style="font-size:clamp(18px,2vw,22px);font-weight:800;color:#0A1628;">&#128336; Quiz <span style="color:#4AA8E8;">History</span></div></div>'+
+  '<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;" id="hist-filters">'+
+  '<button id="hf-all" style="padding:7px 16px;border-radius:100px;font-size:11px;font-weight:700;border:1.5px solid #0A1628;background:#0A1628;color:white;cursor:pointer;font-family:Outfit,sans-serif;">All</button>'+
+  '<button id="hf-fin" style="padding:7px 16px;border-radius:100px;font-size:11px;font-weight:700;border:1.5px solid rgba(10,22,40,.1);background:white;color:#8A9BB5;cursor:pointer;font-family:Outfit,sans-serif;">Finished</button>'+
+  '<button id="hf-unf" style="padding:7px 16px;border-radius:100px;font-size:11px;font-weight:700;border:1.5px solid rgba(10,22,40,.1);background:white;color:#8A9BB5;cursor:pointer;font-family:Outfit,sans-serif;">Unfinished</button>'+
+  '</div>'+
+  '<div id="hist-list"><div style="text-align:center;padding:40px;color:#8A9BB5;">Loading...</div></div>';
+  document.getElementById('hf-all').addEventListener('click',function(){setHistFilter('all');});
+  document.getElementById('hf-fin').addEventListener('click',function(){setHistFilter('finished');});
+  document.getElementById('hf-unf').addEventListener('click',function(){setHistFilter('unfinished');});
+  loadHistory('all');
+}
+
+function setHistFilter(f){
+  ['hf-all','hf-fin','hf-unf'].forEach(function(id){
+    var b=document.getElementById(id);
+    if(!b)return;
+    b.style.background='white';b.style.color='#8A9BB5';b.style.borderColor='rgba(10,22,40,.1)';
+  });
+  var map={all:'hf-all',finished:'hf-fin',unfinished:'hf-unf'};
+  var active=document.getElementById(map[f]);
+  if(active){active.style.background='#0A1628';active.style.color='white';active.style.borderColor='#0A1628';}
+  loadHistory(f);
+}
+
+async function loadHistory(filter){
+  var el=document.getElementById('hist-list');
+  if(!el||!currentUser)return;
+  var url='/rest/v1/quiz_sessions?user_id=eq.'+currentUser.id+'&order=created_at.desc&select=*';
+  if(filter==='finished')url+='&status=eq.finished';
+  else if(filter==='unfinished')url+='&status=neq.finished';
+  var r=await api('GET',url);
+  var sessions=(r.ok&&Array.isArray(r.data))?r.data:[];
+  if(!sessions.length){
+    el.innerHTML='<div style="text-align:center;padding:48px;"><div style="font-size:48px;margin-bottom:14px;opacity:.4;">&#128336;</div><div style="font-size:16px;font-weight:700;color:#0A1628;margin-bottom:8px;">No history yet</div><div style="font-size:13px;color:#8A9BB5;">Complete a quiz to see it here</div></div>';
+    return;
+  }
+  el.innerHTML=sessions.map(function(s,idx){
+    var fin=s.status==='finished';
+    var date=new Date(s.created_at).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    return '<div id="hi-'+idx+'" style="background:white;border-radius:14px;padding:16px 18px;margin-bottom:12px;box-shadow:0 2px 12px rgba(10,22,40,.05);cursor:pointer;">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;">'+
+    '<div><div style="font-size:14px;font-weight:700;color:#0A1628;">'+(s.name||'Quiz')+'</div>'+
+    '<div style="font-size:11px;color:#8A9BB5;margin-top:2px;">'+date+' &middot; '+(s.total_questions||0)+' Qs &middot; '+
+    '<span style="background:'+(fin?'rgba(16,185,129,.1)':'rgba(245,158,11,.1)')+';color:'+(fin?'#065f46':'#92400e')+';padding:2px 7px;border-radius:100px;font-size:9px;font-weight:700;">'+(fin?'Finished':'In Progress')+'</span></div></div>'+
+    '<div style="font-size:20px;font-weight:900;color:#4AA8E8;">'+(fin?(s.score||0)+'%':'&#8212;')+'</div></div>'+
+    '<div id="hd-'+idx+'" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid rgba(10,22,40,.06);">'+
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px;">'+
+    '<div style="background:#F5F8FC;border-radius:10px;padding:10px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#10B981;">'+(s.correct||0)+'</div><div style="font-size:10px;color:#8A9BB5;">Correct</div></div>'+
+    '<div style="background:#F5F8FC;border-radius:10px;padding:10px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#EF4444;">'+(( s.total_questions||0)-(s.correct||0))+'</div><div style="font-size:10px;color:#8A9BB5;">Wrong</div></div>'+
+    '<div style="background:#F5F8FC;border-radius:10px;padding:10px;text-align:center;"><div style="font-size:18px;font-weight:800;color:#0A1628;">'+(s.total_questions||0)+'</div><div style="font-size:10px;color:#8A9BB5;">Total</div></div>'+
+    '</div><div style="font-size:12px;color:#8A9BB5;">Mode: '+(s.mode||'practice')+'</div></div></div>';
+  }).join('');
+  sessions.forEach(function(s,idx){
+    var item=document.getElementById('hi-'+idx);
+    if(item)item.addEventListener('click',function(){
+      var det=document.getElementById('hd-'+idx);
+      if(det)det.style.display=det.style.display==='block'?'none':'block';
+    });
+  });
 }
 
 </script>
