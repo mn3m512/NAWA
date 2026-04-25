@@ -995,223 +995,6 @@ body.dark .card-title,.body.dark .sc-val,.body.dark .q-text,.body.dark .mod-name
   </div>
 </div>
 
-<script>
-var SURL='https://zphhtwarzqhsmqsawknt.supabase.co';
-var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
-
-// Nav scroll effect
-window.addEventListener('scroll',function(){
-  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50);
-});
-
-// Particles
-(function(){
-  var c=document.getElementById('particles');
-  for(var i=0;i<20;i++){
-    var p=document.createElement('div');
-    p.className='particle';
-    p.style.cssText='left:'+Math.random()*100+'%;animation-duration:'+(8+Math.random()*12)+'s;animation-delay:'+(-Math.random()*20)+'s;width:'+(2+Math.random()*3)+'px;height:'+(2+Math.random()*3)+'px;opacity:'+(0.2+Math.random()*0.4)+';';
-    c.appendChild(p);
-  }
-})();
-
-function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
-
-// ── MODAL ──
-var MODS={'1':'MED101 Body Structure · MED102 Intro to Disease · MED103 Infections & Immunology · MED104 Psychology · MED105 Blood System · MED106 Musculoskeletal','2':'MED210 Cardiovascular · MED211 Respiratory · MED215 Endocrine · MED216 Digestive','3':'MED319 CNS · MED320 Genitourinary · MED323 General Medicine · MED324 Surgery · MED325 Tropical Medicine','4':'MED430 Medicine · MED431 Cardiopulmonary · MED432 Investigative · MED433 Pediatrics · MED434 Ophthalmology · MED435 ENT · MED436 Neuropsychiatry','5':'MED538 Surgery · MED539 Orthopedics · MED541 OB/GYN · MED542 Family Medicine · MED543 Dermatology','intern':'Internal Medicine · Surgery · Pediatrics · OB/GYN · Emergency Medicine'};
-var PHONE_LEN={'+20':10,'+966':9,'+971':9,'+965':8,'+974':8,'+44':10,'+1':10};
-
-function openModal(t){document.getElementById('modal').classList.add('open');if(t==='register')renderReg();else renderLogin();}
-function closeModal(){document.getElementById('modal').classList.remove('open');}
-
-function svgLogo(){return'<svg width="28" height="28" viewBox="0 0 100 100" fill="none"><defs><clipPath id="mc"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="#0A1628"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#mc)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="#0A1628" stroke-width="2.5" fill="none"/></svg>';}
-
-function renderReg(){
-  document.getElementById('modal-body').innerHTML=
-  '<div class="modal-logo">'+svgLogo()+'<span class="modal-logo-text">NAWA</span></div>'+
-  '<div class="modal-title">Create your account</div>'+
-  '<div class="modal-sub">Join Nawa — Free to start, no credit card needed</div>'+
-  '<div id="amsg"></div>'+
-  '<div class="form-row2"><div><label class="form-lbl">First Name *</label><input class="form-inp" id="r-fn" placeholder="Ahmed"></div>'+
-  '<div><label class="form-lbl">Last Name *</label><input class="form-inp" id="r-ln" placeholder="Hassan"></div></div>'+
-  '<label class="form-lbl">Phone Number</label>'+
-  '<div class="phone-row"><select class="phone-code" id="r-code" onchange="chkPhone()">'+
-  '<option value="+20">🇪🇬 +20</option><option value="+966">🇸🇦 +966</option>'+
-  '<option value="+971">🇦🇪 +971</option><option value="+965">🇰🇼 +965</option>'+
-  '<option value="+44">🇬🇧 +44</option><option value="+1">🇺🇸 +1</option>'+
-  '</select><input class="phone-inp" id="r-phone" placeholder="01xxxxxxxxx" oninput="chkPhone()"></div>'+
-  '<div class="ph-hint" id="ph-hint"></div>'+
-  '<label class="form-lbl">University</label>'+
-  '<select class="form-sel" id="r-uni">'+
-  '<option value="">Select your university</option>'+
-  '<optgroup label="🏛️ Government"><option>Ain Shams University</option><option>Al-Azhar University</option><option>Alexandria University</option><option>Assiut University</option><option>Cairo University (Kasr Al Ainy)</option><option>Mansoura University</option><option>Tanta University</option><option>Zagazig University</option><option>Beni Suef University</option><option>Minia University</option><option>Helwan University</option><option>Military Medical College</option></optgroup>'+
-  '<optgroup label="🏢 Private"><option>New Giza University (NGU)</option><option>Badr University (BUC)</option><option>Future University</option><option>6th October University (O6U)</option><option>MUST University</option><option>Nahda University</option><option>Sinai University</option></optgroup>'+
-  '<optgroup label="🏛️ National"><option>Ain Shams National University</option><option>Alexandria National University</option><option>Cairo National University</option><option>King Salman International University</option><option>Mansoura National University</option></optgroup>'+
-  '<option value="other">🌍 Other</option></select>'+
-  '<label class="form-lbl">Academic Year</label>'+
-  '<select class="form-sel" id="r-year" onchange="showMods()">'+
-  '<option value="">Select your year</option>'+
-  '<option value="1">1st Year</option><option value="2">2nd Year</option><option value="3">3rd Year</option>'+
-  '<option value="4">4th Year</option><option value="5">5th Year</option><option value="intern">Intern</option>'+
-  '</select>'+
-  '<div class="mods-box" id="mods-box"></div>'+
-  '<label class="form-lbl">Email *</label>'+
-  '<input class="form-inp" type="email" id="r-email" placeholder="ahmed@gmail.com">'+
-  '<label class="form-lbl">Password *</label>'+
-  '<div class="pw-wrap"><input class="pw-inp" type="password" id="r-pw" placeholder="At least 6 characters" oninput="chkPw()"><button class="pw-eye" type="button" onclick="tgPw(\'r-pw\',this)">👁</button></div>'+
-  '<label class="form-lbl">Confirm Password *</label>'+
-  '<div class="pw-wrap"><input class="pw-inp" type="password" id="r-pw2" placeholder="Repeat password" oninput="chkPw()"><button class="pw-eye" type="button" onclick="tgPw(\'r-pw2\',this)">👁</button></div>'+
-  '<div class="pw-hint" id="pw-hint"></div>'+
-  '<button class="form-submit" id="r-btn" onclick="doReg()">Create Account →</button>'+
-  '<div class="form-switch" style="margin-top:14px;">Already have an account? <span onclick="renderLogin()">Sign in</span></div>';
-}
-
-function renderLogin(){
-  document.getElementById('modal-body').innerHTML=
-  '<div class="modal-logo">'+svgLogo()+'<span class="modal-logo-text">NAWA</span></div>'+
-  '<div class="modal-title">Welcome back! 👋</div>'+
-  '<div class="modal-sub">Sign in to continue your journey</div>'+
-  '<div id="amsg"></div>'+
-  '<label class="form-lbl">Email</label>'+
-  '<input class="form-inp" type="email" id="l-email" placeholder="ahmed@gmail.com">'+
-  '<label class="form-lbl">Password</label>'+
-  '<div class="pw-wrap"><input class="pw-inp" type="password" id="l-pw" placeholder="Your password" onkeydown="if(event.key===\'Enter\')doLogin()"><button class="pw-eye" type="button" onclick="tgPw(\'l-pw\',this)">👁</button></div>'+
-  '<div class="forgot-link"><span onclick="showForgot()">Forgot password?</span></div>'+
-  '<button class="form-submit" id="l-btn" onclick="doLogin()">Sign In →</button>'+
-  '<div class="form-switch" style="margin-top:14px;">New to Nawa? <span onclick="renderReg()">Create free account</span></div>';
-}
-
-function showForgot(){
-  document.getElementById('modal-body').innerHTML=
-  '<div class="modal-logo">'+svgLogo()+'<span class="modal-logo-text">NAWA</span></div>'+
-  '<div class="modal-title">Reset Password</div>'+
-  '<div class="modal-sub">Enter your email and we\'ll send you a reset link</div>'+
-  '<div id="amsg"></div>'+
-  '<label class="form-lbl">Email</label>'+
-  '<input class="form-inp" type="email" id="f-email" placeholder="ahmed@gmail.com">'+
-  '<button class="form-submit" id="f-btn" onclick="doForgot()">Send Reset Link →</button>'+
-  '<div class="form-switch" style="margin-top:14px;"><span onclick="renderLogin()">← Back to Sign In</span></div>';
-}
-
-async function doForgot(){
-  var email=document.getElementById('f-email').value.trim();
-  if(!email){setMsg('Enter your email',false);return;}
-  var btn=document.getElementById('f-btn');
-  btn.disabled=true;btn.textContent='Sending...';
-  var r=await fetch(SURL+'/auth/v1/recover',{method:'POST',
-    headers:{'Content-Type':'application/json','apikey':SKEY},
-    body:JSON.stringify({email:email})});
-  btn.disabled=false;btn.textContent='Send Reset Link →';
-  if(r.ok){setMsg('✅ Reset link sent! Check your email.',true);}
-  else{setMsg('Error sending email. Try again.',false);}
-}
-
-function showMods(){
-  var yr=document.getElementById('r-year').value;
-  var b=document.getElementById('mods-box');
-  if(yr&&MODS[yr]){b.style.display='block';b.innerHTML='<strong style="color:#0D3B7A">Modules: </strong>'+MODS[yr];}
-  else b.style.display='none';
-}
-function chkPhone(){
-  var code=document.getElementById('r-code').value;
-  var num=(document.getElementById('r-phone').value||'').replace(/\D/g,'');
-  var h=document.getElementById('ph-hint');
-  if(!h||!num){if(h)h.textContent='';return;}
-  var exp=PHONE_LEN[code]||10;
-  if(num.length===exp){h.textContent='✓ Valid number';h.className='ph-hint ph-ok';}
-  else{h.textContent=exp+' digits required for '+code+' ('+num.length+'/'+exp+')';h.className='ph-hint ph-no';}
-}
-function chkPw(){
-  var p1=document.getElementById('r-pw');
-  var p2=document.getElementById('r-pw2');
-  var m=document.getElementById('pw-hint');
-  if(!p1||!p2||!m)return;
-  if(!p2.value){m.textContent='';return;}
-  if(p1.value===p2.value){m.textContent='✓ Passwords match';m.className='pw-hint pw-ok';}
-  else{m.textContent='✗ Passwords do not match';m.className='pw-hint pw-no';}
-}
-function tgPw(id,btn){
-  var el=document.getElementById(id);if(!el)return;
-  el.type=el.type==='password'?'text':'password';
-  btn.textContent=el.type==='password'?'👁':'🙈';
-}
-function setMsg(txt,ok){
-  var m=document.getElementById('amsg');
-  if(m)m.innerHTML='<div class="auth-msg '+(ok?'auth-ok':'auth-er')+'">'+txt+'</div>';
-}
-function gv(id){var el=document.getElementById(id);return el?(el.value||'').trim():'';}
-
-async function doReg(){
-  var fn=gv('r-fn'),ln=gv('r-ln'),email=gv('r-email'),pw=gv('r-pw'),pw2=gv('r-pw2');
-  var uni=document.getElementById('r-uni').value;
-  var year=document.getElementById('r-year').value;
-  var code=document.getElementById('r-code').value;
-  var phone=(document.getElementById('r-phone').value||'').replace(/\D/g,'');
-  if(!fn){setMsg('Please enter your first name',false);return;}
-  if(!email||!email.includes('@')){setMsg('Please enter a valid email',false);return;}
-  if(pw.length<6){setMsg('Password must be at least 6 characters',false);return;}
-  if(pw!==pw2){setMsg('Passwords do not match',false);return;}
-  if(phone){var exp=PHONE_LEN[code]||10;if(phone.length!==exp){setMsg('Phone should be '+exp+' digits for '+code,false);return;}}
-  var btn=document.getElementById('r-btn');
-  btn.disabled=true;btn.textContent='Creating account...';
-  try{
-    var r=await fetch(SURL+'/auth/v1/signup',{method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SKEY},
-      body:JSON.stringify({email:email,password:pw,data:{first_name:fn,last_name:ln}})});
-    var data=await r.json();
-    if(data.access_token||(data.user&&data.user.id)){
-      var uid=data.user?data.user.id:null;
-      if(data.access_token&&uid){
-        // Save profile
-        await fetch(SURL+'/rest/v1/profiles',{method:'POST',
-          headers:{'Content-Type':'application/json','apikey':SKEY,'Authorization':'Bearer '+data.access_token,'Prefer':'return=representation'},
-          body:JSON.stringify({id:uid,email:email,first_name:fn,last_name:ln,university:uni,year:year,phone:code+phone,plan:'basic'})});
-        localStorage.setItem('nawa_tk',data.access_token);
-        showDash();
-      }else{
-        setMsg('✅ Account created! Please sign in.',true);
-        setTimeout(renderLogin,1500);
-      }
-    }else{setMsg(data.error_description||data.msg||'Registration failed. Try again.',false);}
-  }catch(e){setMsg('Network error. Please try again.',false);}
-  btn.disabled=false;btn.textContent='Create Account →';
-}
-
-async function doLogin(){
-  var email=gv('l-email'),pw=gv('l-pw');
-  if(!email||!pw){setMsg('Please enter email and password',false);return;}
-  var btn=document.getElementById('l-btn');
-  btn.disabled=true;btn.textContent='Signing in...';
-  try{
-    var r=await fetch(SURL+'/auth/v1/token?grant_type=password',{method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SKEY},
-      body:JSON.stringify({email:email,password:pw})});
-    var data=await r.json();
-    if(data.access_token){
-      localStorage.setItem('nawa_tk',data.access_token);
-      showDash();
-    }else{setMsg(data.error_description||'Wrong email or password',false);}
-  }catch(e){setMsg('Network error. Please try again.',false);}
-  btn.disabled=false;btn.textContent='Sign In →';
-}
-
-
-function showLanding(){document.getElementById('landing').style.display='block';var d=document.getElementById('app');if(d)d.style.display='none';}
-function showDash(){document.getElementById('landing').style.display='none';var d=document.getElementById('app');if(d)d.style.display='block';if(typeof goto==='function')goto('home');}
-function openUpgrade(){var o=document.getElementById('up-overlay');if(o)o.classList.add('open');}
-function closeUpgrade(){var o=document.getElementById('up-overlay');if(o)o.classList.remove('open');}
-
-// Check if already logged in
-(async function(){
-  var tk=localStorage.getItem('nawa_tk');
-  if(tk){
-    var r=await fetch(SURL+'/auth/v1/user',{headers:{'apikey':SKEY,'Authorization':'Bearer '+tk}});
-    if(r.ok){showDash();}
-    else localStorage.removeItem('nawa_tk');
-  }
-})();
-</script>
-
 </div><!-- end landing -->
 
 <!-- ══ UPGRADE MODAL ══ -->
@@ -1416,11 +1199,53 @@ function closeUpgrade(){var o=document.getElementById('up-overlay');if(o)o.class
 </div><!-- /app -->
 
 <script>
+// === LANDING & AUTH ===
 
-function showLanding(){document.getElementById('landing').style.display='block';var d=document.getElementById('app');if(d)d.style.display='none';}
-function showDash(){document.getElementById('landing').style.display='none';var d=document.getElementById('app');if(d)d.style.display='block';if(typeof goto==='function')goto('home');}
-function openUpgrade(){var o=document.getElementById('up-overlay');if(o)o.classList.add('open');}
-function closeUpgrade(){var o=document.getElementById('up-overlay');if(o)o.classList.remove('open');}
+var SURL='https://zphhtwarzqhsmqsawknt.supabase.co';
+var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
+
+// Nav scroll effect
+window.addEventListener('scroll',function(){
+  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50);
+});
+
+// Particles
+(function(){
+  var c=document.getElementById('particles');
+  for(var i=0;i<20;i++){
+    var p=document.createElement('div');
+    p.className='particle';
+    p.style.cssText='left:'+Math.random()*100+'%;animation-duration:'+(8+Math.random()*12)+'s;animation-delay:'+(-Math.random()*20)+'s;width:'+(2+Math.random()*3)+'px;height:'+(2+Math.random()*3)+'px;opacity:'+(0.2+Math.random()*0.4)+';';
+    c.appendChild(p);
+  }
+})();
+
+// ── MODAL ──
+var MODS={'1':'MED101 Body Structure · MED102 Intro to Disease · MED103 Infections & Immunology · MED104 Psychology · MED105 Blood System · MED106 Musculoskeletal','2':'MED210 Cardiovascular · MED211 Respiratory · MED215 Endocrine · MED216 Digestive','3':'MED319 CNS · MED320 Genitourinary · MED323 General Medicine · MED324 Surgery · MED325 Tropical Medicine','4':'MED430 Medicine · MED431 Cardiopulmonary · MED432 Investigative · MED433 Pediatrics · MED434 Ophthalmology · MED435 ENT · MED436 Neuropsychiatry','5':'MED538 Surgery · MED539 Orthopedics · MED541 OB/GYN · MED542 Family Medicine · MED543 Dermatology','intern':'Internal Medicine · Surgery · Pediatrics · OB/GYN · Emergency Medicine'};
+var PHONE_LEN={'+20':10,'+966':9,'+971':9,'+965':8,'+974':8,'+44':10,'+1':10};
+
+
+
+
+
+
+
+
+// Check if already logged in
+(async function(){
+  var tk=localStorage.getItem('nawa_tk');
+  if(tk){
+    var r=await fetch(SURL+'/auth/v1/user',{headers:{'apikey':SKEY,'Authorization':'Bearer '+tk}});
+    if(r.ok){showDash();}
+    else localStorage.removeItem('nawa_tk');
+  }
+})();
+
+
+// === SHOW/HIDE ===
+
+
+// closeUpgrade defined elsewhere
 
 var SURL='https://zphhtwarzqhsmqsawknt.supabase.co';
 var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
@@ -1624,9 +1449,6 @@ async function doLogin(){
 
 function showLanding(){document.getElementById('landing').style.display='block';var d=document.getElementById('app');if(d)d.style.display='none';}
 function showDash(){document.getElementById('landing').style.display='none';var d=document.getElementById('app');if(d)d.style.display='block';if(typeof goto==='function')goto('home');}
-function openUpgrade(){var o=document.getElementById('up-overlay');if(o)o.classList.add('open');}
-function closeUpgrade(){var o=document.getElementById('up-overlay');if(o)o.classList.remove('open');}
-
 // Check if already logged in
 (async function(){
   var tk=localStorage.getItem('nawa_tk');
@@ -1637,9 +1459,10 @@ function closeUpgrade(){var o=document.getElementById('up-overlay');if(o)o.class
   }
 })();
 
-</script>
 
-<script>
+
+// === DASHBOARD ===
+
 
 var SURL='https://zphhtwarzqhsmqsawknt.supabase.co';
 var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
