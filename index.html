@@ -4,318 +4,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nawa — Medical Education Platform</title>
-<meta name="description" content="The smartest MCQ platform for Egyptian medical students. Practice by module, lecture, and subject.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<title>Nawa — Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root{
-  --navy:#0A1628;--ocean:#0D3B7A;--blue:#1560BD;--sky:#4AA8E8;--sky2:#2d9fd8;
-  --green:#10B981;--red:#EF4444;--orange:#F59E0B;--purple:#8B5CF6;
-  --gray:#8A9BB5;--light:#C8D8E8;--foam:#E8F4FD;--off:#F5F8FC;--white:#fff;
-}
+:root{--navy:#0A1628;--ocean:#0D3B7A;--blue:#1560BD;--sky:#4AA8E8;--green:#10B981;--red:#EF4444;--orange:#F59E0B;--purple:#8B5CF6;--gray:#8A9BB5;--light:#C8D8E8;--foam:#E8F4FD;--off:#F5F8FC;--white:#fff;--sidebar:220px;}
 *{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--navy);overflow-x:hidden;}
-
-/* ── SCROLLBAR ── */
-::-webkit-scrollbar{width:6px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:rgba(74,168,232,.3);border-radius:3px;}
-
-/* ── NAV ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:68px;
-background:rgba(10,22,40,.92);backdrop-filter:blur(20px);
-border-bottom:1px solid rgba(255,255,255,.06);
-display:flex;align-items:center;justify-content:space-between;
-padding:0 clamp(16px,4vw,60px);transition:all .3s;}
-.nav.scrolled{background:rgba(10,22,40,.98);box-shadow:0 4px 30px rgba(0,0,0,.3);}
-.logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
-.logo-text{font-size:20px;font-weight:900;letter-spacing:5px;text-transform:uppercase;color:white;}
-.nav-links{display:flex;align-items:center;gap:28px;}
-.nav-link{font-size:13px;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;transition:.2s;text-decoration:none;}
-.nav-link:hover{color:white;}
-.nav-btns{display:flex;gap:8px;align-items:center;}
-.btn{padding:10px 22px;border-radius:10px;font-family:‘Outfit’,sans-serif;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
-.btn-outline{background:transparent;color:white;border:1.5px solid rgba(255,255,255,.25);}
-.btn-outline:hover{border-color:var(–sky);color:var(–sky);background:rgba(74,168,232,.05);}
-.btn-sky{background:var(–sky);color:var(–navy);}
-.btn-sky:hover{background:white;transform:translateY(-1px);}
-
-/* ── HERO ── */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
-text-align:center;padding:100px clamp(20px,4vw,60px) 60px;position:relative;overflow:hidden;}
-.hero-bg{position:absolute;inset:0;
-background:radial-gradient(ellipse 80% 60% at 50% 30%,rgba(74,168,232,.15) 0%,transparent 70%),
-radial-gradient(ellipse 40% 40% at 80% 80%,rgba(139,92,246,.08) 0%,transparent 60%),
-radial-gradient(ellipse 40% 40% at 20% 70%,rgba(16,185,129,.06) 0%,transparent 60%);}
-.hero-grid{position:absolute;inset:0;
-background-image:linear-gradient(rgba(74,168,232,.04) 1px,transparent 1px),
-linear-gradient(90deg,rgba(74,168,232,.04) 1px,transparent 1px);
-background-size:52px 52px;animation:gridMove 20s linear infinite;}
-@keyframes gridMove{from{transform:translateY(0);}to{transform:translateY(52px);}}
-.hero-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none;}
-.particle{position:absolute;width:3px;height:3px;border-radius:50%;background:var(–sky);opacity:.4;animation:float linear infinite;}
-@keyframes float{0%{transform:translateY(100vh) translateX(0);opacity:0;}10%{opacity:.4;}90%{opacity:.4;}100%{transform:translateY(-100px) translateX(50px);opacity:0;}}
-.hero-content{position:relative;z-index:2;max-width:800px;}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;
-background:rgba(74,168,232,.1);border:1px solid rgba(74,168,232,.25);
-color:var(–sky);padding:8px 20px;border-radius:100px;
-font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
-margin-bottom:32px;animation:fadeUp .8s ease both;}
-.badge-dot{width:7px;height:7px;border-radius:50%;background:var(–sky);animation:pulse 2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-.hero-title{font-size:clamp(42px,8vw,88px);font-weight:900;color:white;line-height:.95;
-letter-spacing:-4px;margin-bottom:24px;animation:fadeUp .8s .1s ease both;}
-.hero-title span{color:var(–sky);display:block;}
-.hero-title em{font-style:normal;color:rgba(255,255,255,.7);font-size:.6em;letter-spacing:-2px;display:block;margin-top:8px;}
-.hero-sub{font-size:clamp(15px,2vw,19px);font-weight:300;color:rgba(255,255,255,.55);
-line-height:1.7;margin-bottom:14px;max-width:560px;margin-left:auto;margin-right:auto;
-animation:fadeUp .8s .2s ease both;}
-.hero-sub2{font-size:clamp(13px,1.5vw,15px);font-weight:400;color:rgba(255,255,255,.35);
-line-height:1.6;margin-bottom:40px;max-width:500px;margin-left:auto;margin-right:auto;
-animation:fadeUp .8s .25s ease both;}
-.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
-animation:fadeUp .8s .3s ease both;margin-bottom:16px;}
-.btn-hero{padding:15px 38px;border-radius:12px;font-size:15px;font-weight:700;
-cursor:pointer;border:none;font-family:‘Outfit’,sans-serif;transition:all .25s;display:inline-flex;align-items:center;gap:8px;}
-.btn-hero-primary{background:linear-gradient(135deg,var(–sky),var(–blue));color:white;
-box-shadow:0 8px 32px rgba(74,168,232,.4);}
-.btn-hero-primary:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(74,168,232,.5);}
-.btn-hero-secondary{background:rgba(255,255,255,.06);color:white;border:1.5px solid rgba(255,255,255,.15);}
-.btn-hero-secondary:hover{background:rgba(255,255,255,.12);transform:translateY(-2px);}
-.hero-signin-sub{font-size:12px;color:rgba(255,255,255,.3);animation:fadeUp .8s .35s ease both;margin-bottom:52px;}
-.hero-signin-sub span{color:var(–sky);cursor:pointer;font-weight:600;}
-.hero-stats{display:flex;gap:clamp(24px,5vw,64px);justify-content:center;
-padding-top:40px;border-top:1px solid rgba(255,255,255,.07);flex-wrap:wrap;
-animation:fadeUp .8s .4s ease both;}
-.stat-item{text-align:center;}
-.stat-num{font-size:clamp(26px,4vw,38px);font-weight:900;color:white;letter-spacing:-2px;}
-.stat-lbl{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:5px;}
-
-/* ── SCROLL INDICATOR ── */
-.scroll-ind{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);
-display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeUp 1s .6s ease both;}
-.scroll-dot{width:6px;height:36px;border-radius:3px;border:1.5px solid rgba(255,255,255,.2);position:relative;overflow:hidden;}
-.scroll-dot::after{content:’’;position:absolute;top:0;left:0;right:0;height:50%;
-background:var(–sky);border-radius:3px;animation:scrollDot 2s ease-in-out infinite;}
-@keyframes scrollDot{0%{transform:translateY(-100%);}50%{transform:translateY(100%);}100%{transform:translateY(200%);}}
-.scroll-text{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.25);}
-
-/* ── SECTIONS ── */
-.section{padding:clamp(60px,8vw,100px) clamp(20px,4vw,60px);}
-.sec-inner{max-width:1200px;margin:0 auto;}
-.sec-tag{font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(–sky);margin-bottom:12px;text-align:center;}
-.sec-title{font-size:clamp(30px,5vw,52px);font-weight:900;text-align:center;letter-spacing:-2px;margin-bottom:14px;}
-.sec-title-dark{color:var(–navy);}
-.sec-title-white{color:white;}
-.sec-sub{font-size:clamp(14px,1.8vw,17px);font-weight:300;color:var(–gray);text-align:center;line-height:1.7;max-width:540px;margin:0 auto 56px;}
-.sec-sub-white{color:rgba(255,255,255,.45);}
-
-/* ── FEATURES ── */
-.features-bg{background:var(–off);}
-.feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
-.feat-card{background:white;border-radius:20px;padding:30px;
-box-shadow:0 4px 24px rgba(10,22,40,.06);border:1px solid rgba(10,22,40,.04);
-transition:all .3s;position:relative;overflow:hidden;}
-.feat-card::before{content:’’;position:absolute;top:0;left:0;right:0;height:3px;
-background:linear-gradient(to right,var(–sky),var(–blue));opacity:0;transition:.3s;}
-.feat-card:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(10,22,40,.12);}
-.feat-card:hover::before{opacity:1;}
-.feat-icon{font-size:32px;margin-bottom:16px;display:block;}
-.feat-name{font-size:16px;font-weight:700;color:var(–navy);margin-bottom:9px;}
-.feat-desc{font-size:13px;font-weight:300;color:var(–gray);line-height:1.75;}
-.feat-tag{font-size:9px;background:linear-gradient(135deg,var(–sky),var(–blue));
-color:white;padding:3px 8px;border-radius:100px;font-weight:700;margin-left:7px;vertical-align:middle;}
-
-/* ── HOW IT WORKS ── */
-.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px;}
-.how-step{text-align:center;}
-.how-num{width:56px;height:56px;border-radius:16px;
-background:linear-gradient(135deg,var(–ocean),var(–sky));
-display:flex;align-items:center;justify-content:center;
-font-size:22px;font-weight:900;color:white;margin:0 auto 16px;}
-.how-title{font-size:16px;font-weight:700;color:var(–navy);margin-bottom:8px;}
-.how-desc{font-size:13px;font-weight:300;color:var(–gray);line-height:1.7;}
-
-/* ── MODULES SHOWCASE ── */
-.modules-bg{background:var(–navy);}
-.mods-showcase{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;}
-.mod-showcase-card{border-radius:16px;overflow:hidden;cursor:pointer;
-transition:transform .2s;box-shadow:0 6px 20px rgba(0,0,0,.2);}
-.mod-showcase-card:hover{transform:translateY(-4px);}
-.mod-showcase-img{height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;}
-.mod-showcase-ico{font-size:40px;position:relative;z-index:1;}
-.mod-showcase-code{font-size:9px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,.7);position:relative;z-index:1;margin-top:5px;}
-.mod-showcase-info{background:rgba(255,255,255,.05);backdrop-filter:blur(10px);padding:12px;border-top:1px solid rgba(255,255,255,.08);}
-.mod-showcase-name{font-size:12px;font-weight:700;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.mod-showcase-qs{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;}
-.mod-live-tag{position:absolute;top:8px;right:8px;z-index:2;
-background:var(–green);color:white;font-size:8px;font-weight:700;
-padding:3px 8px;border-radius:100px;}
-
-/* ── TESTIMONIALS ── */
-.test-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
-.test-card{background:white;border-radius:20px;padding:28px;
-box-shadow:0 4px 20px rgba(10,22,40,.06);}
-.test-stars{color:var(–orange);font-size:16px;margin-bottom:12px;}
-.test-text{font-size:14px;font-weight:300;color:var(–navy);line-height:1.7;margin-bottom:18px;font-style:italic;}
-.test-author{display:flex;align-items:center;gap:10px;}
-.test-av{width:38px;height:38px;border-radius:50%;
-background:linear-gradient(135deg,var(–ocean),var(–sky));
-display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:white;}
-.test-name{font-size:13px;font-weight:700;color:var(–navy);}
-.test-info{font-size:11px;color:var(–gray);}
-
-/* ── PRICING ── */
-.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;max-width:960px;margin:0 auto;}
-.price-card{border-radius:24px;padding:36px;border:1px solid rgba(255,255,255,.08);position:relative;transition:transform .2s;}
-.price-card:hover{transform:translateY(-4px);}
-.price-popular{background:linear-gradient(135deg,var(–sky),var(–blue));border:none;
-box-shadow:0 24px 64px rgba(74,168,232,.3);}
-.price-elite{background:linear-gradient(135deg,#4c1d95,#7c3aed);}
-.pop-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);
-background:white;color:var(–navy);font-size:10px;font-weight:800;
-padding:5px 16px;border-radius:100px;white-space:nowrap;
-box-shadow:0 4px 12px rgba(0,0,0,.15);}
-.price-name{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
-color:rgba(255,255,255,.5);margin-bottom:16px;}
-.price-popular .price-name,.price-elite .price-name{color:rgba(255,255,255,.7);}
-.price-amount{font-size:48px;font-weight:900;color:white;letter-spacing:-3px;line-height:1;}
-.price-currency{font-size:20px;vertical-align:super;}
-.price-per{font-size:13px;color:rgba(255,255,255,.35);margin-top:4px;}
-.price-popular .price-per,.price-elite .price-per{color:rgba(255,255,255,.6);}
-.price-divider{height:1px;background:rgba(255,255,255,.1);margin:20px 0;}
-.price-feats{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:26px;}
-.price-feats li{font-size:13px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:9px;}
-.price-popular .price-feats li,.price-elite .price-feats li{color:rgba(255,255,255,.85);}
-.price-feats li::before{content:‘✓’;font-weight:900;color:rgba(255,255,255,.4);font-size:12px;flex-shrink:0;}
-.price-popular .price-feats li::before,.price-elite .price-feats li::before{color:white;}
-.price-btn{width:100%;padding:13px;border-radius:11px;font-family:‘Outfit’,sans-serif;
-font-size:14px;font-weight:700;cursor:pointer;transition:.2s;
-background:rgba(255,255,255,.1);color:white;border:1.5px solid rgba(255,255,255,.2);}
-.price-btn:hover{background:rgba(255,255,255,.2);}
-.price-popular .price-btn{background:white;color:var(–sky);border:none;}
-.price-popular .price-btn:hover{background:var(–navy);color:white;}
-.price-elite .price-btn{background:rgba(255,255,255,.15);color:white;}
-
-/* ── CTA SECTION ── */
-.cta-section{background:linear-gradient(135deg,var(–ocean) 0%,var(–blue) 50%,var(–sky) 100%);
-padding:80px clamp(20px,4vw,60px);text-align:center;position:relative;overflow:hidden;}
-.cta-section::before{content:’’;position:absolute;inset:0;
-background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(255,255,255,.05) 0%,transparent 70%);}
-.cta-title{font-size:clamp(32px,5vw,56px);font-weight:900;color:white;letter-spacing:-2px;margin-bottom:16px;position:relative;}
-.cta-sub{font-size:clamp(15px,2vw,18px);font-weight:300;color:rgba(255,255,255,.7);margin-bottom:36px;position:relative;}
-.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;}
-
-/* ── FOOTER ── */
-.footer{background:#060E1A;padding:clamp(48px,6vw,80px) clamp(20px,4vw,60px) 0;}
-.footer-grid{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:48px;padding-bottom:48px;border-bottom:1px solid rgba(255,255,255,.06);}
-.footer-brand-logo{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.footer-brand-name{font-size:20px;font-weight:900;letter-spacing:5px;text-transform:uppercase;color:white;}
-.footer-brand-desc{font-size:13px;font-weight:300;color:rgba(255,255,255,.35);line-height:1.7;margin-bottom:20px;max-width:260px;}
-.footer-social{display:flex;gap:10px;}
-.social-btn{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.06);
-border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;
-font-size:16px;cursor:pointer;transition:.2s;text-decoration:none;}
-.social-btn:hover{background:rgba(74,168,232,.15);border-color:rgba(74,168,232,.3);}
-.footer-col h4{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
-color:rgba(255,255,255,.25);margin-bottom:18px;}
-.footer-col a{display:block;font-size:13px;font-weight:300;color:rgba(255,255,255,.4);
-text-decoration:none;margin-bottom:10px;cursor:pointer;transition:.15s;}
-.footer-col a:hover{color:var(–sky);}
-.footer-bottom{padding:20px 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:center;}
-.footer-copy{font-size:12px;color:rgba(255,255,255,.2);}
-.footer-tagline{font-size:12px;color:rgba(255,255,255,.15);letter-spacing:3px;font-style:italic;}
-
-/* ── MODAL ── */
-.overlay{display:none;position:fixed;inset:0;background:rgba(6,14,26,.85);z-index:500;
-align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;
-backdrop-filter:blur(16px);}
-.overlay.open{display:flex;}
-.modal{background:white;border-radius:28px;padding:36px;width:100%;max-width:500px;
-margin:auto;position:relative;box-shadow:0 48px 100px rgba(0,0,0,.4);
-animation:modalIn .3s ease;}
-@keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
-.modal-x{position:absolute;top:16px;right:16px;background:var(–off);border:none;
-border-radius:9px;width:34px;height:34px;cursor:pointer;font-size:16px;
-color:var(–gray);display:flex;align-items:center;justify-content:center;transition:.2s;}
-.modal-x:hover{background:#e0e8f0;color:var(–navy);}
-.modal-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:24px;}
-.modal-logo-text{font-size:18px;font-weight:900;letter-spacing:5px;text-transform:uppercase;color:var(–navy);}
-.modal-title{font-size:24px;font-weight:800;color:var(–navy);margin-bottom:4px;}
-.modal-sub{font-size:13px;color:var(–gray);margin-bottom:24px;}
-.form-lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
-color:var(–navy);display:block;margin-bottom:5px;}
-.form-inp{width:100%;padding:12px 14px;border:2px solid rgba(10,22,40,.1);border-radius:11px;
-font-family:‘Outfit’,sans-serif;font-size:14px;color:var(–navy);outline:none;
-transition:.2s;margin-bottom:14px;background:white;}
-.form-inp:focus{border-color:var(–sky);background:#fafeff;}
-.form-inp:disabled{background:var(–off);cursor:not-allowed;color:var(–gray);}
-.form-sel{width:100%;padding:12px 14px;border:2px solid rgba(10,22,40,.1);border-radius:11px;
-font-family:‘Outfit’,sans-serif;font-size:14px;color:var(–navy);outline:none;
-appearance:none;margin-bottom:14px;background:white;}
-.form-sel:focus{border-color:var(–sky);}
-.form-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.phone-row{display:flex;gap:8px;margin-bottom:14px;}
-.phone-code{width:136px;flex-shrink:0;padding:12px 10px;border:2px solid rgba(10,22,40,.1);
-border-radius:11px;font-family:‘Outfit’,sans-serif;font-size:13px;color:var(–navy);
-outline:none;appearance:none;background:white;}
-.phone-inp{flex:1;padding:12px 14px;border:2px solid rgba(10,22,40,.1);border-radius:11px;
-font-family:‘Outfit’,sans-serif;font-size:14px;color:var(–navy);outline:none;background:white;}
-.phone-inp:focus{border-color:var(–sky);}
-.ph-hint{font-size:11px;margin:-8px 0 12px;}
-.ph-ok{color:var(–green);}
-.ph-no{color:var(–red);}
-.pw-wrap{position:relative;margin-bottom:14px;}
-.pw-inp{width:100%;padding:12px 44px 12px 14px;border:2px solid rgba(10,22,40,.1);
-border-radius:11px;font-family:‘Outfit’,sans-serif;font-size:14px;color:var(–navy);
-outline:none;background:white;transition:.2s;}
-.pw-inp:focus{border-color:var(–sky);}
-.pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);
-background:none;border:none;cursor:pointer;font-size:18px;color:var(–gray);padding:4px;}
-.pw-hint{font-size:11px;margin:-8px 0 12px;}
-.pw-ok{color:var(–green);}
-.pw-no{color:var(–red);}
-.mods-box{background:var(–foam);border:1px solid rgba(74,168,232,.2);border-radius:11px;
-padding:11px 14px;font-size:11px;color:var(–navy);line-height:1.8;margin-bottom:14px;display:none;}
-.auth-msg{padding:11px 14px;border-radius:10px;font-size:13px;font-weight:600;margin-bottom:14px;}
-.auth-ok{background:rgba(16,185,129,.08);color:#065f46;border:1.5px solid rgba(16,185,129,.2);}
-.auth-er{background:rgba(239,68,68,.08);color:#991b1b;border:1.5px solid rgba(239,68,68,.2);}
-.form-submit{width:100%;padding:14px;background:linear-gradient(135deg,var(–ocean),var(–blue));
-color:white;border:none;border-radius:11px;font-family:‘Outfit’,sans-serif;
-font-size:14px;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:.5px;}
-.form-submit:hover{background:linear-gradient(135deg,var(–blue),var(–sky));}
-.form-submit:disabled{opacity:.6;cursor:not-allowed;}
-.form-divider{display:flex;align-items:center;gap:12px;margin:16px 0;}
-.form-divider::before,.form-divider::after{content:’’;flex:1;height:1px;background:rgba(10,22,40,.08);}
-.form-divider span{font-size:12px;color:var(–gray);}
-.google-btn{width:100%;padding:13px;background:white;color:var(–navy);
-border:2px solid rgba(10,22,40,.1);border-radius:11px;font-family:‘Outfit’,sans-serif;
-font-size:14px;font-weight:600;cursor:pointer;transition:.2s;
-display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:14px;}
-.google-btn:hover{border-color:var(–sky);background:var(–foam);}
-.form-switch{text-align:center;font-size:13px;color:var(–gray);}
-.form-switch span{color:var(–sky);font-weight:700;cursor:pointer;}
-.form-switch span:hover{text-decoration:underline;}
-.forgot-link{text-align:right;margin-bottom:14px;}
-.forgot-link span{font-size:12px;color:var(–sky);font-weight:600;cursor:pointer;}
-.forgot-link span:hover{text-decoration:underline;}
-
-@media(max-width:768px){
-.nav-links{display:none;}
-.footer-grid{grid-template-columns:1fr 1fr;}
-.footer-grid>div:first-child{grid-column:1/-1;}
-}
-@media(max-width:480px){
-.footer-grid{grid-template-columns:1fr;}
-.form-row2{grid-template-columns:1fr;}
-}
-
-:root{–navy:#0A1628;–ocean:#0D3B7A;–blue:#1560BD;–sky:#4AA8E8;–green:#10B981;–red:#EF4444;–orange:#F59E0B;–purple:#8B5CF6;–gray:#8A9BB5;–light:#C8D8E8;–foam:#E8F4FD;–off:#F5F8FC;–white:#fff;–sidebar:220px;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:‘Outfit’,sans-serif;background:var(–off);color:var(–navy);}
+body{font-family:'Outfit',sans-serif;background:var(--off);color:var(--navy);}
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-thumb{background:rgba(10,22,40,.15);border-radius:3px;}
 
@@ -714,365 +408,10 @@ body.dark .card-title,.body.dark .sc-val,.body.dark .q-text,.body.dark .mod-name
 @media(max-width:768px){
 .result-stats{grid-template-columns:1fr 1fr 1fr;}
 }
-
 </style>
+
 </head>
 <body>
-<div id="landing">
-
-<div id="landing">
-<!-- NAV -->
-<nav class="nav" id="nav">
-  <a class="logo" href="#" onclick="return false;">
-    <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
-      <defs><clipPath id="lc"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs>
-      <circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/>
-      <circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#lc)"/>
-      <path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="50" cy="50" r="46" stroke="white" stroke-width="2.5" fill="none"/>
-    </svg>
-    <span class="logo-text">Nawa</span>
-  </a>
-  <div class="nav-links">
-    <a class="nav-link" onclick="scrollTo('features')">Features</a>
-    <a class="nav-link" onclick="scrollTo('modules')">Modules</a>
-    <a class="nav-link" onclick="scrollTo('pricing')">Pricing</a>
-  </div>
-  <div class="nav-btns">
-    <button class="btn btn-sky" onclick="openModal('register')">Get Started</button>
-  </div>
-</nav>
-
-<!-- HERO -->
-
-<section class="hero" id="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-particles" id="particles"></div>
-  <div class="hero-content">
-    <div class="hero-badge"><span class="badge-dot"></span> Medical Education Platform</div>
-    <div style="margin-bottom:28px;animation:fadeUp .8s .1s ease both;">
-      <svg width="84" height="84" viewBox="0 0 100 100" fill="none">
-        <defs><clipPath id="hc"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs>
-        <circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.06)"/>
-        <circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#hc)"/>
-        <path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <circle cx="50" cy="50" r="46" stroke="white" stroke-width="2.5" fill="none"/>
-      </svg>
-    </div>
-    <h1 class="hero-title">
-      The Nucleus of<br>
-      <span>Medical Excellence</span>
-    </h1>
-    <p class="hero-sub">Master medicine through smart MCQs organized by module, subject, and lecture. Track your progress and rise to the top.</p>
-    <p class="hero-sub2" style="font-style:italic;color:rgba(255,255,255,.3);font-size:14px;margin-bottom:40px;">Root Deep. Reach Far.</p>
-    <div class="hero-btns">
-      <button class="btn-hero btn-hero-primary" onclick="openModal('register')" style="padding:16px 52px;font-size:16px;">
-        Start Now →
-      </button>
-    </div>
-    <p class="hero-signin-sub">Already have an account? <span onclick="openModal('login')">Sign in</span></p>
-    <div class="hero-stats">
-      <div class="stat-item"><div class="stat-num">344+</div><div class="stat-lbl">Questions</div></div>
-      <div class="stat-item"><div class="stat-num">28</div><div class="stat-lbl">Lectures</div></div>
-      <div class="stat-item"><div class="stat-num">4</div><div class="stat-lbl">Subjects</div></div>
-      <div class="stat-item"><div class="stat-num">Free</div><div class="stat-lbl">To Start</div></div>
-    </div>
-  </div>
-  <div class="scroll-ind">
-    <div class="scroll-dot"></div>
-    <span class="scroll-text">Scroll</span>
-  </div>
-</section>
-
-<!-- FEATURES -->
-
-<section class="section features-bg" id="features">
-  <div class="sec-inner">
-    <div class="sec-tag">Why Nawa</div>
-    <h2 class="sec-title sec-title-dark">Everything You Need to Excel</h2>
-    <p class="sec-sub">From smart MCQ practice to AI-powered analytics — we've built everything a medical student needs in one place.</p>
-    <div class="feat-grid">
-      <div class="feat-card"><span class="feat-icon">📚</span><div class="feat-name">Module-Based Learning</div><div class="feat-desc">Practice by module, subject, or specific lecture. Target exactly what you need to study. No wasted time.</div></div>
-      <div class="feat-card"><span class="feat-icon">🎯</span><div class="feat-name">Practice & Exam Mode</div><div class="feat-desc">Practice mode gives instant feedback with explanations. Exam mode simulates real test pressure and timing.</div></div>
-      <div class="feat-card"><span class="feat-icon">📊</span><div class="feat-name">Deep Performance Analytics</div><div class="feat-desc">Track your accuracy per lecture and subject. Know exactly which topics need more attention.</div></div>
-      <div class="feat-card"><span class="feat-icon">🔥</span><div class="feat-name">Streak & Daily Goals</div><div class="feat-desc">Set daily question targets and build study streaks. Consistent practice is the key to success.</div></div>
-      <div class="feat-card"><span class="feat-icon">🏆</span><div class="feat-name">Triple Leaderboard</div><div class="feat-desc">Compete globally, per university, and per year. See where you stand and push yourself higher.</div></div>
-      <div class="feat-card"><span class="feat-icon">🃏</span><div class="feat-name">Smart Flashcards <span class="feat-tag">PRO</span></div><div class="feat-desc">Spaced Repetition System flashcards. Cards you get wrong come back sooner — proven science.</div></div>
-      <div class="feat-card"><span class="feat-icon">📝</span><div class="feat-name">Integrated Notes</div><div class="feat-desc">Take notes while practicing. Notes auto-save and link to lectures. Never lose an insight again.</div></div>
-      <div class="feat-card"><span class="feat-icon">🔖</span><div class="feat-name">Bookmark & Review</div><div class="feat-desc">Bookmark tricky questions mid-quiz. Review them anytime in your personal wrong answers bank.</div></div>
-      <div class="feat-card"><span class="feat-icon">⏱️</span><div class="feat-name">Quiz Timer</div><div class="feat-desc">Optional countdown timer per question. Train your speed and simulate exam conditions perfectly.</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-
-<section class="section" style="background:white;">
-  <div class="sec-inner">
-    <div class="sec-tag">How It Works</div>
-    <h2 class="sec-title sec-title-dark">Start Practicing in 3 Steps</h2>
-    <p class="sec-sub">Simple, intuitive, and built for the way medical students actually study.</p>
-    <div class="how-grid">
-      <div class="how-step">
-        <div class="how-num">1</div>
-        <div class="how-title">Choose Your Module</div>
-        <div class="how-desc">Select your year, then pick the module and specific lectures you want to practice.</div>
-      </div>
-      <div class="how-step">
-        <div class="how-num">2</div>
-        <div class="how-title">Customize Your Quiz</div>
-        <div class="how-desc">Set the number of questions, choose Practice or Exam mode, and add a timer if you want.</div>
-      </div>
-      <div class="how-step">
-        <div class="how-num">3</div>
-        <div class="how-title">Track & Improve</div>
-        <div class="how-desc">See detailed results, review wrong answers, take notes, and watch your scores climb.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MODULES SHOWCASE -->
-
-<section class="section modules-bg" id="modules">
-  <div class="sec-inner">
-    <div class="sec-tag" style="color:var(--sky)">Question Banks</div>
-    <h2 class="sec-title sec-title-white">Available Modules</h2>
-    <p class="sec-sub sec-sub-white">Check if your current subjects are covered. New modules added regularly.</p>
-    <div class="mods-showcase">
-      <div class="mod-showcase-card"><div class="mod-showcase-img" style="background:linear-gradient(135deg,#0D7A4A,#10B981);"><span class="mod-showcase-ico">🦠</span><span class="mod-showcase-code">MED103</span><span class="mod-live-tag">Live</span></div><div class="mod-showcase-info"><div class="mod-showcase-name">Basic Of Infections</div><div class="mod-showcase-qs">344 questions · 28 lectures</div></div></div>
-      <div class="mod-showcase-card"><div class="mod-showcase-img" style="background:linear-gradient(135deg,#0D3B7A,#1560BD);"><span class="mod-showcase-ico">🦴</span><span class="mod-showcase-code">MED101</span></div><div class="mod-showcase-info"><div class="mod-showcase-name">Normal Body Structure</div><div class="mod-showcase-qs">Coming soon</div></div></div>
-      <div class="mod-showcase-card"><div class="mod-showcase-img" style="background:linear-gradient(135deg,#7A0D0D,#EF4444);"><span class="mod-showcase-ico">❤️</span><span class="mod-showcase-code">MED431</span></div><div class="mod-showcase-info"><div class="mod-showcase-name">Cardiopulmonary</div><div class="mod-showcase-qs">Coming soon</div></div></div>
-      <div class="mod-showcase-card"><div class="mod-showcase-img" style="background:linear-gradient(135deg,#3A1A6A,#8B5CF6);"><span class="mod-showcase-ico">🧠</span><span class="mod-showcase-code">MED436</span></div><div class="mod-showcase-info"><div class="mod-showcase-name">Neuropsychiatry</div><div class="mod-showcase-qs">Coming soon</div></div></div>
-      <div class="mod-showcase-card"><div class="mod-showcase-img" style="background:linear-gradient(135deg,#0A4A2A,#10B981);"><span class="mod-showcase-ico">👶</span><span class="mod-showcase-code">MED433</span></div><div class="mod-showcase-info"><div class="mod-showcase-name">Pediatrics</div><div class="mod-showcase-qs">Coming soon</div></div></div>
-      <div class="mod-showcase-card"><div class="mod-showcase-img" style="background:linear-gradient(135deg,#4A4A0D,#F59E0B);"><span class="mod-showcase-ico">🔪</span><span class="mod-showcase-code">MED538</span></div><div class="mod-showcase-info"><div class="mod-showcase-name">Surgery</div><div class="mod-showcase-qs">Coming soon</div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-
-<section class="section" style="background:var(--off);">
-  <div class="sec-inner">
-    <div class="sec-tag">Student Stories</div>
-    <h2 class="sec-title sec-title-dark">What Students Say</h2>
-    <p class="sec-sub">Real results from real students at Egyptian medical universities.</p>
-    <div class="test-grid">
-      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text">"Finally a platform that organizes questions the way our curriculum is structured. I can focus on exactly the lectures I need before each exam."</p><div class="test-author"><div class="test-av">Y</div><div><div class="test-name">Yassmine A.</div><div class="test-info">4th Year · Alexandria</div></div></div></div>
-      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text">"The practice mode with instant explanations is a game changer. I understand why answers are right or wrong, not just memorizing."</p><div class="test-author"><div class="test-av">Z</div><div><div class="test-name">Zeyad M.</div><div class="test-info">4th Year · Alexandria</div></div></div></div>
-      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text">"The leaderboard keeps me motivated every day. Competing with my classmates while actually learning — nothing like it."</p><div class="test-author"><div class="test-av">S</div><div><div class="test-name">Sara K.</div><div class="test-info">3rd Year · Cairo</div></div></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING -->
-
-<section class="section" style="background:var(--navy);" id="pricing">
-  <div class="sec-inner">
-    <div class="sec-tag" style="color:var(--sky)">Pricing</div>
-    <h2 class="sec-title sec-title-white">Simple, Transparent Pricing</h2>
-    <p class="sec-sub sec-sub-white">Start free. Upgrade when you're ready. No hidden fees, no subscriptions tricks.</p>
-    <div class="price-grid">
-      <div class="price-card">
-        <div class="price-name">Basic</div>
-        <div class="price-amount"><span class="price-currency"></span>0 <span style="font-size:20px">EGP</span></div>
-        <div class="price-per">Forever free</div>
-        <div class="price-divider"></div>
-        <ul class="price-feats">
-          <li>10 questions per day</li>
-          <li>Practice Mode</li>
-          <li>Basic streak tracking</li>
-          <li>Leaderboard access</li>
-          <li>My Notes</li>
-        </ul>
-        <button class="price-btn" onclick="openModal('register')">Get Started Free</button>
-      </div>
-      <div class="price-card price-popular">
-        <div class="pop-badge">⭐ Most Popular</div>
-        <div class="price-name">Pro</div>
-        <div class="price-amount">150 <span style="font-size:20px">EGP</span></div>
-        <div class="price-per">per month</div>
-        <div class="price-divider"></div>
-        <ul class="price-feats">
-          <li>Unlimited questions</li>
-          <li>All modules & lectures</li>
-          <li>Practice + Exam Mode</li>
-          <li>Smart Flashcards (SRS)</li>
-          <li>Full Analytics</li>
-          <li>Difficulty filter</li>
-          <li>Wrong Answers Bank</li>
-        </ul>
-        <button class="price-btn" onclick="openModal('register')">Start Pro</button>
-      </div>
-      <div class="price-card price-elite">
-        <div class="price-name">Elite</div>
-        <div class="price-amount">350 <span style="font-size:20px">EGP</span></div>
-        <div class="price-per">per month</div>
-        <div class="price-divider"></div>
-        <ul class="price-feats">
-          <li>Everything in Pro</li>
-          <li>Video explanations</li>
-          <li>1-on-1 mentoring</li>
-          <li>Priority support</li>
-          <li>Early access to new modules</li>
-          <li>Study groups</li>
-        </ul>
-        <button class="price-btn" onclick="openModal('register')">Go Elite</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA -->
-
-<section class="cta-section">
-  <h2 class="cta-title">Your Best Score Starts Here.</h2>
-  <p class="cta-sub">Join thousands of Egyptian medical students already on Nawa. It's free to start.</p>
-  <div class="cta-btns">
-    <button class="btn-hero btn-hero-primary" onclick="openModal('register')" style="background:white;color:var(--blue);">🚀 Start For Free</button>
-    <button class="btn-hero btn-hero-secondary" onclick="openModal('login')">Sign In →</button>
-  </div>
-</section>
-
-<!-- FOOTER -->
-
-<footer class="footer">
-  <div class="footer-grid">
-    <div>
-      <div class="footer-brand-logo">
-        <svg width="32" height="32" viewBox="0 0 100 100" fill="none">
-          <defs><clipPath id="fc"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs>
-          <circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/>
-          <circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#fc)"/>
-          <path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-          <circle cx="50" cy="50" r="46" stroke="white" stroke-width="2.5" fill="none"/>
-        </svg>
-        <span class="footer-brand-name">Nawa</span>
-      </div>
-      <p class="footer-brand-desc">Egypt's smartest medical MCQ platform. Built by medical students, for medical students.</p>
-      <div class="footer-social">
-        <a class="social-btn" href="#" title="Instagram">📸</a>
-        <a class="social-btn" href="#" title="TikTok">🎵</a>
-        <a class="social-btn" href="#" title="Facebook">👥</a>
-        <a class="social-btn" href="https://wa.me/201002429528" target="_blank" title="WhatsApp">💬</a>
-        <a class="social-btn" href="https://t.me/201002429528" target="_blank" title="Telegram">✈️</a>
-      </div>
-    </div>
-    <div class="footer-col">
-      <h4>Platform</h4>
-      <a onclick="scrollTo('features')">Features</a>
-      <a onclick="scrollTo('modules')">Modules</a>
-      <a onclick="scrollTo('pricing')">Pricing</a>
-      <a onclick="openModal('register')">Sign Up Free</a>
-    </div>
-    <div class="footer-col">
-      <h4>Study</h4>
-      <a>Question Bank</a>
-      <a>Flashcards</a>
-      <a>Practice Mode</a>
-      <a>Leaderboard</a>
-    </div>
-    <div class="footer-col">
-      <h4>Contact</h4>
-      <a href="https://wa.me/201002429528" target="_blank">💬 WhatsApp</a>
-      <a href="https://t.me/201002429528" target="_blank">✈️ Telegram</a>
-      <a href="mailto:abdelmonemabdrl@gmail.com">📧 Email</a>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span class="footer-copy">© 2025 Nawa Medical Education. All rights reserved.</span>
-    <span class="footer-tagline">Root Deep. Reach Far.</span>
-  </div>
-</footer>
-
-<!-- MODAL -->
-
-<div class="overlay" id="modal" onclick="closeModal()">
-  <div class="modal" onclick="event.stopPropagation()">
-    <button class="modal-x" onclick="closeModal()">✕</button>
-    <div id="modal-body"></div>
-  </div>
-</div>
-
-</div><!-- end landing -->
-
-<!-- ══ UPGRADE MODAL ══ -->
-
-<div class="upgrade-overlay" id="up-overlay" onclick="closeUpgrade()">
-  <div class="upgrade-modal" onclick="event.stopPropagation()">
-    <button class="upgrade-x" onclick="closeUpgrade()">✕</button>
-    <div style="text-align:center;margin-bottom:24px;"><div style="font-size:22px;font-weight:900;color:white;">🚀 Upgrade Your Plan</div><div style="font-size:14px;color:rgba(255,255,255,.45);margin-top:4px;">Choose the plan that fits your goals</div></div>
-    <div class="up-grid">
-      <div class="up-card pro"><div class="up-name">Pro</div><div class="up-price">150 <span style="font-size:18px">EGP</span></div><div class="up-per">per month</div><div class="up-line"></div><ul class="up-feats"><li>Unlimited questions</li><li>All modules</li><li>Exam Mode</li><li>Flashcards (SRS)</li><li>Full Analytics</li><li>Wrong Answers Bank</li></ul><button class="up-btn" onclick="closeUpgrade()">Start Pro →</button></div>
-      <div class="up-card elite"><div class="up-name">Elite</div><div class="up-price">350 <span style="font-size:18px">EGP</span></div><div class="up-per">per month</div><div class="up-line"></div><ul class="up-feats"><li>Everything in Pro</li><li>Video explanations</li><li>1-on-1 mentoring</li><li>Priority support</li><li>Early access</li></ul><button class="up-btn" onclick="closeUpgrade()">Go Elite →</button></div>
-    </div>
-  </div>
-</div>
-
-<!-- QUIZ SCREEN -->
-
-<div class="quiz-screen" id="quiz-screen">
-  <div class="quiz-top">
-    <span id="q-badge" class="q-mode-badge q-practice-b">PRACTICE</span>
-    <div class="q-prog-wrap"><div class="q-prog"><div class="q-prog-fill" id="q-prog"></div></div></div>
-    <span class="q-timer-display" id="q-timer" style="display:none">1:30</span>
-    <button class="q-exit-btn" onclick="exitQuiz()">✕ Exit</button>
-  </div>
-  <div class="quiz-body" id="quiz-body"></div>
-  <div class="quiz-footer">
-    <span class="q-counter" id="q-counter">Q 1/10</span>
-    <div class="q-footer-btns">
-      <button class="q-action-btn q-bm-btn" id="q-bm-btn" onclick="toggleBM()" title="Bookmark">🔖</button>
-      <button class="q-action-btn q-note-btn" id="q-note-btn" onclick="toggleNoteArea()" title="Take Note">📝</button>
-      <button class="q-action-btn q-report-btn" onclick="reportQ()" title="Report Question">⚠️</button>
-      <button class="q-next-btn" onclick="nextQ()">Next →</button>
-    </div>
-  </div>
-</div>
-
-<!-- UPGRADE MODAL -->
-
-<div class="upgrade-overlay" id="upgrade-overlay" onclick="closeUpgrade()">
-  <div class="upgrade-modal" onclick="event.stopPropagation()">
-    <button class="upgrade-x" onclick="closeUpgrade()">✕</button>
-    <div class="upgrade-title">🚀 Upgrade Your Plan</div>
-    <div class="upgrade-sub">Choose the plan that fits your goals</div>
-    <div class="upgrade-grid">
-      <div class="up-card">
-        <div class="up-name">Pro</div>
-        <div class="up-price">150 <span style="font-size:18px">EGP</span></div>
-        <div class="up-per">per month</div>
-        <div class="up-line"></div>
-        <ul class="up-feats"><li>Unlimited questions</li><li>All modules & lectures</li><li>Exam Mode</li><li>Smart Flashcards (SRS)</li><li>Full Analytics</li><li>Difficulty filter</li><li>Wrong Answers Bank</li></ul>
-        <button class="up-btn popular" style="background:var(--sky);color:var(--navy);border:none;" onclick="closeUpgrade()">Start Pro →</button>
-      </div>
-      <div class="up-card elite">
-        <div class="up-name">Elite</div>
-        <div class="up-price">350 <span style="font-size:18px">EGP</span></div>
-        <div class="up-per">per month</div>
-        <div class="up-line"></div>
-        <ul class="up-feats"><li>Everything in Pro</li><li>Video explanations</li><li>1-on-1 mentoring</li><li>Priority support</li><li>Early access</li><li>Study groups</li></ul>
-        <button class="up-btn" onclick="closeUpgrade()">Go Elite →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div><!-- /landing -->
-
-<div class="upgrade-overlay" id="up-overlay" onclick="closeUpgrade()">
-  <div class="upgrade-modal" onclick="event.stopPropagation()">
-    <button class="upgrade-x" onclick="closeUpgrade()">✕</button>
-    <div style="text-align:center;margin-bottom:24px;"><div style="font-size:22px;font-weight:900;color:white;">🚀 Upgrade Your Plan</div><div style="font-size:14px;color:rgba(255,255,255,.45);margin-top:4px;">Choose the plan that fits your goals</div></div>
-    <div class="up-grid">
-      <div class="up-card pro"><div class="up-name">Pro</div><div class="up-price">150 <span style="font-size:18px">EGP</span></div><div class="up-per">per month</div><div class="up-line"></div><ul class="up-feats"><li>Unlimited questions</li><li>All modules</li><li>Exam Mode</li><li>Flashcards (SRS)</li><li>Full Analytics</li><li>Wrong Answers Bank</li></ul><button class="up-btn" onclick="closeUpgrade()">Start Pro →</button></div>
-      <div class="up-card elite"><div class="up-name">Elite</div><div class="up-price">350 <span style="font-size:18px">EGP</span></div><div class="up-per">per month</div><div class="up-line"></div><ul class="up-feats"><li>Everything in Pro</li><li>Video explanations</li><li>1-on-1 mentoring</li><li>Priority support</li></ul><button class="up-btn" onclick="closeUpgrade()">Go Elite →</button></div>
-    </div>
-  </div>
-</div>
-
-<div id="app" style="display:none;">
 
 <!-- TOP NAV -->
 
@@ -1196,272 +535,166 @@ body.dark .card-title,.body.dark .sc-val,.body.dark .q-text,.body.dark .mod-name
   </div>
 </div>
 
-</div><!-- /app -->
-
 <script>
-// === LANDING & AUTH ===
-
-var SURL='https://zphhtwarzqhsmqsawknt.supabase.co';
-var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
-
-// Nav scroll effect
-window.addEventListener('scroll',function(){
-  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50);
-});
-
-// Particles
-(function(){
-  var c=document.getElementById('particles');
-  for(var i=0;i<20;i++){
-    var p=document.createElement('div');
-    p.className='particle';
-    p.style.cssText='left:'+Math.random()*100+'%;animation-duration:'+(8+Math.random()*12)+'s;animation-delay:'+(-Math.random()*20)+'s;width:'+(2+Math.random()*3)+'px;height:'+(2+Math.random()*3)+'px;opacity:'+(0.2+Math.random()*0.4)+';';
-    c.appendChild(p);
-  }
-})();
-
-// ── MODAL ──
-var MODS={'1':'MED101 Body Structure · MED102 Intro to Disease · MED103 Infections & Immunology · MED104 Psychology · MED105 Blood System · MED106 Musculoskeletal','2':'MED210 Cardiovascular · MED211 Respiratory · MED215 Endocrine · MED216 Digestive','3':'MED319 CNS · MED320 Genitourinary · MED323 General Medicine · MED324 Surgery · MED325 Tropical Medicine','4':'MED430 Medicine · MED431 Cardiopulmonary · MED432 Investigative · MED433 Pediatrics · MED434 Ophthalmology · MED435 ENT · MED436 Neuropsychiatry','5':'MED538 Surgery · MED539 Orthopedics · MED541 OB/GYN · MED542 Family Medicine · MED543 Dermatology','intern':'Internal Medicine · Surgery · Pediatrics · OB/GYN · Emergency Medicine'};
-var PHONE_LEN={'+20':10,'+966':9,'+971':9,'+965':8,'+974':8,'+44':10,'+1':10};
-
-
-
-
-
-
-
-
-// Check if already logged in
-(async function(){
-  var tk=localStorage.getItem('nawa_tk');
-  if(tk){
-    var r=await fetch(SURL+'/auth/v1/user',{headers:{'apikey':SKEY,'Authorization':'Bearer '+tk}});
-    if(r.ok){showDash();}
-    else localStorage.removeItem('nawa_tk');
-  }
-})();
-
-
-// === SHOW/HIDE ===
-
-
-// closeUpgrade defined elsewhere
-
-var SURL='https://zphhtwarzqhsmqsawknt.supabase.co';
-var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
-
-// Nav scroll effect
-window.addEventListener('scroll',function(){
-  document.getElementById('nav').classList.toggle('scrolled',window.scrollY>50);
-});
-
-// Particles
-(function(){
-  var c=document.getElementById('particles');
-  for(var i=0;i<20;i++){
-    var p=document.createElement('div');
-    p.className='particle';
-    p.style.cssText='left:'+Math.random()*100+'%;animation-duration:'+(8+Math.random()*12)+'s;animation-delay:'+(-Math.random()*20)+'s;width:'+(2+Math.random()*3)+'px;height:'+(2+Math.random()*3)+'px;opacity:'+(0.2+Math.random()*0.4)+';';
-    c.appendChild(p);
-  }
-})();
-
-function scrollTo(id){document.getElementById(id).scrollIntoView({behavior:'smooth'});}
-
-// ── MODAL ──
-var MODS={'1':'MED101 Body Structure · MED102 Intro to Disease · MED103 Infections & Immunology · MED104 Psychology · MED105 Blood System · MED106 Musculoskeletal','2':'MED210 Cardiovascular · MED211 Respiratory · MED215 Endocrine · MED216 Digestive','3':'MED319 CNS · MED320 Genitourinary · MED323 General Medicine · MED324 Surgery · MED325 Tropical Medicine','4':'MED430 Medicine · MED431 Cardiopulmonary · MED432 Investigative · MED433 Pediatrics · MED434 Ophthalmology · MED435 ENT · MED436 Neuropsychiatry','5':'MED538 Surgery · MED539 Orthopedics · MED541 OB/GYN · MED542 Family Medicine · MED543 Dermatology','intern':'Internal Medicine · Surgery · Pediatrics · OB/GYN · Emergency Medicine'};
-var PHONE_LEN={'+20':10,'+966':9,'+971':9,'+965':8,'+974':8,'+44':10,'+1':10};
-
-function openModal(t){document.getElementById('modal').classList.add('open');if(t==='register')renderReg();else renderLogin();}
-function closeModal(){document.getElementById('modal').classList.remove('open');}
-
-function svgLogo(){return'<svg width="28" height="28" viewBox="0 0 100 100" fill="none"><defs><clipPath id="mc"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="#0A1628"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#mc)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="#0A1628" stroke-width="2.5" fill="none"/></svg>';}
-
-function renderReg(){
-  document.getElementById('modal-body').innerHTML=
-  '<div class="modal-logo">'+svgLogo()+'<span class="modal-logo-text">NAWA</span></div>'+
-  '<div class="modal-title">Create your account</div>'+
-  '<div class="modal-sub">Join Nawa — Free to start, no credit card needed</div>'+
-  '<div id="amsg"></div>'+
-  '<div class="form-row2"><div><label class="form-lbl">First Name *</label><input class="form-inp" id="r-fn" placeholder="Ahmed"></div>'+
-  '<div><label class="form-lbl">Last Name *</label><input class="form-inp" id="r-ln" placeholder="Hassan"></div></div>'+
-  '<label class="form-lbl">Phone Number</label>'+
-  '<div class="phone-row"><select class="phone-code" id="r-code" onchange="chkPhone()">'+
-  '<option value="+20">🇪🇬 +20</option><option value="+966">🇸🇦 +966</option>'+
-  '<option value="+971">🇦🇪 +971</option><option value="+965">🇰🇼 +965</option>'+
-  '<option value="+44">🇬🇧 +44</option><option value="+1">🇺🇸 +1</option>'+
-  '</select><input class="phone-inp" id="r-phone" placeholder="01xxxxxxxxx" oninput="chkPhone()"></div>'+
-  '<div class="ph-hint" id="ph-hint"></div>'+
-  '<label class="form-lbl">University</label>'+
-  '<select class="form-sel" id="r-uni">'+
-  '<option value="">Select your university</option>'+
-  '<optgroup label="🏛️ Government"><option>Ain Shams University</option><option>Al-Azhar University</option><option>Alexandria University</option><option>Assiut University</option><option>Cairo University (Kasr Al Ainy)</option><option>Mansoura University</option><option>Tanta University</option><option>Zagazig University</option><option>Beni Suef University</option><option>Minia University</option><option>Helwan University</option><option>Military Medical College</option></optgroup>'+
-  '<optgroup label="🏢 Private"><option>New Giza University (NGU)</option><option>Badr University (BUC)</option><option>Future University</option><option>6th October University (O6U)</option><option>MUST University</option><option>Nahda University</option><option>Sinai University</option></optgroup>'+
-  '<optgroup label="🏛️ National"><option>Ain Shams National University</option><option>Alexandria National University</option><option>Cairo National University</option><option>King Salman International University</option><option>Mansoura National University</option></optgroup>'+
-  '<option value="other">🌍 Other</option></select>'+
-  '<label class="form-lbl">Academic Year</label>'+
-  '<select class="form-sel" id="r-year" onchange="showMods()">'+
-  '<option value="">Select your year</option>'+
-  '<option value="1">1st Year</option><option value="2">2nd Year</option><option value="3">3rd Year</option>'+
-  '<option value="4">4th Year</option><option value="5">5th Year</option><option value="intern">Intern</option>'+
-  '</select>'+
-  '<div class="mods-box" id="mods-box"></div>'+
-  '<label class="form-lbl">Email *</label>'+
-  '<input class="form-inp" type="email" id="r-email" placeholder="ahmed@gmail.com">'+
-  '<label class="form-lbl">Password *</label>'+
-  '<div class="pw-wrap"><input class="pw-inp" type="password" id="r-pw" placeholder="At least 6 characters" oninput="chkPw()"><button class="pw-eye" type="button" onclick="tgPw(\'r-pw\',this)">👁</button></div>'+
-  '<label class="form-lbl">Confirm Password *</label>'+
-  '<div class="pw-wrap"><input class="pw-inp" type="password" id="r-pw2" placeholder="Repeat password" oninput="chkPw()"><button class="pw-eye" type="button" onclick="tgPw(\'r-pw2\',this)">👁</button></div>'+
-  '<div class="pw-hint" id="pw-hint"></div>'+
-  '<button class="form-submit" id="r-btn" onclick="doReg()">Create Account →</button>'+
-  '<div class="form-switch" style="margin-top:14px;">Already have an account? <span onclick="renderLogin()">Sign in</span></div>';
+function tgEyeBtn(btn){
+  var id=btn.getAttribute('data-tg');
+  var el=document.getElementById(id);
+  if(!el)return;
+  el.type=el.type==='password'?'text':'password';
+  btn.textContent=el.type==='password'?'Show':'Hide';
 }
 
-function renderLogin(){
-  document.getElementById('modal-body').innerHTML=
-  '<div class="modal-logo">'+svgLogo()+'<span class="modal-logo-text">NAWA</span></div>'+
-  '<div class="modal-title">Welcome back! 👋</div>'+
-  '<div class="modal-sub">Sign in to continue your journey</div>'+
-  '<div id="amsg"></div>'+
-  '<label class="form-lbl">Email</label>'+
-  '<input class="form-inp" type="email" id="l-email" placeholder="ahmed@gmail.com">'+
-  '<label class="form-lbl">Password</label>'+
-  '<div class="pw-wrap"><input class="pw-inp" type="password" id="l-pw" placeholder="Your password" onkeydown="if(event.key===\'Enter\')doLogin()"><button class="pw-eye" type="button" onclick="tgPw(\'l-pw\',this)">👁</button></div>'+
-  '<div class="forgot-link"><span onclick="showForgot()">Forgot password?</span></div>'+
-  '<button class="form-submit" id="l-btn" onclick="doLogin()">Sign In →</button>'+
-  '<div class="form-switch" style="margin-top:14px;">New to Nawa? <span onclick="renderReg()">Create free account</span></div>';
+function buildRegForm(){
+  var f=document.getElementById('am-form');
+  f.innerHTML=
+  '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+  '<div><label style="'+LBL_S+'">First Name *</label><input style="'+INP_S+'" id="rg-fn" placeholder="Ahmed"></div>' +
+  '<div><label style="'+LBL_S+'">Last Name</label><input style="'+INP_S+'" id="rg-ln" placeholder="Hassan"></div></div>' +
+  '<label style="'+LBL_S+'">University</label>' +
+  '<select style="'+SEL_S+'" id="rg-uni">' +
+  '<option value="">Select university</option>' +
+  '<optgroup label="Government"><option>Ain Shams University</option><option>Al-Azhar University</option><option>Alexandria University</option><option>Assiut University</option><option>Cairo University (Kasr Al Ainy)</option><option>Mansoura University</option><option>Tanta University</option><option>Zagazig University</option><option>Beni Suef University</option><option>Minia University</option><option>Military Medical College</option></optgroup>' +
+  '<optgroup label="Private"><option>New Giza University (NGU)</option><option>Badr University (BUC)</option><option>Future University</option><option>6th October University (O6U)</option><option>MUST University</option></optgroup>' +
+  '<optgroup label="National"><option>Ain Shams National University</option><option>Alexandria National University</option><option>Cairo National University</option><option>King Salman International University</option><option>Mansoura National University</option></optgroup>' +
+  '<option value="other">Other</option></select>' +
+  '<label style="'+LBL_S+'">Academic Year</label>' +
+  '<select style="'+SEL_S+'" id="rg-year"><option value="">Select year</option><option value="1">1st Year</option><option value="2">2nd Year</option><option value="3">3rd Year</option><option value="4">4th Year</option><option value="5">5th Year</option><option value="intern">Intern</option></select>' +
+  '<label style="'+LBL_S+'">Email *</label><input style="'+INP_S+'" type="email" id="rg-email" placeholder="your@email.com">' +
+  '<label style="'+LBL_S+'">Password *</label>' +
+  '<div style="position:relative;margin-bottom:13px;">' +
+  '<input style="width:100%;padding:12px 44px 12px 14px;border:2px solid rgba(10,22,40,.1);border-radius:11px;font-family:Outfit,sans-serif;font-size:14px;color:#0A1628;outline:none;" type="password" id="rg-pw" placeholder="Min 6 characters">' +
+  '<button type="button" data-tg="rg-pw" id="eye-rg-pw" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:#8A9BB5;font-family:Outfit,sans-serif;font-weight:600;">Show</button></div>' +
+  '<label style="'+LBL_S+'">Confirm Password *</label>' +
+  '<div style="position:relative;margin-bottom:13px;">' +
+  '<input style="width:100%;padding:12px 44px 12px 14px;border:2px solid rgba(10,22,40,.1);border-radius:11px;font-family:Outfit,sans-serif;font-size:14px;color:#0A1628;outline:none;" type="password" id="rg-pw2" placeholder="Repeat password">' +
+  '<button type="button" data-tg="rg-pw2" id="eye-rg-pw2" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:#8A9BB5;font-family:Outfit,sans-serif;font-weight:600;">Show</button></div>' +
+  '<button style="'+BTN_S+'" id="rg-btn">Create Account</button>' +
+  '<div style="text-align:center;margin-top:13px;font-size:13px;color:#8A9BB5;">Have an account? <span id="go-login" style="color:#4AA8E8;font-weight:700;cursor:pointer;">Sign in</span></div>';
+  // Attach events
+  document.getElementById('eye-rg-pw').addEventListener('click',function(){tgEyeBtn(this);});
+  document.getElementById('eye-rg-pw2').addEventListener('click',function(){tgEyeBtn(this);});
+  document.getElementById('rg-btn').addEventListener('click',doReg);
+  document.getElementById('go-login').addEventListener('click',function(){switchTab('login');});
 }
 
-function showForgot(){
-  document.getElementById('modal-body').innerHTML=
-  '<div class="modal-logo">'+svgLogo()+'<span class="modal-logo-text">NAWA</span></div>'+
-  '<div class="modal-title">Reset Password</div>'+
-  '<div class="modal-sub">Enter your email and we\'ll send you a reset link</div>'+
-  '<div id="amsg"></div>'+
-  '<label class="form-lbl">Email</label>'+
-  '<input class="form-inp" type="email" id="f-email" placeholder="ahmed@gmail.com">'+
-  '<button class="form-submit" id="f-btn" onclick="doForgot()">Send Reset Link →</button>'+
-  '<div class="form-switch" style="margin-top:14px;"><span onclick="renderLogin()">← Back to Sign In</span></div>';
+function buildLoginForm(){
+  var f=document.getElementById('am-form');
+  f.innerHTML=
+  '<label style="'+LBL_S+'">Email</label><input style="'+INP_S+'" type="email" id="lg-email" placeholder="your@email.com">' +
+  '<label style="'+LBL_S+'">Password</label>' +
+  '<div style="position:relative;margin-bottom:13px;">' +
+  '<input style="width:100%;padding:12px 44px 12px 14px;border:2px solid rgba(10,22,40,.1);border-radius:11px;font-family:Outfit,sans-serif;font-size:14px;color:#0A1628;outline:none;" type="password" id="lg-pw" placeholder="Your password">' +
+  '<button type="button" data-tg="lg-pw" id="eye-lg-pw" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:14px;color:#8A9BB5;font-family:Outfit,sans-serif;font-weight:600;">Show</button></div>' +
+  '<div style="text-align:right;margin-bottom:13px;"><span id="forgot-link" style="font-size:12px;color:#4AA8E8;font-weight:600;cursor:pointer;">Forgot password?</span></div>' +
+  '<button style="'+BTN_S+'" id="lg-btn">Sign In</button>' +
+  '<div style="text-align:center;margin-top:13px;font-size:13px;color:#8A9BB5;">No account? <span id="go-reg" style="color:#4AA8E8;font-weight:700;cursor:pointer;">Create free account</span></div>';
+  // Attach events
+  document.getElementById('eye-lg-pw').addEventListener('click',function(){tgEyeBtn(this);});
+  document.getElementById('lg-btn').addEventListener('click',doLogin);
+  document.getElementById('lg-pw').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+  document.getElementById('forgot-link').addEventListener('click',buildForgotForm);
+  document.getElementById('go-reg').addEventListener('click',function(){switchTab('reg');});
 }
+
+function buildForgotForm(){
+  var f=document.getElementById('am-form');
+  f.innerHTML=
+  '<label style="'+LBL_S+'">Email</label><input style="'+INP_S+'" type="email" id="fg-email" placeholder="your@email.com">' +
+  '<button style="'+BTN_S+'" id="fg-btn">Send Reset Link</button>' +
+  '<div style="text-align:center;margin-top:13px;"><span id="back-login" style="font-size:13px;color:#4AA8E8;font-weight:700;cursor:pointer;">Back to Sign In</span></div>';
+  document.getElementById('fg-btn').addEventListener('click',doForgot);
+  document.getElementById('back-login').addEventListener('click',function(){switchTab('login');});
+}
+
+
+// ── LANDING & AUTH ──
+var MODS_PREVIEW={'1':'MED101-MED106','2':'MED210-MED216','3':'MED319-MED326','4':'MED430-MED436','5':'MED538-MED543','intern':'Internship Rotations'};
+var PHL={'+20':10,'+966':9,'+971':9,'+44':10,'+1':10};
+var INP_S='width:100%;padding:12px 14px;border:2px solid rgba(10,22,40,.1);border-radius:11px;font-family:Outfit,sans-serif;font-size:14px;color:#0A1628;outline:none;margin-bottom:13px;background:white;';
+var SEL_S='width:100%;padding:12px 14px;border:2px solid rgba(10,22,40,.1);border-radius:11px;font-family:Outfit,sans-serif;font-size:14px;color:#0A1628;outline:none;appearance:none;margin-bottom:13px;background:white;';
+var LBL_S='font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#0A1628;display:block;margin-bottom:5px;';
+var BTN_S='width:100%;padding:14px;background:linear-gradient(135deg,#0D3B7A,#1560BD);color:white;border:none;border-radius:11px;font-family:Outfit,sans-serif;font-size:14px;font-weight:700;cursor:pointer;';
+
+function showLandingScreen(){
+  document.getElementById('landing-screen').style.display='block';
+}
+function hideLandingScreen(){
+  document.getElementById('landing-screen').style.display='none';
+}
+function openLoginModal(){
+  document.getElementById('auth-modal').style.display='flex';
+  switchTab('reg');
+}
+function closeLoginModal(){
+  document.getElementById('auth-modal').style.display='none';
+  var m=document.getElementById('am-msg');if(m)m.innerHTML='';
+}
+function switchTab(t){
+  var tr=document.getElementById('tab-reg'),tl=document.getElementById('tab-login');
+  var ON='flex:1;padding:10px;border-radius:9px;border:none;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:white;color:#0A1628;box-shadow:0 2px 8px rgba(10,22,40,.08);';
+  var OFF='flex:1;padding:10px;border-radius:9px;border:none;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:#8A9BB5;';
+  if(tr)tr.style.cssText=t==='reg'?ON:OFF;
+  if(tl)tl.style.cssText=t==='login'?ON:OFF;
+  var m=document.getElementById('am-msg');if(m)m.innerHTML='';
+  if(t==='reg')buildRegForm();else buildLoginForm();
+}
+function amMsg(txt,ok){
+  var m=document.getElementById('am-msg');
+  if(m)m.innerHTML='<div style="padding:10px 14px;border-radius:9px;font-size:12px;font-weight:600;margin-bottom:13px;'+(ok?'background:rgba(16,185,129,.08);color:#065f46;border:1px solid rgba(16,185,129,.2);':'background:rgba(239,68,68,.08);color:#991b1b;border:1px solid rgba(239,68,68,.2);')+'">'+txt+'</div>';
+}
+function gav(id){var el=document.getElementById(id);return el?(el.value||'').trim():'';}
+
+
+
+
+
+
+
 
 async function doForgot(){
-  var email=document.getElementById('f-email').value.trim();
-  if(!email){setMsg('Enter your email',false);return;}
-  var btn=document.getElementById('f-btn');
+  var email=gav('fg-email'),btn=document.getElementById('fg-btn');
+  if(!email){amMsg('Enter your email',false);return;}
   btn.disabled=true;btn.textContent='Sending...';
-  var r=await fetch(SURL+'/auth/v1/recover',{method:'POST',
-    headers:{'Content-Type':'application/json','apikey':SKEY},
-    body:JSON.stringify({email:email})});
-  btn.disabled=false;btn.textContent='Send Reset Link →';
-  if(r.ok){setMsg('✅ Reset link sent! Check your email.',true);}
-  else{setMsg('Error sending email. Try again.',false);}
+  var r=await fetch(SURL+'/auth/v1/recover',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email})});
+  btn.disabled=false;btn.textContent='Send Reset Link';
+  r.ok?amMsg('✅ Reset link sent! Check your email.',true):amMsg('Error sending email.',false);
 }
-
-function showMods(){
-  var yr=document.getElementById('r-year').value;
-  var b=document.getElementById('mods-box');
-  if(yr&&MODS[yr]){b.style.display='block';b.innerHTML='<strong style="color:#0D3B7A">Modules: </strong>'+MODS[yr];}
-  else b.style.display='none';
-}
-function chkPhone(){
-  var code=document.getElementById('r-code').value;
-  var num=(document.getElementById('r-phone').value||'').replace(/\D/g,'');
-  var h=document.getElementById('ph-hint');
-  if(!h||!num){if(h)h.textContent='';return;}
-  var exp=PHONE_LEN[code]||10;
-  if(num.length===exp){h.textContent='✓ Valid number';h.className='ph-hint ph-ok';}
-  else{h.textContent=exp+' digits required for '+code+' ('+num.length+'/'+exp+')';h.className='ph-hint ph-no';}
-}
-function chkPw(){
-  var p1=document.getElementById('r-pw');
-  var p2=document.getElementById('r-pw2');
-  var m=document.getElementById('pw-hint');
-  if(!p1||!p2||!m)return;
-  if(!p2.value){m.textContent='';return;}
-  if(p1.value===p2.value){m.textContent='✓ Passwords match';m.className='pw-hint pw-ok';}
-  else{m.textContent='✗ Passwords do not match';m.className='pw-hint pw-no';}
-}
-function tgPw(id,btn){
-  var el=document.getElementById(id);if(!el)return;
-  el.type=el.type==='password'?'text':'password';
-  btn.textContent=el.type==='password'?'👁':'🙈';
-}
-function setMsg(txt,ok){
-  var m=document.getElementById('amsg');
-  if(m)m.innerHTML='<div class="auth-msg '+(ok?'auth-ok':'auth-er')+'">'+txt+'</div>';
-}
-function gv(id){var el=document.getElementById(id);return el?(el.value||'').trim():'';}
 
 async function doReg(){
-  var fn=gv('r-fn'),ln=gv('r-ln'),email=gv('r-email'),pw=gv('r-pw'),pw2=gv('r-pw2');
-  var uni=document.getElementById('r-uni').value;
-  var year=document.getElementById('r-year').value;
-  var code=document.getElementById('r-code').value;
-  var phone=(document.getElementById('r-phone').value||'').replace(/\D/g,'');
-  if(!fn){setMsg('Please enter your first name',false);return;}
-  if(!email||!email.includes('@')){setMsg('Please enter a valid email',false);return;}
-  if(pw.length<6){setMsg('Password must be at least 6 characters',false);return;}
-  if(pw!==pw2){setMsg('Passwords do not match',false);return;}
-  if(phone){var exp=PHONE_LEN[code]||10;if(phone.length!==exp){setMsg('Phone should be '+exp+' digits for '+code,false);return;}}
-  var btn=document.getElementById('r-btn');
-  btn.disabled=true;btn.textContent='Creating account...';
+  var fn=gav('rg-fn'),ln=gav('rg-ln'),email=gav('rg-email'),pw=gav('rg-pw'),pw2=gav('rg-pw2');
+  var uni=document.getElementById('rg-uni').value,year=document.getElementById('rg-year').value;
+  if(!fn){amMsg('Enter your first name',false);return;}
+  if(!email||!email.includes('@')){amMsg('Enter a valid email',false);return;}
+  if(pw.length<6){amMsg('Password must be at least 6 characters',false);return;}
+  if(pw!==pw2){amMsg('Passwords do not match',false);return;}
+  var btn=document.getElementById('rg-btn');btn.disabled=true;btn.textContent='Creating account...';
   try{
-    var r=await fetch(SURL+'/auth/v1/signup',{method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SKEY},
-      body:JSON.stringify({email:email,password:pw,data:{first_name:fn,last_name:ln}})});
-    var data=await r.json();
-    if(data.access_token||(data.user&&data.user.id)){
-      var uid=data.user?data.user.id:null;
-      if(data.access_token&&uid){
-        // Save profile
-        await fetch(SURL+'/rest/v1/profiles',{method:'POST',
-          headers:{'Content-Type':'application/json','apikey':SKEY,'Authorization':'Bearer '+data.access_token,'Prefer':'return=representation'},
-          body:JSON.stringify({id:uid,email:email,first_name:fn,last_name:ln,university:uni,year:year,phone:code+phone,plan:'basic'})});
-        localStorage.setItem('nawa_tk',data.access_token);
-        showDash();
-      }else{
-        setMsg('✅ Account created! Please sign in.',true);
-        setTimeout(renderLogin,1500);
-      }
-    }else{setMsg(data.error_description||data.msg||'Registration failed. Try again.',false);}
-  }catch(e){setMsg('Network error. Please try again.',false);}
-  btn.disabled=false;btn.textContent='Create Account →';
+    var r=await fetch(SURL+'/auth/v1/signup',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email,password:pw,data:{first_name:fn,last_name:ln}})});
+    var d=await r.json();
+    if(d.access_token&&d.user){
+      TOKEN=d.access_token;localStorage.setItem('nawa_tk',TOKEN);CU=d.user;
+      await apiFetch('POST','/rest/v1/profiles',{id:d.user.id,email:email,first_name:fn,last_name:ln,university:uni,year:year,plan:'basic'});
+      await loadProfile();closeLoginModal();hideLandingScreen();goto('home');
+    }else if(d.user){amMsg('✅ Account created! Please sign in.',true);setTimeout(function(){switchTab('login');},1500);}
+    else amMsg(d.error_description||'Registration failed',false);
+  }catch(e){amMsg('Network error. Try again.',false);}
+  btn.disabled=false;btn.textContent='Create Account';
 }
 
 async function doLogin(){
-  var email=gv('l-email'),pw=gv('l-pw');
-  if(!email||!pw){setMsg('Please enter email and password',false);return;}
-  var btn=document.getElementById('l-btn');
-  btn.disabled=true;btn.textContent='Signing in...';
+  var email=gav('lg-email'),pw=gav('lg-pw');
+  if(!email||!pw){amMsg('Enter email and password',false);return;}
+  var btn=document.getElementById('lg-btn');btn.disabled=true;btn.textContent='Signing in...';
   try{
-    var r=await fetch(SURL+'/auth/v1/token?grant_type=password',{method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SKEY},
-      body:JSON.stringify({email:email,password:pw})});
-    var data=await r.json();
-    if(data.access_token){
-      localStorage.setItem('nawa_tk',data.access_token);
-      showDash();
-    }else{setMsg(data.error_description||'Wrong email or password',false);}
-  }catch(e){setMsg('Network error. Please try again.',false);}
-  btn.disabled=false;btn.textContent='Sign In →';
+    var r=await fetch(SURL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email,password:pw})});
+    var d=await r.json();
+    if(d.access_token){
+      TOKEN=d.access_token;localStorage.setItem('nawa_tk',TOKEN);CU=d.user;
+      await loadProfile();closeLoginModal();hideLandingScreen();goto('home');
+    }else amMsg(d.error_description||'Wrong email or password',false);
+  }catch(e){amMsg('Network error. Try again.',false);}
+  btn.disabled=false;btn.textContent='Sign In';
 }
-
-
-function showLanding(){document.getElementById('landing').style.display='block';var d=document.getElementById('app');if(d)d.style.display='none';}
-function showDash(){document.getElementById('landing').style.display='none';var d=document.getElementById('app');if(d)d.style.display='block';if(typeof goto==='function')goto('home');}
-// Check if already logged in
-(async function(){
-  var tk=localStorage.getItem('nawa_tk');
-  if(tk){
-    var r=await fetch(SURL+'/auth/v1/user',{headers:{'apikey':SKEY,'Authorization':'Bearer '+tk}});
-    if(r.ok){showDash();}
-    else localStorage.removeItem('nawa_tk');
-  }
-})();
-
-
-
-// === DASHBOARD ===
 
 
 var SURL='https://zphhtwarzqhsmqsawknt.supabase.co';
@@ -1474,10 +707,10 @@ var darkMode=localStorage.getItem('nawa_dark')==='1';
 window.addEventListener('load',async function(){
   if(darkMode){document.body.classList.add('dark');document.getElementById('dark-btn').textContent='☀️';}
   var tk=localStorage.getItem('nawa_tk');
-  if(!tk){showLanding();return;}
+  if(!tk){showLandingScreen();return;}
   TOKEN=tk;
   var r=await apiFetch('GET','/auth/v1/user');
-  if(!r.ok){localStorage.removeItem('nawa_tk');showLanding();return;}
+  if(!r.ok){localStorage.removeItem('nawa_tk');showLandingScreen();return;}
   CU=r.data;
   await loadProfile();
   goto('home');
@@ -1506,7 +739,7 @@ async function loadProfile(){
 async function doLogout(){
   await apiFetch('POST','/auth/v1/logout');
   localStorage.removeItem('nawa_tk');
-  showLanding();
+  showLandingScreen();
 }
 
 function toggleDark(){
@@ -2462,7 +1695,53 @@ var r=await apiFetch(‘PUT’,’/auth/v1/user’,{password:newPw});
 if(r.ok)alert(‘✅ Password changed successfully!’);
 else alert(‘Error changing password. Try again.’);
 }
-
 </script>
+
+<div id="landing-screen" style="display:none;position:fixed;inset:0;z-index:1000;background:#0A1628;overflow-y:auto;">
+  <nav style="position:sticky;top:0;height:64px;background:rgba(10,22,40,.95);border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;padding:0 clamp(16px,4vw,60px);backdrop-filter:blur(20px);">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="30" height="30" viewBox="0 0 100 100" fill="none"><defs><clipPath id="lsvg"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#lsvg)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="white" stroke-width="2.5" fill="none"/></svg>
+      <span style="font-size:20px;font-weight:900;letter-spacing:5px;text-transform:uppercase;color:white;">Nawa</span>
+    </div>
+    <button onclick="openLoginModal()" style="padding:10px 24px;background:#4AA8E8;color:#0A1628;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Get Started</button>
+  </nav>
+  <div style="min-height:calc(100vh - 64px);display:flex;align-items:center;justify-content:center;text-align:center;padding:60px 24px;position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 35%,rgba(74,168,232,.14) 0%,transparent 65%);"></div>
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(74,168,232,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,168,232,.04) 1px,transparent 1px);background-size:52px 52px;"></div>
+    <div style="position:relative;z-index:2;max-width:720px;">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(74,168,232,.1);border:1px solid rgba(74,168,232,.25);color:#4AA8E8;padding:8px 20px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:30px;"><span style="width:7px;height:7px;border-radius:50%;background:#4AA8E8;display:inline-block;"></span> Medical Education Platform</div>
+      <div style="margin-bottom:26px;"><svg width="80" height="80" viewBox="0 0 100 100" fill="none"><defs><clipPath id="hsvg"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.06)"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#hsvg)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="white" stroke-width="2" fill="none"/></svg></div>
+      <h1 style="font-size:clamp(42px,8vw,80px);font-weight:900;color:white;line-height:.95;letter-spacing:-3px;margin-bottom:16px;">The Nucleus of<br><span style="color:#4AA8E8;display:block;">Medical Excellence</span></h1>
+      <p style="font-size:clamp(13px,2vw,16px);font-style:italic;color:rgba(255,255,255,.35);letter-spacing:2px;margin-bottom:14px;">Root Deep. Reach Far.</p>
+      <p style="font-size:clamp(14px,2vw,17px);font-weight:300;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:38px;max-width:500px;margin-left:auto;margin-right:auto;">Master medicine through smart MCQs organized by module, subject, and lecture. Track your progress and rise to the top.</p>
+      <button onclick="openLoginModal()" style="padding:16px 52px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;border:none;font-family:Outfit,sans-serif;background:linear-gradient(135deg,#4AA8E8,#1560BD);color:white;box-shadow:0 8px 32px rgba(74,168,232,.4);">Start Now &#8594;</button>
+      <p style="font-size:12px;color:rgba(255,255,255,.3);margin-top:13px;">Already have an account? <span onclick="openLoginModal()" style="color:#4AA8E8;cursor:pointer;font-weight:600;">Sign in</span></p>
+      <div style="display:flex;gap:clamp(24px,5vw,64px);justify-content:center;margin-top:52px;padding-top:40px;border-top:1px solid rgba(255,255,255,.07);flex-wrap:wrap;">
+        <div><div style="font-size:clamp(26px,4vw,36px);font-weight:900;color:white;letter-spacing:-2px;">344+</div><div style="font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;">Questions</div></div>
+        <div><div style="font-size:clamp(26px,4vw,36px);font-weight:900;color:white;letter-spacing:-2px;">28</div><div style="font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;">Lectures</div></div>
+        <div><div style="font-size:clamp(26px,4vw,36px);font-weight:900;color:white;letter-spacing:-2px;">4</div><div style="font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;">Subjects</div></div>
+        <div><div style="font-size:clamp(26px,4vw,36px);font-weight:900;color:white;letter-spacing:-2px;">Free</div><div style="font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;">To Start</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+
+<div id="auth-modal" style="display:none;position:fixed;inset:0;background:rgba(6,14,26,.85);z-index:2000;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto;backdrop-filter:blur(16px);" onclick="closeLoginModal()">
+  <div onclick="event.stopPropagation()" style="background:white;border-radius:28px;padding:36px;width:100%;max-width:500px;margin:auto;position:relative;box-shadow:0 48px 100px rgba(0,0,0,.4);">
+    <button onclick="closeLoginModal()" style="position:absolute;top:16px;right:16px;background:#F5F8FC;border:none;border-radius:9px;width:34px;height:34px;cursor:pointer;font-size:16px;color:#8A9BB5;">✕</button>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:20px;">
+      <svg width="26" height="26" viewBox="0 0 100 100" fill="none"><defs><clipPath id="msvg"><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50 A46 46 0 0 1 4 50Z"/></clipPath></defs><circle cx="50" cy="50" r="46" fill="#0A1628"/><circle cx="50" cy="50" r="46" fill="#4AA8E8" clip-path="url(#msvg)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="white" stroke-width="2.5" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="#0A1628" stroke-width="2.5" fill="none"/></svg>
+      <span style="font-size:18px;font-weight:900;letter-spacing:5px;text-transform:uppercase;color:#0A1628;">NAWA</span>
+    </div>
+    <div style="display:flex;gap:4px;background:#F5F8FC;border-radius:12px;padding:4px;margin-bottom:22px;">
+      <button id="tab-reg" onclick="switchTab('reg')" style="flex:1;padding:10px;border-radius:9px;border:none;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:white;color:#0A1628;box-shadow:0 2px 8px rgba(10,22,40,.08);">Sign Up</button>
+      <button id="tab-login" onclick="switchTab('login')" style="flex:1;padding:10px;border-radius:9px;border:none;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:#8A9BB5;">Sign In</button>
+    </div>
+    <div id="am-msg"></div>
+    <div id="am-form"></div>
+  </div>
+</div>
 </body>
 </html>
