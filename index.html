@@ -263,6 +263,12 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
 .dash-main{margin-left:220px;}
 .menu-btn{display:none;}
 }
+
+.empty-state{text-align:center;padding:48px 20px;}
+.empty-ico{font-size:48px;margin-bottom:14px;opacity:.5;}
+.empty-t{font-size:16px;font-weight:700;color:#0A1628;margin-bottom:8px;}
+.empty-s{font-size:13px;color:#8A9BB5;}
+.loading-state{text-align:center;padding:40px;color:#8A9BB5;font-size:14px;}
 </style>
 
 </head>
@@ -358,12 +364,33 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
   </nav>
   <div class="sb-ov" id="sb-ov" onclick="closeSB()"></div>
   <aside class="sidebar" id="sidebar">
-    <div class="si-sec"><div class="si-lbl">Menu</div><div class="si on" id="si-home" onclick="goto('home')"><span class="si-ico">🏠</span>Home</div></div>
-    <div class="si-sec"><div class="si-lbl">Study</div><div class="si" id="si-modules" onclick="goto('modules')"><span class="si-ico">📚</span>My Modules</div><div class="si" id="si-history" onclick="goto('history')"><span class="si-ico">🕐</span>Quiz History</div></div>
-    <div class="si-sec"><div class="si-lbl">Performance</div><div class="si" id="si-stats" onclick="goto('stats')"><span class="si-ico">📊</span>My Stats</div><div class="si" id="si-lb" onclick="goto('lb')"><span class="si-ico">🏆</span>Leaderboard</div></div>
-    <div class="si-sec"><div class="si-lbl">More</div><div class="si" id="si-notes" onclick="goto('notes')"><span class="si-ico">📝</span>My Notes</div><div class="si" id="si-flash" onclick="goto('flash')"><span class="si-ico">🃏</span>Flashcards<span class="si-badge">PRO</span></div></div>
-    <div class="si-sec"><div class="si-lbl">Account</div><div class="si" id="si-profile" onclick="goto('profile')"><span class="si-ico">👤</span>My Profile</div><div class="si" onclick="doLogout()"><span class="si-ico">🚪</span>Sign Out</div></div>
-    <div class="sb-upgrade"><p>Upgrade to unlock unlimited questions and premium features.</p><button>Upgrade ✦</button></div>
+    <div class="si-sec"><div class="si-lbl">Menu</div>
+      <div class="si on" id="si-home" onclick="goto('home')"><span class="si-ico">🏠</span>Home</div>
+    </div>
+    <div class="si-sec"><div class="si-lbl">Study</div>
+      <div class="si" id="si-modules" onclick="goto('modules')"><span class="si-ico">📚</span>My Modules</div>
+      <div class="si" id="si-random" onclick="goto('random')"><span class="si-ico">🎲</span>Random Quiz</div>
+      <div class="si" id="si-history" onclick="goto('history')"><span class="si-ico">🕐</span>Quiz History</div>
+    </div>
+    <div class="si-sec"><div class="si-lbl">My Library</div>
+      <div class="si" id="si-favorites" onclick="goto('favorites')"><span class="si-ico">⭐</span>Favorites</div>
+      <div class="si" id="si-bookmarks" onclick="goto('bookmarks')"><span class="si-ico">🔖</span>Bookmarks</div>
+      <div class="si" id="si-mistakes" onclick="goto('mistakes')"><span class="si-ico">❌</span>Mistakes</div>
+      <div class="si" id="si-tasks" onclick="goto('tasks')"><span class="si-ico">✅</span>Tasks</div>
+    </div>
+    <div class="si-sec"><div class="si-lbl">Performance</div>
+      <div class="si" id="si-stats" onclick="goto('stats')"><span class="si-ico">📊</span>My Stats</div>
+      <div class="si" id="si-lb" onclick="goto('lb')"><span class="si-ico">🏆</span>Leaderboard</div>
+    </div>
+    <div class="si-sec"><div class="si-lbl">More</div>
+      <div class="si" id="si-notes" onclick="goto('notes')"><span class="si-ico">📝</span>My Notes</div>
+      <div class="si" id="si-flash" onclick="goto('flash')"><span class="si-ico">🃏</span>Flashcards<span class="si-badge">PRO</span></div>
+    </div>
+    <div class="si-sec"><div class="si-lbl">Account</div>
+      <div class="si" id="si-profile" onclick="goto('profile')"><span class="si-ico">👤</span>My Profile</div>
+      <div class="si" onclick="doLogout()"><span class="si-ico">🚪</span>Sign Out</div>
+    </div>
+    <div class="sb-upgrade"><p>Upgrade to unlock unlimited questions and premium features.</p><button onclick="openUpgradeModal()">Upgrade ✦</button></div>
   </aside>
   <div class="dash-main" id="dash-main"></div>
 </div>
@@ -380,9 +407,10 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
   <div class="quiz-footer">
     <span id="q-counter" style="font-size:12px;font-weight:600;color:#8A9BB5;">Q 1/10</span>
     <div style="display:flex;gap:8px;">
-      <button class="q-bm" id="q-bm-btn" onclick="toggleBM()">🔖</button>
+      <button class="q-bm" id="q-fav-btn" onclick="toggleFav()" title="Favorite">⭐</button>
+      <button class="q-bm" id="q-bm-btn" onclick="toggleBM()" title="Bookmark">🔖</button>
       <button id="q-prev-btn" onclick="prevQ()" style="background:#F5F8FC;color:#0A1628;border:none;padding:11px 16px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;display:none;">← Back</button>
-      <button class="q-next" onclick="nextQ()">Next →</button>
+      <button class="q-next" id="q-next-btn" onclick="nextQ()">Next →</button>
     </div>
   </div>
 </div>
@@ -511,7 +539,12 @@ function renderPage(page){
   else if(page==='modules')renderModules(m);
   else if(page==='lb')renderLB(m);
   else if(page==='profile')renderProfile(m);
-  else if(page==='history')renderHistory(m);else m.innerHTML='<div style="text-align:center;padding:60px 20px;"><div style="font-size:48px;margin-bottom:16px;">🚧</div><div style="font-size:18px;font-weight:700;color:#0A1628;margin-bottom:8px;">'+page.charAt(0).toUpperCase()+page.slice(1)+'</div><div style="font-size:14px;color:#8A9BB5;">Coming soon!</div></div>';
+  else if(page==='history')renderHistory(m);else if(page==='random')renderRandom(m);
+  else if(page==='favorites')renderFavorites(m);
+  else if(page==='bookmarks')renderBookmarks(m);
+  else if(page==='mistakes')renderMistakes(m);
+  else if(page==='tasks')renderTasks(m);
+  else m.innerHTML='<div style="text-align:center;padding:60px 20px;"><div style="font-size:48px;margin-bottom:16px;">🚧</div><div style="font-size:18px;font-weight:700;color:#0A1628;margin-bottom:8px;">'+page.charAt(0).toUpperCase()+page.slice(1)+'</div><div style="font-size:14px;color:#8A9BB5;">Coming soon!</div></div>';
 }
 
 // ── HOME ──
@@ -864,6 +897,8 @@ function renderQuestion(){
   g('q-prog-fill').style.width=pct+'%';
   g('q-counter').textContent='Q '+(quizIdx+1)+'/'+quizQs.length;
   var prevBtn=g('q-prev-btn');if(prevBtn)prevBtn.style.display=quizIdx>0?'block':'none';
+  var favBtn=g('q-fav-btn');if(favBtn)favBtn.style.color=favs[quizQs[quizIdx].id]?'#F59E0B':'';
+  var bmBtn=g('q-bm-btn');if(bmBtn)bmBtn.style.color=bookmarks[quizQs[quizIdx].id]?'#F59E0B':'';
 
   var opts=['a','b','c','d'];
   var optsHTML=opts.map(function(o,i){
@@ -930,10 +965,14 @@ function showResult(){
   '<div class="rs"><div class="rs-v">'+pct+'%</div><div class="rs-l">Accuracy</div></div>'+
   '</div>'+
   '<div class="result-btns">'+
-  '<button class="btn btn-sky" onclick="exitQuiz()" style="padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;">Back to Modules</button>'+
-  '<button class="btn btn-dark" onclick="retryQuiz()" style="padding:12px 24px;border-radius:10px;font-size:14px;font-weight:700;border:1.5px solid rgba(10,22,40,.15);">Try Again</button>'+
+  '<button onclick="exitQuiz()" style="padding:12px 24px;background:#4AA8E8;color:#0A1628;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;">Back to Modules</button>'+
+  '<button onclick="retryQuiz()" style="padding:12px 24px;background:transparent;color:#0A1628;border:1.5px solid rgba(10,22,40,.15);border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;">Try Again</button>'+
+  (wrongAnswers.length>0?'<button onclick="retryMistakes()" style="padding:12px 24px;background:#EF4444;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;">❌ Retry Mistakes ('+wrongAnswers.length+')</button>':'')+
   '</div></div>';
   g('quiz-footer').style.display='none';
+  // Save wrong answers list
+  wrongAnswers = quizAnswers.filter(function(a){return !a.isCorrect;});
+  saveMistakes();
   // Save to DB
   if(currentUser){
     var firstQ=quizQs[0];
@@ -1109,6 +1148,244 @@ function prevQ(){
   quizAnswered=false;
   renderQuestion();
 }
+
+
+
+// ─── FAVORITES ───────────────────────────────────────────────
+var favs = {};
+
+function toggleFav(){
+  var q=quizQs[quizIdx]; if(!q)return;
+  favs[q.id] = !favs[q.id];
+  var btn=g('q-fav-btn');
+  if(btn) btn.style.color = favs[q.id] ? '#F59E0B' : '';
+  if(currentUser){
+    if(favs[q.id]){
+      api('POST','/rest/v1/favorites',{user_id:currentUser.id,question_id:q.id});
+    } else {
+      api('DELETE','/rest/v1/favorites?user_id=eq.'+currentUser.id+'&question_id=eq.'+q.id);
+    }
+  }
+}
+
+async function renderFavorites(m){
+  m.innerHTML = renderPageHeader('⭐','Favorites','Questions you starred') +
+  '<div id="fav-list"><div class="loading-state">Loading...</div></div>';
+  if(!currentUser){m.innerHTML+='<div class="empty-state"><div class="empty-ico">⭐</div><div class="empty-t">Sign in to see favorites</div></div>';return;}
+  var r = await api('GET','/rest/v1/favorites?user_id=eq.'+currentUser.id+'&select=question_id,questions(*)');
+  var items = (r.ok && Array.isArray(r.data)) ? r.data : [];
+  var el = document.getElementById('fav-list');
+  if(!el) return;
+  if(!items.length){
+    el.innerHTML = '<div class="empty-state"><div class="empty-ico">⭐</div><div class="empty-t">No favorites yet</div><div class="empty-s">Press ⭐ on any question during a quiz</div></div>';
+    return;
+  }
+  var qs = items.map(function(i){ return i.questions; }).filter(Boolean);
+  el.innerHTML = renderQuestionList(qs, 'favorite') +
+  (qs.length ? '<div style="text-align:center;margin-top:16px"><button onclick="startFromList(favQs)" style="'+btnStyle('#0A1628','white')+'">▶ Quiz from Favorites ('+qs.length+')</button></div>' : '');
+  window.favQs = qs;
+}
+
+// ─── BOOKMARKS ───────────────────────────────────────────────
+var bookmarks = {};
+
+function toggleBM(){
+  var q=quizQs[quizIdx]; if(!q)return;
+  bookmarks[q.id] = !bookmarks[q.id];
+  var btn=g('q-bm-btn');
+  if(btn) btn.style.color = bookmarks[q.id] ? '#F59E0B' : '';
+  if(currentUser){
+    if(bookmarks[q.id]){
+      api('POST','/rest/v1/bookmarks',{user_id:currentUser.id,question_id:q.id});
+    } else {
+      api('DELETE','/rest/v1/bookmarks?user_id=eq.'+currentUser.id+'&question_id=eq.'+q.id);
+    }
+  }
+}
+
+async function renderBookmarks(m){
+  m.innerHTML = renderPageHeader('🔖','Bookmarks','Saved for later review') +
+  '<div id="bm-list"><div class="loading-state">Loading...</div></div>';
+  if(!currentUser) return;
+  var r = await api('GET','/rest/v1/bookmarks?user_id=eq.'+currentUser.id+'&select=question_id,questions(*)');
+  var items = (r.ok && Array.isArray(r.data)) ? r.data : [];
+  var el = document.getElementById('bm-list');
+  if(!el) return;
+  if(!items.length){
+    el.innerHTML = '<div class="empty-state"><div class="empty-ico">🔖</div><div class="empty-t">No bookmarks yet</div><div class="empty-s">Press 🔖 on any question during a quiz</div></div>';
+    return;
+  }
+  var qs = items.map(function(i){ return i.questions; }).filter(Boolean);
+  el.innerHTML = renderQuestionList(qs, 'bookmark') +
+  (qs.length ? '<div style="text-align:center;margin-top:16px"><button onclick="startFromList(bmQs)" style="'+btnStyle('#0A1628','white')+'">▶ Quiz from Bookmarks ('+qs.length+')</button></div>' : '');
+  window.bmQs = qs;
+}
+
+// ─── MISTAKES ────────────────────────────────────────────────
+var wrongAnswers = [];
+
+async function saveMistakes(){
+  if(!currentUser || !wrongAnswers.length) return;
+  // Save each wrong answer
+  for(var i=0; i<wrongAnswers.length; i++){
+    var a = wrongAnswers[i];
+    // Check if already exists
+    var r = await api('GET','/rest/v1/mistakes?user_id=eq.'+currentUser.id+'&question_id=eq.'+a.qid);
+    if(r.ok && Array.isArray(r.data) && r.data.length){
+      // Update count
+      api('PATCH','/rest/v1/mistakes?user_id=eq.'+currentUser.id+'&question_id=eq.'+a.qid,
+        {count: (r.data[0].count||1)+1, last_seen: new Date().toISOString()});
+    } else {
+      api('POST','/rest/v1/mistakes',{user_id:currentUser.id, question_id:a.qid, count:1, last_seen:new Date().toISOString()});
+    }
+  }
+}
+
+async function renderMistakes(m){
+  m.innerHTML = renderPageHeader('❌','Mistakes','Questions you got wrong') +
+  '<div id="mk-list"><div class="loading-state">Loading...</div></div>';
+  if(!currentUser) return;
+  var r = await api('GET','/rest/v1/mistakes?user_id=eq.'+currentUser.id+'&select=count,question_id,questions(*)&order=count.desc');
+  var items = (r.ok && Array.isArray(r.data)) ? r.data : [];
+  var el = document.getElementById('mk-list');
+  if(!el) return;
+  if(!items.length){
+    el.innerHTML = '<div class="empty-state"><div class="empty-ico">❌</div><div class="empty-t">No mistakes yet</div><div class="empty-s">Complete quizzes to track wrong answers</div></div>';
+    return;
+  }
+  var qs = items.map(function(i){ return i.questions; }).filter(Boolean);
+  el.innerHTML = renderQuestionList(qs, 'mistake', items) +
+  (qs.length ? '<div style="text-align:center;margin-top:16px"><button onclick="startFromList(mkQs)" style="'+btnStyle('#EF4444','white')+'">🔄 Retry All Mistakes ('+qs.length+')</button></div>' : '');
+  window.mkQs = qs;
+}
+
+function retryMistakes(){
+  if(!wrongAnswers.length) return;
+  // Get wrong question objects
+  var wrongQs = wrongAnswers.map(function(a){
+    return quizQs.find(function(q){ return q.id===a.qid; });
+  }).filter(Boolean);
+  if(!wrongQs.length) return;
+  exitQuiz();
+  quizQs=wrongQs; quizIdx=0; quizAnswers=[]; quizAnswered=false; wrongAnswers=[];
+  quizMode='practice';
+  g('quiz-screen').classList.add('open');
+  g('q-badge').className='q-badge q-practice';
+  g('q-badge').textContent='PRACTICE';
+  g('quiz-footer').style.display='flex';
+  renderQuestion();
+}
+
+// ─── TASKS ───────────────────────────────────────────────────
+async function renderTasks(m){
+  m.innerHTML = renderPageHeader('✅','Tasks','Your study to-do list') +
+  '<div style="display:flex;gap:10px;margin-bottom:16px;">'+
+  '<input id="task-inp" placeholder="Add a new task..." style="flex:1;padding:12px 16px;border:2px solid rgba(10,22,40,.1);border-radius:11px;font-family:Outfit,sans-serif;font-size:14px;color:#0A1628;outline:none;" onkeydown="if(event.key===\'Enter\')addTask()">'+
+  '<button onclick="addTask()" style="'+btnStyle('#0A1628','white')+' padding:12px 20px;">+ Add</button></div>'+
+  '<div id="tasks-list"><div class="loading-state">Loading...</div></div>';
+  loadTasks();
+}
+
+async function loadTasks(){
+  var el=document.getElementById('tasks-list'); if(!el||!currentUser) return;
+  var r = await api('GET','/rest/v1/tasks?user_id=eq.'+currentUser.id+'&order=created_at.desc&select=*');
+  var tasks = (r.ok && Array.isArray(r.data)) ? r.data : [];
+  if(!tasks.length){
+    el.innerHTML = '<div class="empty-state"><div class="empty-ico">✅</div><div class="empty-t">No tasks yet</div><div class="empty-s">Add your study goals above</div></div>';
+    return;
+  }
+  el.innerHTML = tasks.map(function(t){
+    return '<div id="task-'+t.id+'" style="display:flex;align-items:center;gap:12px;background:white;border-radius:12px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 8px rgba(10,22,40,.05);">'+
+    '<div onclick="toggleTask(\''+t.id+'\','+t.done+')" style="width:22px;height:22px;border-radius:6px;border:2px solid '+(t.done?'#10B981':'#C8D8E8')+';background:'+(t.done?'#10B981':'white')+';cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;font-weight:800;color:white;">'+(t.done?'✓':'')+'</div>'+
+    '<span style="flex:1;font-size:14px;color:#0A1628;font-weight:500;'+(t.done?'text-decoration:line-through;opacity:.5;':'')+'">'+t.text+'</span>'+
+    '<button onclick="deleteTask(\''+t.id+'\')" style="background:none;border:none;cursor:pointer;color:#EF4444;font-size:16px;padding:0;">🗑</button>'+
+    '</div>';
+  }).join('');
+}
+
+async function addTask(){
+  var inp=document.getElementById('task-inp'); if(!inp||!currentUser) return;
+  var text=inp.value.trim(); if(!text) return;
+  inp.value='';
+  await api('POST','/rest/v1/tasks',{user_id:currentUser.id,text:text,done:false});
+  loadTasks();
+}
+
+async function toggleTask(id,done){
+  await api('PATCH','/rest/v1/tasks?id=eq.'+id,{done:!done});
+  loadTasks();
+}
+
+async function deleteTask(id){
+  await api('DELETE','/rest/v1/tasks?id=eq.'+id);
+  loadTasks();
+}
+
+// ─── RANDOM QUIZ ─────────────────────────────────────────────
+async function startRandomQuiz(){
+  var r = await api('GET','/rest/v1/questions?select=*&limit=50');
+  var data = (r.ok && Array.isArray(r.data)) ? r.data : [];
+  if(!data.length){ alert('No questions available!'); return; }
+  quizQs = data.sort(function(){return Math.random()-.5;}).slice(0,10);
+  quizIdx=0; quizAnswers=[]; quizAnswered=false; wrongAnswers=[];
+  quizMode='practice';
+  g('quiz-screen').classList.add('open');
+  g('q-badge').className='q-badge q-practice';
+  g('q-badge').textContent='PRACTICE';
+  g('quiz-footer').style.display='flex';
+  renderQuestion();
+}
+
+function renderRandom(m){
+  m.innerHTML = renderPageHeader('🎲','Random Quiz','10 random questions from all modules') +
+  '<div style="text-align:center;padding:40px 20px;">'+
+  '<div style="font-size:72px;margin-bottom:20px;">🎲</div>'+
+  '<div style="font-size:20px;font-weight:800;color:#0A1628;margin-bottom:10px;">Feeling lucky?</div>'+
+  '<div style="font-size:14px;color:#8A9BB5;margin-bottom:32px;">Get 10 random questions from all available modules</div>'+
+  '<button onclick="startRandomQuiz()" style="'+btnStyle('#0A1628','white')+' font-size:16px;padding:16px 48px;">🎲 Start Random Quiz</button></div>';
+}
+
+// ─── START FROM LIST ─────────────────────────────────────────
+function startFromList(qs){
+  if(!qs||!qs.length){ alert('No questions!'); return; }
+  quizQs = qs.sort(function(){return Math.random()-.5;});
+  quizIdx=0; quizAnswers=[]; quizAnswered=false; wrongAnswers=[];
+  quizMode='practice';
+  g('quiz-screen').classList.add('open');
+  g('q-badge').className='q-badge q-practice';
+  g('q-badge').textContent='PRACTICE';
+  g('quiz-footer').style.display='flex';
+  renderQuestion();
+}
+
+// ─── HELPERS ─────────────────────────────────────────────────
+function renderPageHeader(ico, title, sub){
+  return '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">'+
+  '<div><div style="font-size:clamp(18px,2vw,24px);font-weight:800;color:#0A1628;">'+ico+' <span style="color:#4AA8E8;">'+title+'</span></div>'+
+  '<div style="font-size:12px;color:#8A9BB5;margin-top:3px;">'+sub+'</div></div></div>';
+}
+
+function btnStyle(bg, color){
+  return 'background:'+bg+';color:'+color+';border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:14px;font-weight:700;cursor:pointer;';
+}
+
+function renderQuestionList(qs, type, extraData){
+  if(!qs.length) return '';
+  return qs.slice(0,50).map(function(q,i){
+    var extra = extraData ? extraData[i] : null;
+    var countBadge = (extra && extra.count>1) ? '<span style="background:#EF4444;color:white;font-size:9px;font-weight:700;padding:2px 7px;border-radius:100px;margin-left:6px;">x'+extra.count+'</span>' : '';
+    return '<div style="background:white;border-radius:13px;padding:15px 18px;margin-bottom:10px;box-shadow:0 2px 8px rgba(10,22,40,.05);">'+
+    '<div style="font-size:13px;font-weight:700;color:#0A1628;margin-bottom:8px;line-height:1.5;">'+q.question_text+countBadge+'</div>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;">'+
+    ['a','b','c','d'].map(function(opt,j){
+      var txt=[q.option_a,q.option_b,q.option_c,q.option_d][j];
+      var isCorrect = opt===q.correct_option;
+      return '<div style="font-size:11px;padding:4px 10px;border-radius:6px;background:'+(isCorrect?'rgba(16,185,129,.12)':'#F5F8FC')+';color:'+(isCorrect?'#065f46':'#8A9BB5')+';font-weight:'+(isCorrect?'700':'400')+';">'+['A','B','C','D'][j]+'. '+txt+'</div>';
+    }).join('')+
+    '</div></div>';
+  }).join('');
+}
+
 
 </script>
 
