@@ -471,7 +471,7 @@ async function doReg(){
   if(data.access_token||(data.user&&data.user.id)){
     if(data.access_token){TOKEN=data.access_token;localStorage.setItem('nawa_tk',TOKEN);currentUser=data.user;
       await api('POST','/rest/v1/profiles',{id:data.user.id,email:email,first_name:fn,last_name:ln,university:uni,year:year,phone:code+phone,plan:'basic'});
-      await loadProfile();closeModal();showDash();
+      await loadProfile();closeModal();showDash();showWelcome();
     }else{setMsg('Account created! Check your email then sign in.',true);setTimeout(renderLogin,2000);}
   }else{setMsg(data.error_description||data.msg||'Registration failed',false);}
 }
@@ -483,7 +483,7 @@ async function doLogin(){
   var r=await fetch(SURL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json','apikey':SKEY},body:JSON.stringify({email:email,password:pw})});
   var data=await r.json();
   setLoad('l-btn',false,'Sign In');
-  if(data.access_token){TOKEN=data.access_token;localStorage.setItem('nawa_tk',TOKEN);currentUser=data.user;await loadProfile();closeModal();showDash();}
+  if(data.access_token){TOKEN=data.access_token;localStorage.setItem('nawa_tk',TOKEN);currentUser=data.user;await loadProfile();closeModal();showDash();showWelcome();}
   else setMsg(data.error_description||'Wrong email or password',false);
 }
 
@@ -893,7 +893,12 @@ function renderLB(m){
 }
 
 // ── PROFILE ──
-function renderProfile(m){
+async function renderProfile(m){
+  // Reload profile if empty
+  if((!userProfile||!userProfile.first_name)&&currentUser){
+    var rp=await api('GET','/rest/v1/profiles?id=eq.'+currentUser.id+'&select=*');
+    if(rp.ok&&rp.data&&rp.data[0])userProfile=rp.data[0];
+  }
   var name=(userProfile&&userProfile.first_name)||'Student';
   var lname=(userProfile&&userProfile.last_name)||'';
   var email=(currentUser&&currentUser.email)||'';
@@ -935,6 +940,20 @@ async function saveProfile(){
     var av=g('user-av');if(av&&fn)av.textContent=fn[0].toUpperCase();
   }else{if(msg)msg.innerHTML='<div class="auth-msg auth-er">Error saving</div>';}
 }
+
+function showWelcome(){
+  var name=(userProfile&&userProfile.first_name)||(currentUser&&currentUser.user_metadata&&currentUser.user_metadata.first_name)||'';
+  var toast=document.createElement('div');
+  toast.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#0D3B7A,#1560BD);color:white;padding:14px 28px;border-radius:14px;font-family:Outfit,sans-serif;font-size:15px;font-weight:700;z-index:9999;box-shadow:0 8px 32px rgba(13,59,122,.4);animation:fadeUp .3s ease;white-space:nowrap;';
+  toast.textContent='Welcome back'+(name?' , '+name:'')+' 👋';
+  document.body.appendChild(toast);
+  setTimeout(function(){
+    toast.style.transition='opacity .5s';
+    toast.style.opacity='0';
+    setTimeout(function(){if(toast.parentNode)toast.parentNode.removeChild(toast);},500);
+  },2500);
+}
+
 </script>
 
 </body>
