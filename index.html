@@ -206,7 +206,7 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
 .sel-summary{background:var(–foam);border-radius:10px;padding:12px 14px;font-size:12px;color:var(–navy);margin-bottom:16px;line-height:1.7;}
 
 /* QUIZ SCREEN */
-.quiz-screen{display:none;position:fixed;inset:0;background:#F5F8FC;z-index:1000;overflow-y:hidden;flex-direction:column;}
+.quiz-screen{display:none;position:fixed;inset:0;background:#F5F8FC;z-index:1000;overflow-y:hidden;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0);}
 .quiz-screen.open{display:flex;}
 .quiz-top{background:var(–navy);padding:0 20px;height:56px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:10;flex-shrink:0;}
 .q-badge{font-size:10px;font-weight:700;padding:4px 12px;border-radius:100px;}
@@ -228,7 +228,7 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
 .q-opt.correct .q-ltr{background:var(–green);color:white;}
 .q-opt.wrong .q-ltr{background:var(–red);color:white;}
 .q-exp{padding:15px;background:rgba(16,185,129,.06);border:1px solid rgba(16,185,129,.2);border-radius:12px;margin-bottom:16px;font-size:13px;color:var(–navy);line-height:1.6;display:none;}
-.quiz-footer{background:white;border-top:1px solid rgba(10,22,40,.06);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;}
+.quiz-footer{background:white;border-top:1px solid rgba(10,22,40,.06);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;position:relative;z-index:2;}
 .q-next{background:var(–navy);color:white;border:none;padding:12px 26px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:‘Outfit’,sans-serif;}
 .q-bm{background:var(–foam);color:var(–navy);border:none;padding:12px 14px;border-radius:10px;font-size:16px;cursor:pointer;}
 
@@ -293,7 +293,7 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
   <div class="hero-inner">
     <div class="badge"><span style="width:6px;height:6px;border-radius:50%;background:var(--sky);display:inline-block;"></span> Medical Education Platform</div>
     <h1>The Nucleus of<br><span>Medical Excellence</span></h1>
-    <p class="hero-sub">Smart MCQ platform for Egyptian medical students.<br>Practice by module, subject, or lecture. Track your progress.</p>
+    <p class="hero-sub">Smart MCQ platform for medical students.<br>Practice by module, subject, and lecture. Track your progress.</p>
     <div class="hero-btns"><button onclick="openModal('register')" style="padding:16px 52px;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;border:none;font-family:Outfit,sans-serif;background:linear-gradient(135deg,#4AA8E8,#1560BD);color:white;box-shadow:0 8px 32px rgba(74,168,232,.4);letter-spacing:.5px;">Start Now →</button></div>
     <div class="stats-row">
       <div><div class="stat-n">344+</div><div class="stat-l">Questions</div></div>
@@ -359,7 +359,7 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
     </div>
     <div class="d-nav-r">
       <button class="menu-btn" onclick="toggleSB()">☰</button>
-      <div class="av" id="user-av" onclick="goto('profile')">M</div>
+      <div class="av" id="user-av" onclick="goto('profile')" style="cursor:pointer" onclick="goto('profile')">M</div>
     </div>
   </nav>
   <div class="sb-ov" id="sb-ov" onclick="closeSB()"></div>
@@ -399,9 +399,10 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
 
 <div class="quiz-screen" id="quiz-screen">
   <div class="quiz-top">
-    <span id="q-badge" class="q-badge q-practice">PRACTICE</span>
+    <button onclick="exitQuiz()" style="background:rgba(255,255,255,.12);border:none;color:white;padding:7px 14px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;flex-shrink:0;">&#10005; Exit</button>
     <div class="q-prog-wrap"><div class="q-prog"><div class="q-prog-fill" id="q-prog-fill" style="width:0%"></div></div></div>
-    <span id="q-timer-display" style="font-size:14px;font-weight:700;color:white;min-width:50px;text-align:center;display:none;"></span><button class="q-exit" onclick="exitQuiz()">✕ Exit</button>
+    <span id="q-timer-display" style="font-size:14px;font-weight:700;color:white;min-width:60px;text-align:center;background:rgba(255,255,255,.1);padding:5px 10px;border-radius:8px;display:none;">00:00</span>
+    <span id="q-badge" class="q-badge q-practice">PRACTICE</span>
   </div>
   <div class="quiz-body" id="quiz-body"></div>
   <div class="quiz-footer">
@@ -841,8 +842,8 @@ async function startQuiz(code,subjectKey){
     showExamTimerPicker();
   } else {
     startTimer=false;
-    g('quiz-footer').style.display='flex';
-    renderQuestion();
+    var qf=g('quiz-footer');if(qf)qf.style.display='flex';
+    setTimeout(function(){renderQuestion();},100);
   }
 }
 
@@ -865,7 +866,7 @@ function showExamTimerPicker(){
 }
 
 function startExamWithTimer(minutes){
-  g('q-footer').style.display='flex';
+  var qf=g('quiz-footer');if(qf)qf.style.display='flex';
   if(minutes>0){
     examTimeLeft=minutes*60;
     startTimer=true;
@@ -892,11 +893,15 @@ function updateTimerDisplay(){
   var m=Math.floor(examTimeLeft/60);
   var s=examTimeLeft%60;
   el.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  el.style.display='inline-block';
   el.style.color=examTimeLeft<=60?'#EF4444':'white';
+  el.style.background=examTimeLeft<=60?'rgba(239,68,68,.2)':'rgba(255,255,255,.1)';
 }
 
 function renderQuestion(){
   var q=quizQs[quizIdx];quizAnswered=false;
+  // Scroll quiz body to top
+  var qb=g('quiz-body');if(qb)qb.scrollTop=0;
   var pct=Math.round((quizIdx/quizQs.length)*100);
   g('q-prog-fill').style.width=pct+'%';
   g('q-counter').textContent='Q '+(quizIdx+1)+'/'+quizQs.length;
@@ -973,7 +978,8 @@ function showResult(){
   '<button onclick="retryQuiz()" style="padding:12px 24px;background:transparent;color:#0A1628;border:1.5px solid rgba(10,22,40,.15);border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;">Try Again</button>'+
   (wrongAnswers.length>0?'<button onclick="retryMistakes()" style="padding:12px 24px;background:#EF4444;color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:Outfit,sans-serif;">❌ Retry Mistakes ('+wrongAnswers.length+')</button>':'')+
   '</div></div>';
-  g('quiz-footer').style.display='none';
+  var qf=g('quiz-footer');if(qf)qf.style.display='none';
+  var qtop=document.querySelector('.quiz-top');if(qtop)qtop.style.display='flex';
   // Save wrong answers list
   wrongAnswers = quizAnswers.filter(function(a){return !a.isCorrect;});
   saveMistakes();
@@ -994,7 +1000,14 @@ function showResult(){
 }
 
 function retryQuiz(){quizIdx=0;quizAnswers=[];quizAnswered=false;quizQs=quizQs.sort(function(){return Math.random()-.5;});g('quiz-footer').style.display='flex';renderQuestion();}
-function exitQuiz(){if(examTimer)clearInterval(examTimer);examTimer=null;var td=g('q-timer-display');if(td)td.style.display='none';g('quiz-screen').classList.remove('open');g('quiz-footer').style.display='flex';}
+function exitQuiz(){
+  if(examTimer){clearInterval(examTimer);examTimer=null;}
+  var td=g('q-timer-display');if(td){td.style.display='none';td.textContent='00:00';}
+  g('quiz-screen').classList.remove('open');
+  var qf=g('quiz-footer');if(qf)qf.style.display='flex';
+  // Reset quiz state for fresh start
+  quizQs=[]; quizIdx=0; quizAnswers=[]; quizAnswered=false; wrongAnswers=[];
+}
 function toggleBM(){var btn=g('q-bm-btn');if(btn){btn.style.background=btn.style.background?'':'rgba(245,158,11,.15)';}}
 
 // ── LEADERBOARD ──
@@ -1162,12 +1175,12 @@ function toggleFav(){
   var q=quizQs[quizIdx]; if(!q)return;
   favs[q.id] = !favs[q.id];
   var btn=g('q-fav-btn');
-  if(btn) btn.style.color = favs[q.id] ? '#F59E0B' : '';
-  if(currentUser){
+  if(btn){btn.style.color=favs[q.id]?'#F59E0B':'';btn.style.transform='scale(1.3)';setTimeout(function(){if(btn)btn.style.transform='scale(1)';},200);}
+  if(currentUser&&TOKEN){
     if(favs[q.id]){
-      api('POST','/rest/v1/favorites',{user_id:currentUser.id,question_id:q.id});
+      api('POST','/rest/v1/favorites',{user_id:currentUser.id,question_id:q.id}).catch(function(){});
     } else {
-      api('DELETE','/rest/v1/favorites?user_id=eq.'+currentUser.id+'&question_id=eq.'+q.id);
+      api('DELETE','/rest/v1/favorites?user_id=eq.'+currentUser.id+'&question_id=eq.'+q.id).catch(function(){});
     }
   }
 }
@@ -1197,12 +1210,12 @@ function toggleBM(){
   var q=quizQs[quizIdx]; if(!q)return;
   bookmarks[q.id] = !bookmarks[q.id];
   var btn=g('q-bm-btn');
-  if(btn) btn.style.color = bookmarks[q.id] ? '#F59E0B' : '';
-  if(currentUser){
+  if(btn){btn.style.color=bookmarks[q.id]?'#F59E0B':'';btn.style.transform='scale(1.2)';setTimeout(function(){if(btn)btn.style.transform='scale(1)';},200);}
+  if(currentUser&&TOKEN){
     if(bookmarks[q.id]){
-      api('POST','/rest/v1/bookmarks',{user_id:currentUser.id,question_id:q.id});
+      api('POST','/rest/v1/bookmarks',{user_id:currentUser.id,question_id:q.id}).catch(function(){});
     } else {
-      api('DELETE','/rest/v1/bookmarks?user_id=eq.'+currentUser.id+'&question_id=eq.'+q.id);
+      api('DELETE','/rest/v1/bookmarks?user_id=eq.'+currentUser.id+'&question_id=eq.'+q.id).catch(function(){});
     }
   }
 }
