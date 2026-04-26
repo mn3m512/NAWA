@@ -349,6 +349,46 @@ footer{background:var(–navy);border-top:1px solid rgba(255,255,255,.06);paddin
   </div>
 </div>
 
+<!-- UPGRADE MODAL -->
+
+<div class="overlay" id="upgrade-modal" onclick="closeUpgradeModal()">
+  <div class="modal" onclick="event.stopPropagation()" style="max-width:600px;">
+    <button class="modal-x" onclick="closeUpgradeModal()">&#10005;</button>
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:24px;font-weight:900;color:#0A1628;margin-bottom:6px;">&#128640; Upgrade Your Plan</div>
+      <div style="font-size:14px;color:#8A9BB5;">Choose the plan that fits your goals</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
+      <div style="border-radius:20px;padding:28px;background:linear-gradient(135deg,#4AA8E8,#1560BD);box-shadow:0 16px 48px rgba(74,168,232,.3);">
+        <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:12px;">PRO</div>
+        <div style="font-size:38px;font-weight:900;color:white;letter-spacing:-2px;">150 <span style="font-size:18px;">EGP</span></div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);margin-top:3px;margin-bottom:16px;">per month</div>
+        <div style="height:1px;background:rgba(255,255,255,.2);margin-bottom:16px;"></div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+          <li style="font-size:13px;color:rgba(255,255,255,.9);">&#10003; Unlimited questions</li>
+          <li style="font-size:13px;color:rgba(255,255,255,.9);">&#10003; All modules</li>
+          <li style="font-size:13px;color:rgba(255,255,255,.9);">&#10003; Flashcards (SRS)</li>
+          <li style="font-size:13px;color:rgba(255,255,255,.9);">&#10003; Full analytics</li>
+        </ul>
+        <button onclick="closeUpgradeModal()" style="width:100%;padding:12px;background:white;color:#1560BD;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Get Pro &#8594;</button>
+      </div>
+      <div style="border-radius:20px;padding:28px;background:linear-gradient(135deg,#4c1d95,#7c3aed);">
+        <div style="font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.7);margin-bottom:12px;">ELITE</div>
+        <div style="font-size:38px;font-weight:900;color:white;letter-spacing:-2px;">350 <span style="font-size:18px;">EGP</span></div>
+        <div style="font-size:12px;color:rgba(255,255,255,.6);margin-top:3px;margin-bottom:16px;">per month</div>
+        <div style="height:1px;background:rgba(255,255,255,.2);margin-bottom:16px;"></div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;">
+          <li style="font-size:13px;color:rgba(255,255,255,.9);">&#10003; Everything in Pro</li>
+          <li style="font-size:13px;color:rgba(255,255,255,.9);">&#10003; Video explanations</li>
+          <li style="font-size:13px;color:rgba(255,255,255,.9);">&#10003; 1-on-1 mentoring</li>
+          <li style="font-size:13px;color:rgba(255,255,255,.9);">&#10003; Priority support</li>
+        </ul>
+        <button onclick="closeUpgradeModal()" style="width:100%;padding:12px;background:rgba(255,255,255,.15);color:white;border:1.5px solid rgba(255,255,255,.3);border-radius:10px;font-family:Outfit,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Get Elite &#8594;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- DASHBOARD -->
 
 <div id="dashboard" class="dash">
@@ -1740,6 +1780,15 @@ async function delNote(id){
 if(!confirm(‘Delete this note?’))return;
 await api(‘DELETE’,’/rest/v1/user_notes?id=eq.’+id);
 goto(‘notes’);
+}
+
+function openUpgradeModal(){
+var m=document.getElementById(‘upgrade-modal’);
+if(m) m.classList.add(‘open’);
+}
+function closeUpgradeModal(){
+var m=document.getElementById(‘upgrade-modal’);
+if(m) m.classList.remove(‘open’);
 }
 
 </script>
