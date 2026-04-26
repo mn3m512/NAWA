@@ -545,6 +545,9 @@ function renderPage(page){
   else if(page==='bookmarks')renderBookmarks(m);
   else if(page==='mistakes')renderMistakes(m);
   else if(page==='tasks')renderTasks(m);
+  else if(page==='flash')renderFlash(m);
+  else if(page==='stats')renderStats(m);
+  else if(page==='notes')renderNotes(m);
   else m.innerHTML='<div style="text-align:center;padding:60px 20px;"><div style="font-size:48px;margin-bottom:16px;">🚧</div><div style="font-size:18px;font-weight:700;color:#0A1628;margin-bottom:8px;">'+page.charAt(0).toUpperCase()+page.slice(1)+'</div><div style="font-size:14px;color:#8A9BB5;">Coming soon!</div></div>';
 }
 
@@ -1012,22 +1015,36 @@ function toggleBM(){var btn=g('q-bm-btn');if(btn){btn.style.background=btn.style
 
 // ── LEADERBOARD ──
 function renderLB(m){
-  m.innerHTML=
-  '<div style="margin-bottom:18px;"><div style="font-size:clamp(18px,2vw,22px);font-weight:800;color:var(--navy);">🏆 <span style="color:var(--sky);">Leaderboard</span></div></div>'+
-  '<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">'+
-  ['This Week','This Month','All Time'].map(function(f,i){return'<button style="padding:7px 16px;border-radius:100px;font-size:11px;font-weight:700;border:1.5px solid '+(i===0?'var(--navy)':'rgba(10,22,40,.1)')+';background:'+(i===0?'var(--navy)':'white')+';color:'+(i===0?'white':'var(--gray)')+';cursor:pointer;font-family:\'Outfit\',sans-serif;">'+f+'</button>';}).join('')+
+  m.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px;">'+
+  '<div><div style="font-size:clamp(18px,2vw,24px);font-weight:800;color:#0A1628;">🏆 <span style="color:#4AA8E8;">Leaderboard</span></div>'+
+  '<div style="font-size:12px;color:#8A9BB5;margin-top:3px;">Compete and rise to the top</div></div></div>'+
+  '<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;" id="lb-filters">'+
+  '<button id="lb-global" style="padding:7px 16px;border-radius:100px;font-size:11px;font-weight:700;border:1.5px solid #0A1628;background:#0A1628;color:white;cursor:pointer;font-family:Outfit,sans-serif;">&#127758; Global</button>'+
+  '<button id="lb-uni" style="padding:7px 16px;border-radius:100px;font-size:11px;font-weight:700;border:1.5px solid rgba(10,22,40,.1);background:white;color:#8A9BB5;cursor:pointer;font-family:Outfit,sans-serif;">&#127963; My University</button>'+
+  '<button id="lb-year" style="padding:7px 16px;border-radius:100px;font-size:11px;font-weight:700;border:1.5px solid rgba(10,22,40,.1);background:white;color:#8A9BB5;cursor:pointer;font-family:Outfit,sans-serif;">&#128197; My Year</button>'+
   '</div>'+
-  '<div class="card">'+
-  '<div class="card-hd"><div class="card-title">Week Rankings</div><span style="font-size:11px;color:var(--gray);">Solve 20+ Qs to appear</span></div>'+
-  [['🥇','Yassmine A.','95.2%',421,'#FFD700'],['🥈','Zeyad M.','92.3%',935,'#C0C8D0'],['🥉','Moneim T.','85.4%',847,'#CD9B6A']].map(function(r,i){
-    return'<div class="lb-row" style="background:'+(i%2?'#fafcff':'white')+'">'+
-    '<div class="lb-rank" style="color:'+r[4]+'">'+r[0]+'</div>'+
-    '<div class="lb-av">'+r[1][0]+'</div>'+
-    '<div class="lb-info"><div class="lb-name">'+r[1]+'</div><div class="lb-meta">'+r[3]+' questions answered</div></div>'+
-    '<div class="lb-score">'+r[2]+'</div></div>';
-  }).join('')+
-  '<div style="padding:30px;text-align:center;color:var(--gray);font-size:13px;">Be the first to reach the top! 🔥</div>'+
-  '</div>';
+  '<div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(10,22,40,.06);" id="lb-rows">'+
+  '<div style="text-align:center;padding:30px;color:#8A9BB5;">Loading...</div></div>';
+  loadLB('global');
+  // Attach events after render
+  setTimeout(function(){
+    var bg=document.getElementById('lb-global');
+    var bu=document.getElementById('lb-uni');
+    var by=document.getElementById('lb-year');
+    if(bg)bg.addEventListener('click',function(){setLBScope('global');});
+    if(bu)bu.addEventListener('click',function(){setLBScope('uni');});
+    if(by)by.addEventListener('click',function(){setLBScope('year');});
+  },50);
+}
+
+function setLBScope(scope){
+  ['global','uni','year'].forEach(function(s){
+    var btn=document.getElementById('lb-'+s);
+    if(!btn)return;
+    if(s===scope){btn.style.background='#0A1628';btn.style.color='white';btn.style.borderColor='#0A1628';}
+    else{btn.style.background='white';btn.style.color='#8A9BB5';btn.style.borderColor='rgba(10,22,40,.1)';}
+  });
+  loadLB(scope);
 }
 
 // ── PROFILE ──
@@ -1404,7 +1421,327 @@ function renderQuestionList(qs, type, extraData){
 }
 
 
-</script>
 
+// ── selectTimer (for exam timer picker) ──
+var selectedTimer = 10;
+function selectTimer(m){
+  selectedTimer = m;
+  [10,15,20,30].forEach(function(t){
+    var el = document.getElementById('tm-'+t);
+    if(!el) return;
+    el.style.borderColor = t===m ? '#4AA8E8' : 'rgba(10,22,40,.1)';
+    el.style.background = t===m ? '#E8F4FD' : 'white';
+    el.querySelector('.tm-n').style.color = t===m ? '#4AA8E8' : '#0A1628';
+  });
+}
+
+// ── switchTab (auth modal tabs) ──
+function switchTab(t){
+  var tr = document.getElementById('tab-reg');
+  var tl = document.getElementById('tab-login');
+  var ON = 'flex:1;padding:10px;border-radius:9px;border:none;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:white;color:#0A1628;box-shadow:0 2px 8px rgba(10,22,40,.08);';
+  var OFF = 'flex:1;padding:10px;border-radius:9px;border:none;font-family:Outfit,sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:#8A9BB5;';
+  if(tr) tr.style.cssText = t==='reg' ? ON : OFF;
+  if(tl) tl.style.cssText = t==='login' ? ON : OFF;
+  var msg = document.getElementById('auth-msg');
+  if(msg) msg.innerHTML = '';
+  if(t==='reg') buildRegForm();
+  else buildLoginForm();
+}
+
+// ── loadLB (leaderboard data loader) ──
+var lbScope = 'global';
+async function loadLB(scope){
+  scope = scope || lbScope;
+  lbScope = scope;
+  var el = document.getElementById('lb-rows');
+  if(!el) return;
+  el.innerHTML = '<div style="text-align:center;padding:30px;color:#8A9BB5;">Loading...</div>';
+  
+  var [ur,sr] = await Promise.all([
+    api('GET','/rest/v1/profiles?select=id,first_name,last_name,university,year&limit=100'),
+    api('GET','/rest/v1/quiz_sessions?select=user_id,correct,total_questions&status=eq.finished')
+  ]);
+  
+  var users = (ur.ok && Array.isArray(ur.d||ur.data)) ? (ur.d||ur.data) : [];
+  var sess = (sr.ok && Array.isArray(sr.d||sr.data)) ? (sr.d||sr.data) : [];
+  
+  var scores = {};
+  sess.forEach(function(s){
+    if(!scores[s.user_id]) scores[s.user_id] = {t:0,c:0};
+    scores[s.user_id].t += s.total_questions||0;
+    scores[s.user_id].c += s.correct||0;
+  });
+  
+  var lb = users.map(function(u){
+    var s = scores[u.id]||{t:0,c:0};
+    var acc = s.t>0 ? Math.round((s.c/s.t)*100) : 0;
+    return Object.assign({},u,{total:s.t,correct:s.c,acc:acc,xp:s.c*10});
+  }).filter(function(u){return u.total>=1;}).sort(function(a,b){return b.xp-a.xp;});
+  
+  if(scope==='uni' && userProfile && userProfile.university)
+    lb = lb.filter(function(u){return u.university===userProfile.university;});
+  if(scope==='year' && userProfile && userProfile.year)
+    lb = lb.filter(function(u){return u.year===userProfile.year;});
+  
+  if(!lb.length){
+    el.innerHTML = '<div style="text-align:center;padding:48px;"><div style="font-size:48px;margin-bottom:14px;opacity:.4;">🏆</div><div style="font-size:16px;font-weight:700;color:#0A1628;">No rankings yet</div><div style="font-size:13px;color:#8A9BB5;margin-top:6px;">Complete quizzes to appear here!</div></div>';
+    return;
+  }
+  
+  var medals = ['🥇','🥈','🥉'];
+  el.innerHTML = lb.slice(0,20).map(function(u,i){
+    var isMe = currentUser && u.id===currentUser.id;
+    return '<div style="display:flex;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid rgba(10,22,40,.05);background:'+(isMe?'rgba(74,168,232,.05)':'white')+';">'+
+    '<div style="font-size:15px;font-weight:800;width:30px;text-align:center;flex-shrink:0;">'+(i<3?medals[i]:'#'+(i+1))+'</div>'+
+    '<div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#0D3B7A,#4AA8E8);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:white;flex-shrink:0;">'+(u.first_name||'?')[0].toUpperCase()+'</div>'+
+    '<div style="flex:1;min-width:0;">'+
+    '<div style="font-size:13px;font-weight:700;color:#0A1628;">'+(u.first_name||'')+' '+(u.last_name||'')+(isMe?' <span style="font-size:10px;color:#4AA8E8;">(You)</span>':'')+'</div>'+
+    '<div style="font-size:10px;color:#8A9BB5;margin-top:2px;">'+(u.university||'—')+' · Year '+(u.year||'?')+'</div>'+
+    '</div>'+
+    '<div style="text-align:right;flex-shrink:0;">'+
+    '<div style="font-size:14px;font-weight:800;color:#4AA8E8;">'+u.acc+'%</div>'+
+    '<div style="font-size:10px;color:#8A9BB5;">⭐ '+u.xp+' XP</div>'+
+    '</div></div>';
+  }).join('');
+}
+
+// ── renderFlash (flashcards page) ──
+var FC=[], fcI=0, fcK=[], fcDK=[];
+function renderFlash(m){
+  m.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">'+
+  '<div><div style="font-size:clamp(18px,2vw,24px);font-weight:800;color:#0A1628;">🃏 <span style="color:#4AA8E8;">Flashcards</span></div>'+
+  '<div style="font-size:12px;color:#8A9BB5;margin-top:3px;">Spaced Repetition System</div></div></div>'+
+  '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">'+
+  '<div style="display:flex;gap:8px;flex-wrap:wrap;" id="fc-subject-btns">'+
+  '<button id="fc-micro" style="padding:8px 16px;border-radius:100px;border:1.5px solid rgba(10,22,40,.1);background:white;color:#0A1628;font-family:Outfit,sans-serif;font-size:12px;font-weight:600;cursor:pointer;">&#129440; Microbiology</button>'+
+  '<button id="fc-immuno" style="padding:8px 16px;border-radius:100px;border:1.5px solid rgba(10,22,40,.1);background:white;color:#0A1628;font-family:Outfit,sans-serif;font-size:12px;font-weight:600;cursor:pointer;">&#128737; Immunology</button>'+
+  '<button id="fc-para" style="padding:8px 16px;border-radius:100px;border:1.5px solid rgba(10,22,40,.1);background:white;color:#0A1628;font-family:Outfit,sans-serif;font-size:12px;font-weight:600;cursor:pointer;">&#129714; Parasitology</button>'+
+  '<button id="fc-all" style="padding:8px 16px;border-radius:100px;border:1.5px solid rgba(10,22,40,.1);background:white;color:#0A1628;font-family:Outfit,sans-serif;font-size:12px;font-weight:600;cursor:pointer;">&#128218; All</button>'+
+  '</div>'+
+  '</div>'+
+  '<div id="fc-area"><div style="text-align:center;padding:60px;"><div style="font-size:64px;margin-bottom:16px;">🃏</div>'+
+  '<div style="font-size:16px;font-weight:700;color:#0A1628;margin-bottom:8px;">Choose a subject above</div>'+
+  '<div style="font-size:13px;color:#8A9BB5;">Flip cards to test your memory</div></div></div>';
+  setTimeout(function(){
+    var b1=document.getElementById('fc-micro');
+    var b2=document.getElementById('fc-immuno');
+    var b3=document.getElementById('fc-para');
+    var b4=document.getElementById('fc-all');
+    if(b1)b1.addEventListener('click',function(){loadFC('MICROBIOLOGY');});
+    if(b2)b2.addEventListener('click',function(){loadFC('IMMUNOLOGY');});
+    if(b3)b3.addEventListener('click',function(){loadFC('PARASITOLOGY');});
+    if(b4)b4.addEventListener('click',function(){loadFC('all');});
+  },50);
+}
+
+async function loadFC(subject){
+  var url = '/rest/v1/questions?select=*&module_code=eq.MED103&limit=60';
+  if(subject !== 'all') url += '&block=eq.'+subject;
+  var r = await api('GET', url);
+  FC = (r.ok && Array.isArray(r.data||r.d)) ? (r.data||r.d).sort(function(){return Math.random()-.5;}) : [];
+  fcI=0; fcK=[]; fcDK=[];
+  if(!FC.length){
+    document.getElementById('fc-area').innerHTML = '<div style="text-align:center;padding:48px;"><div style="font-size:48px;margin-bottom:14px;opacity:.4;">😔</div><div style="font-size:16px;font-weight:700;color:#0A1628;">No cards found</div></div>';
+    return;
+  }
+  renderFC();
+}
+
+function renderFC(){
+  var area = document.getElementById('fc-area');
+  if(!area) return;
+  if(fcI >= FC.length){
+    area.innerHTML = '<div style="text-align:center;padding:48px;">'+
+    '<div style="font-size:48px;margin-bottom:16px;">🎉</div>'+
+    '<div style="font-size:20px;font-weight:800;color:#0A1628;margin-bottom:8px;">Session Complete!</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:280px;margin:16px auto;">'+
+    '<div style="background:white;border-radius:12px;padding:14px;text-align:center;box-shadow:0 2px 8px rgba(10,22,40,.06);"><div style="font-size:24px;font-weight:900;color:#10B981;">'+fcK.length+'</div><div style="font-size:11px;color:#8A9BB5;margin-top:3px;">Knew It ✓</div></div>'+
+    '<div style="background:white;border-radius:12px;padding:14px;text-align:center;box-shadow:0 2px 8px rgba(10,22,40,.06);"><div style="font-size:24px;font-weight:900;color:#EF4444;">'+fcDK.length+'</div><div style="font-size:11px;color:#8A9BB5;margin-top:3px;">Study More ✗</div></div>'+
+    '</div>'+
+    '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px;">'+
+    '<button onclick="fcI=0;fcK=[];fcDK=[];FC=FC.sort(function(){return Math.random()-.5;});renderFC();" style="padding:12px 24px;background:#0A1628;color:white;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">🔄 Restart</button>'+
+    (fcDK.length?'<button onclick="FC=fcDK;fcI=0;fcK=[];fcDK=[];renderFC();" style="padding:12px 24px;background:#EF4444;color:white;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">Review Missed ('+fcDK.length+')</button>':'')+
+    '</div></div>';
+    return;
+  }
+  var q = FC[fcI];
+  var ansIdx = ['a','b','c','d'].indexOf(q.correct_option);
+  var ans = ansIdx>=0 ? [q.option_a,q.option_b,q.option_c,q.option_d][ansIdx] : '—';
+  var pct = Math.round((fcI/FC.length)*100);
+  
+  area.innerHTML = 
+  '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">'+
+  '<span style="font-size:13px;font-weight:600;color:#0A1628;">Card '+(fcI+1)+' / '+FC.length+'</span>'+
+  '<div style="display:flex;gap:12px;"><span style="font-size:12px;color:#10B981;font-weight:700;">✓ '+fcK.length+'</span><span style="font-size:12px;color:#EF4444;font-weight:700;">✗ '+fcDK.length+'</span></div></div>'+
+  '<div style="background:#E8F4FD;border-radius:8px;height:6px;margin-bottom:16px;overflow:hidden;"><div style="height:100%;width:'+pct+'%;background:linear-gradient(to right,#4AA8E8,#10B981);border-radius:8px;transition:.3s;"></div></div>'+
+  '<div id="fc-card" style="width:100%;max-width:520px;height:240px;margin:0 auto 20px;perspective:1000px;cursor:pointer;">'+
+  '<div id="fc-inner" style="width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:.5s;">'+
+  '<div style="position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,#0A1628,#0D3B7A);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;-webkit-backface-visibility:hidden;backface-visibility:hidden;">'+
+  '<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:12px;">QUESTION</div>'+
+  '<div style="font-size:16px;font-weight:700;color:white;line-height:1.5;">'+q.question_text+'</div>'+
+  '<div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:14px;">Tap to reveal answer 👆</div></div>'+
+  '<div style="position:absolute;inset:0;border-radius:20px;background:linear-gradient(135deg,#065f46,#10B981);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;-webkit-backface-visibility:hidden;backface-visibility:hidden;transform:rotateY(180deg);">'+
+  '<div style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:12px;">ANSWER</div>'+
+  '<div style="font-size:17px;font-weight:700;color:white;line-height:1.5;">'+ans+'</div>'+
+  (q.explanation?'<div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:12px;line-height:1.5;">'+q.explanation+'</div>':'')+
+  '</div></div></div>'+
+  '<div style="display:flex;gap:12px;justify-content:center;">'+
+  '<button onclick="fcDK.push(FC[fcI]);fcI++;renderFC();" style="padding:13px 32px;background:rgba(239,68,68,.1);color:#991b1b;border:1.5px solid rgba(239,68,68,.2);border-radius:12px;font-family:Outfit,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">✗ Study More</button>'+
+  '<button onclick="fcK.push(FC[fcI]);fcI++;renderFC();" style="padding:13px 32px;background:rgba(16,185,129,.1);color:#065f46;border:1.5px solid rgba(16,185,129,.2);border-radius:12px;font-family:Outfit,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">✓ Got It!</button>'+
+  '</div>';
+}
+
+// ── renderStats ──
+function renderStats(m){
+  m.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">'+
+  '<div><div style="font-size:clamp(18px,2vw,24px);font-weight:800;color:#0A1628;">📊 <span style="color:#4AA8E8;">My Stats</span></div>'+
+  '<div style="font-size:12px;color:#8A9BB5;margin-top:3px;">Your performance overview</div></div></div>'+
+  '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:20px;" id="stats-cards">'+
+  statCard('📝','Total Questions','—','c-blue')+
+  statCard('✅','Accuracy','—','c-green')+
+  statCard('🔥','Streak','0 days','c-orange')+
+  statCard('⭐','XP Points','0','c-purple')+
+  '</div>'+
+  '<div style="background:white;border-radius:16px;padding:20px;box-shadow:0 2px 16px rgba(10,22,40,.06);margin-bottom:16px;">'+
+  '<div style="font-size:14px;font-weight:700;color:#0A1628;margin-bottom:16px;">📅 Recent Activity</div>'+
+  '<div id="stats-history">Loading...</div></div>';
+  loadStats();
+}
+
+function statCard(ico,lbl,val,c){
+  var colors={'c-blue':'linear-gradient(to right,#0D3B7A,#4AA8E8)','c-green':'linear-gradient(to right,#065f46,#10B981)','c-orange':'linear-gradient(to right,#92400e,#F59E0B)','c-purple':'linear-gradient(to right,#4c1d95,#8B5CF6)'};
+  return '<div style="background:white;border-radius:14px;padding:17px;box-shadow:0 2px 12px rgba(10,22,40,.05);position:relative;overflow:hidden;">'+
+  '<div style="position:absolute;top:0;left:0;right:0;height:3px;background:'+colors[c]+';"></div>'+
+  '<div style="font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8A9BB5;margin-bottom:7px;">'+lbl+'</div>'+
+  '<div id="stat-'+lbl.replace(/ /g,'-').toLowerCase()+'" style="font-size:26px;font-weight:900;color:#0A1628;letter-spacing:-1px;line-height:1;">'+val+'</div>'+
+  '<div style="font-size:18px;opacity:.12;position:absolute;top:12px;right:12px;">'+ico+'</div>'+
+  '</div>';
+}
+
+async function loadStats(){
+  if(!currentUser) return;
+  var r = await api('GET','/rest/v1/quiz_sessions?user_id=eq.'+currentUser.id+'&status=eq.finished&select=*&order=created_at.desc');
+  var sessions = (r.ok && Array.isArray(r.data||r.d)) ? (r.data||r.d) : [];
+  if(!sessions.length){
+    var sh=document.getElementById('stats-history');
+    if(sh)sh.innerHTML='<div style="text-align:center;padding:20px;color:#8A9BB5;">Complete quizzes to see stats here</div>';
+    return;
+  }
+  var tq=sessions.reduce(function(a,s){return a+(s.total_questions||0);},0);
+  var tc=sessions.reduce(function(a,s){return a+(s.correct||0);},0);
+  var acc=tq>0?Math.round((tc/tq)*100):0;
+  var xp=tc*10;
+  
+  var els={
+    'total-questions':tq,
+    'accuracy':acc+'%',
+    'xp-points':xp+' XP'
+  };
+  Object.keys(els).forEach(function(k){
+    var el=document.getElementById('stat-'+k);
+    if(el)el.textContent=els[k];
+  });
+  
+  var sh=document.getElementById('stats-history');
+  if(sh){
+    sh.innerHTML=sessions.slice(0,5).map(function(s){
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(10,22,40,.05);">'+
+      '<div><div style="font-size:13px;font-weight:600;color:#0A1628;">'+(s.name||'Quiz')+'</div>'+
+      '<div style="font-size:11px;color:#8A9BB5;">'+new Date(s.created_at).toLocaleDateString()+'</div></div>'+
+      '<div style="font-size:16px;font-weight:800;color:#4AA8E8;">'+(s.score||0)+'%</div></div>';
+    }).join('');
+  }
+}
+
+// ── renderNotes ──
+var allNotes=[];
+function renderNotes(m){
+  m.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">'+
+  '<div><div style="font-size:clamp(18px,2vw,24px);font-weight:800;color:#0A1628;">📝 <span style="color:#4AA8E8;">My Notes</span></div>'+
+  '<div style="font-size:12px;color:#8A9BB5;margin-top:3px;">Your study notes</div></div>'+
+  '<button onclick="newNote()" style="padding:10px 20px;background:#0A1628;color:white;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">+ New Note</button></div>'+
+  '<div id="notes-list">Loading...</div>';
+  loadNotes();
+}
+
+async function loadNotes(){
+  var el=document.getElementById('notes-list');
+  if(!el||!currentUser) return;
+  var r=await api('GET','/rest/v1/user_notes?user_id=eq.'+currentUser.id+'&order=created_at.desc&select=*');
+  allNotes=(r.ok&&Array.isArray(r.data||r.d))?(r.data||r.d):[];
+  if(!allNotes.length){
+    el.innerHTML='<div style="text-align:center;padding:48px;"><div style="font-size:48px;margin-bottom:14px;opacity:.4;">&#128221;</div><div style="font-size:16px;font-weight:700;color:#0A1628;margin-bottom:8px;">No notes yet</div><div style="font-size:13px;color:#8A9BB5;">Create your first note!</div></div>';
+    return;
+  }
+  el.innerHTML=allNotes.map(function(n,i){
+    return '<div style="background:white;border-radius:14px;padding:16px 18px;box-shadow:0 2px 12px rgba(10,22,40,.06);border-left:4px solid #4AA8E8;cursor:pointer;margin-bottom:12px;" id="note-item-'+i+'">'+
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;">'+
+    '<div style="font-size:14px;font-weight:700;color:#0A1628;margin-bottom:6px;">'+(n.title||'Untitled')+'</div>'+
+    '<button id="del-note-'+i+'" style="background:none;border:none;cursor:pointer;color:#EF4444;font-size:16px;padding:0;">&#128465;</button></div>'+
+    '<div style="font-size:13px;color:#8A9BB5;line-height:1.6;">'+(n.content||'').substring(0,150)+(n.content&&n.content.length>150?'...':'')+'</div>'+
+    '<div style="font-size:10px;color:#C8D8E8;margin-top:8px;">'+new Date(n.created_at).toLocaleDateString()+'</div></div>';
+  }).join('');
+  // Attach events
+  allNotes.forEach(function(n,i){
+    var item=document.getElementById('note-item-'+i);
+    var delBtn=document.getElementById('del-note-'+i);
+    if(item)item.addEventListener('click',function(){editNote(i);});
+    if(delBtn)delBtn.addEventListener('click',function(e){e.stopPropagation();delNote(n.id);});
+  });
+}
+
+function newNote(){
+  var m=g('dash-main');
+  m.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">'+
+  '<div style="font-size:20px;font-weight:800;color:#0A1628;">&#128221; New Note</div>'+
+  '<button id="save-new-note-btn" style="padding:10px 20px;background:#0A1628;color:white;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">&#128190; Save</button></div>'+
+  '<div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(10,22,40,.08);">'+
+  '<input id="note-title" placeholder="Note title..." style="width:100%;border:none;border-bottom:1px solid rgba(10,22,40,.06);outline:none;font-family:Outfit,sans-serif;font-size:18px;font-weight:700;color:#0A1628;padding:16px 18px;background:transparent;">'+
+  '<textarea id="note-body" placeholder="Start writing..." style="width:100%;border:none;outline:none;font-family:Outfit,sans-serif;font-size:14px;color:#0A1628;padding:18px;min-height:400px;resize:vertical;line-height:1.7;background:transparent;"></textarea></div>';
+
+setTimeout(function(){
+var btn=document.getElementById(‘save-new-note-btn’);
+if(btn)btn.addEventListener(‘click’,saveNote);
+},50);
+}
+
+async function saveNote(){
+var t=(document.getElementById(‘note-title’).value||’’).trim();
+var b=(document.getElementById(‘note-body’).value||’’).trim();
+if(!b){alert(‘Write something first!’);return;}
+var r=await api(‘POST’,’/rest/v1/user_notes’,{user_id:currentUser.id,title:t||‘Untitled’,content:b,lecture:’’,module_code:’’});
+if(r.ok)goto(‘notes’);else alert(‘Error saving note.’);
+}
+
+function editNote(idx){
+var n=allNotes[idx];
+var m=g(‘dash-main’);
+m.innerHTML=’<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">’+
+‘<div style="font-size:20px;font-weight:800;color:#0A1628;">📝 Edit Note</div>’+
+‘<button id="save-note-btn" style="padding:10px 20px;background:#0A1628;color:white;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💾 Save</button></div>’+
+‘<div style="background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 16px rgba(10,22,40,.08);">’+
+‘<input id="note-title" value="'+(n.title||'')+'" placeholder="Note title..." style="width:100%;border:none;border-bottom:1px solid rgba(10,22,40,.06);outline:none;font-family:Outfit,sans-serif;font-size:18px;font-weight:700;color:#0A1628;padding:16px 18px;background:transparent;">’+
+‘<textarea id="note-body" placeholder="Start writing..." style="width:100%;border:none;outline:none;font-family:Outfit,sans-serif;font-size:14px;color:#0A1628;padding:18px;min-height:400px;resize:vertical;line-height:1.7;background:transparent;">’+(n.content||’’)+’</textarea></div>’;
+setTimeout(function(){
+var btn=document.getElementById(‘save-note-btn’);
+if(btn)btn.addEventListener(‘click’,function(){updateNote(n.id);});
+},50);
+}
+
+async function updateNote(id){
+var t=(document.getElementById(‘note-title’).value||’’).trim();
+var b=(document.getElementById(‘note-body’).value||’’).trim();
+await api(‘PATCH’,’/rest/v1/user_notes?id=eq.’+id,{title:t||‘Untitled’,content:b});
+goto(‘notes’);
+}
+
+async function delNote(id){
+if(!confirm(‘Delete this note?’))return;
+await api(‘DELETE’,’/rest/v1/user_notes?id=eq.’+id);
+goto(‘notes’);
+}
+
+</script>
 </body>
 </html>
