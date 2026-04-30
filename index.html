@@ -3,6 +3,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nawa — Medical Education</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
@@ -369,14 +371,26 @@ body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--navy);ov
 
 <script>
 'use strict';
+window.onerror = function(msg, src, line, col, err) {
+  console.error('NAWA JS Error:', msg, 'Line:', line);
+  // Make sure landing page is visible
+  var l = document.getElementById('landing');
+  var a = document.getElementById('app');
+  if (l && l.style.display === 'none') l.style.display = 'block';
+  if (a) a.style.display = 'none';
+};
 var SURL='https://zphhtwarzqhsmqsawknt.supabase.co';
 var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
 var TOKEN='',currentUser=null,userProfile=null;
-var favs=JSON.parse(localStorage.getItem('nawa_favs')||'{}');
-var bookmarks=JSON.parse(localStorage.getItem('nawa_bm')||'{}');
-var mistakesList=JSON.parse(localStorage.getItem('nawa_mistakes')||'[]');
-var tasks=JSON.parse(localStorage.getItem('nawa_tasks')||'[]');
-var localStats=JSON.parse(localStorage.getItem('nawa_stats')||'{"total":0,"correct":0,"sessions":0}');
+function safeLS(key, fallback) {
+  try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+  catch(e) { localStorage.removeItem(key); return fallback; }
+}
+var favs = safeLS('nawa_favs', {});
+var bookmarks = safeLS('nawa_bm', {});
+var mistakesList = safeLS('nawa_mistakes', []);
+var tasks = safeLS('nawa_tasks', []);
+var localStats = safeLS('nawa_stats', {"total":0,"correct":0,"sessions":0});
 var quizQs=[],quizIdx=0,quizAnswers=[],quizAnswered=false;
 var quizMode='practice',quizNq=10,wrongAnswers=[];
 var examTimer=null,examTimeLeft=0,selTimer=10;
