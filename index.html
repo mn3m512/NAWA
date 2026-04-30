@@ -20,8 +20,8 @@ body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--navy);ov
 .btn-ghost{padding:10px 22px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:white;border:1.5px solid rgba(255,255,255,.25);}
 .btn-sky{padding:10px 22px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:var(--sky);color:var(--navy);border:none;}
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 24px 60px;position:relative;overflow:hidden;}
-.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 35%,rgba(74,168,232,.15) 0%,transparent 65%);}
-.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(74,168,232,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,168,232,.04) 1px,transparent 1px);background-size:52px 52px;}
+.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 50% 35%,rgba(74,168,232,.15) 0%,transparent 65%);}
+.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(74,168,232,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,168,232,.04) 1px,transparent 1px);background-size:52px 52px;}
 .hero-inner{position:relative;z-index:2;max-width:720px;}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,168,232,.1);border:1px solid rgba(74,168,232,.25);color:var(--sky);padding:8px 20px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px;}
 .hero-title{font-size:clamp(40px,8vw,84px);font-weight:900;color:white;line-height:.95;letter-spacing:-3px;margin-bottom:14px;}
@@ -280,7 +280,7 @@ body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--navy);ov
 <!-- AUTH MODAL -->
 
 <div class="overlay" id="auth-modal">
-  <div class="modal-box" id="auth-modal-box">
+  <div class="modal-box" id="auth-modal-box" onclick="event.stopPropagation()">
     <button class="modal-x" id="auth-close">&#10005;</button>
     <div class="modal-logo"><svg width="22" height="22" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="46" fill="#0A1628"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="#4AA8E8" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="#0A1628" stroke-width="2" fill="none"/></svg><span class="modal-logo-t">NAWA</span></div>
     <div class="modal-tabs"><button class="m-tab on" id="tab-reg">Sign Up</button><button class="m-tab" id="tab-login">Sign In</button></div>
@@ -292,7 +292,7 @@ body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--navy);ov
 <!-- UPGRADE MODAL -->
 
 <div class="overlay" id="upgrade-modal">
-  <div class="modal-box" id="upgrade-modal-box" style="max-width:560px;background:var(--navy);">
+  <div class="modal-box" id="upgrade-modal-box" onclick="event.stopPropagation()" style="max-width:560px;background:var(--navy);">
     <button class="modal-x" id="upgrade-close" style="background:rgba(255,255,255,.1);color:white;">&#10005;</button>
     <div style="text-align:center;margin-bottom:20px;"><div style="font-size:22px;font-weight:900;color:white;margin-bottom:6px;">&#128640; Upgrade Your Plan</div><div style="font-size:13px;color:rgba(255,255,255,.5);">Unlock unlimited questions and premium features</div></div>
     <div class="up-grid">
