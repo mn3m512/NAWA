@@ -7,6 +7,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nawa — Medical Education</title>
+<!-- NAWA v1777559355654 -->
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#0A1628;--ocean:#0D3B7A;--blue:#1560BD;--sky:#4AA8E8;--green:#10B981;--red:#EF4444;--orange:#F59E0B;--purple:#8B5CF6;--gray:#8A9BB5;--foam:#E8F4FD;--off:#F5F8FC;}
@@ -945,6 +946,10 @@ function uploadAvatar(e){var file=e.target.files[0];if(!file||file.size>2*1024*1
 
 // ── DOM READY ──
 document.addEventListener(‘DOMContentLoaded’,function(){
+
+// Visual confirmation JS is running
+var vt = document.getElementById(‘nav-signin-btn’);
+if(vt){ vt.style.outline = ‘2px solid #10B981’; setTimeout(function(){ vt.style.outline = ‘’; }, 2000); }
 g(‘nav-signin-btn’).addEventListener(‘click’,function(){openAuthModal(‘login’);});
 g(‘nav-signup-btn’).addEventListener(‘click’,function(){openAuthModal(‘reg’);});
 g(‘hero-start-btn’).addEventListener(‘click’,function(){openAuthModal(‘reg’);});
