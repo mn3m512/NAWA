@@ -414,6 +414,7 @@ async function api(method,path,body){
 
 // ── INIT ──
 window.addEventListener('load',async function(){
+  console.log('[NAWA] window.load fired');
   try{
     var tk=localStorage.getItem('nawa_tk');
     if(tk){TOKEN=tk;var r=await api('GET','/auth/v1/user');if(r.ok&&r.data&&r.data.id){currentUser=r.data;try{await loadProfile();}catch(e){}showApp();goto('home');return;}
@@ -422,7 +423,8 @@ window.addEventListener('load',async function(){
   showLanding();
 });
 
-function showLanding(){g('landing').style.display='block';g('app').style.display='none';}
+function showLanding(){
+  console.log('[NAWA] showLanding called');g('landing').style.display='block';g('app').style.display='none';}
 function showApp(){g('landing').style.display='none';g('app').style.display='block';}
 function openUpgradeModal(){g('upgrade-modal').classList.add('open');}
 function closeUpgradeModal(){g('upgrade-modal').classList.remove('open');}
@@ -444,7 +446,8 @@ function updateProfileUI(){
 }
 
 // ── AUTH ──
-function openAuthModal(tab){g('auth-modal').classList.add('open');switchAuthTab(tab||'reg');}
+function openAuthModal(tab){
+  console.log('[NAWA] openAuthModal called with tab:', tab);g('auth-modal').classList.add('open');switchAuthTab(tab||'reg');}
 function closeAuthModal(){g('auth-modal').classList.remove('open');g('auth-msg-area').innerHTML='';}
 function switchAuthTab(t){g('tab-reg').classList.toggle('on',t==='reg');g('tab-login').classList.toggle('on',t==='login');g('auth-msg-area').innerHTML='';if(t==='reg')buildRegForm();else buildLoginForm();}
 function setAuthMsg(txt,ok){g('auth-msg-area').innerHTML='<div class="auth-msg '+(ok?'ok':'err')+'">'+txt+'</div>';}
@@ -946,6 +949,7 @@ function uploadAvatar(e){var file=e.target.files[0];if(!file||file.size>2*1024*1
 
 // ── DOM READY ──
 document.addEventListener(‘DOMContentLoaded’,function(){
+console.log(’[NAWA] DOMContentLoaded fired’);
 
 // Visual confirmation JS is running
 var vt = document.getElementById(‘nav-signin-btn’);
@@ -976,6 +980,7 @@ g(‘q-back’).addEventListener(‘click’,prevQ);
 g(‘q-submit’).addEventListener(‘click’,showResult);
 g(‘q-fav’).addEventListener(‘click’,toggleFav);
 g(‘q-bm’).addEventListener(‘click’,toggleBM);
+console.log(’[NAWA] All listeners attached OK’);
 });
 </script>
 
