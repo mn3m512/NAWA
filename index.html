@@ -3,11 +3,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nawa — Medical Education</title>
-<!-- NAWA v1777559355654 -->
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#0A1628;--ocean:#0D3B7A;--blue:#1560BD;--sky:#4AA8E8;--green:#10B981;--red:#EF4444;--orange:#F59E0B;--purple:#8B5CF6;--gray:#8A9BB5;--foam:#E8F4FD;--off:#F5F8FC;}
@@ -23,8 +20,8 @@ body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--navy);ov
 .btn-ghost{padding:10px 22px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:white;border:1.5px solid rgba(255,255,255,.25);}
 .btn-sky{padding:10px 22px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:var(--sky);color:var(--navy);border:none;}
 .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 24px 60px;position:relative;overflow:hidden;}
-.hero-bg{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 60% at 50% 35%,rgba(74,168,232,.15) 0%,transparent 65%);}
-.hero-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(74,168,232,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,168,232,.04) 1px,transparent 1px);background-size:52px 52px;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 35%,rgba(74,168,232,.15) 0%,transparent 65%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(74,168,232,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(74,168,232,.04) 1px,transparent 1px);background-size:52px 52px;}
 .hero-inner{position:relative;z-index:2;max-width:720px;}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,168,232,.1);border:1px solid rgba(74,168,232,.25);color:var(--sky);padding:8px 20px;border-radius:100px;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:28px;}
 .hero-title{font-size:clamp(40px,8vw,84px);font-weight:900;color:white;line-height:.95;letter-spacing:-3px;margin-bottom:14px;}
@@ -283,7 +280,7 @@ body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--navy);ov
 <!-- AUTH MODAL -->
 
 <div class="overlay" id="auth-modal">
-  <div class="modal-box" id="auth-modal-box" onclick="event.stopPropagation()">
+  <div class="modal-box" id="auth-modal-box">
     <button class="modal-x" id="auth-close">&#10005;</button>
     <div class="modal-logo"><svg width="22" height="22" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="46" fill="#0A1628"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="#4AA8E8" stroke-width="3.5" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="#0A1628" stroke-width="2" fill="none"/></svg><span class="modal-logo-t">NAWA</span></div>
     <div class="modal-tabs"><button class="m-tab on" id="tab-reg">Sign Up</button><button class="m-tab" id="tab-login">Sign In</button></div>
@@ -295,7 +292,7 @@ body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--navy);ov
 <!-- UPGRADE MODAL -->
 
 <div class="overlay" id="upgrade-modal">
-  <div class="modal-box" id="upgrade-modal-box" onclick="event.stopPropagation()" style="max-width:560px;background:var(--navy);">
+  <div class="modal-box" id="upgrade-modal-box" style="max-width:560px;background:var(--navy);">
     <button class="modal-x" id="upgrade-close" style="background:rgba(255,255,255,.1);color:white;">&#10005;</button>
     <div style="text-align:center;margin-bottom:20px;"><div style="font-size:22px;font-weight:900;color:white;margin-bottom:6px;">&#128640; Upgrade Your Plan</div><div style="font-size:13px;color:rgba(255,255,255,.5);">Unlock unlimited questions and premium features</div></div>
     <div class="up-grid">
@@ -372,26 +369,15 @@ body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--navy);ov
 
 <script>
 'use strict';
-window.onerror = function(msg, src, line, col, err) {
-  console.error('NAWA JS Error:', msg, 'Line:', line);
-  // Make sure landing page is visible
-  var l = document.getElementById('landing');
-  var a = document.getElementById('app');
-  if (l && l.style.display === 'none') l.style.display = 'block';
-  if (a) a.style.display = 'none';
-};
 var SURL='https://zphhtwarzqhsmqsawknt.supabase.co';
 var SKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwaGh0d2FyenFoc21xc2F3a250Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY5MTc0MzcsImV4cCI6MjA5MjQ5MzQzN30.n7fxZkwKtX_N_NoYHvzJvYSeUgb_9RYxcrPhZn8ciNY';
 var TOKEN='',currentUser=null,userProfile=null;
-function safeLS(key, fallback) {
-  try { var v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
-  catch(e) { localStorage.removeItem(key); return fallback; }
-}
-var favs = safeLS('nawa_favs', {});
-var bookmarks = safeLS('nawa_bm', {});
-var mistakesList = safeLS('nawa_mistakes', []);
-var tasks = safeLS('nawa_tasks', []);
-var localStats = safeLS('nawa_stats', {"total":0,"correct":0,"sessions":0});
+function safeLS(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){localStorage.removeItem(k);return d;}}
+var favs=safeLS('nawa_favs',{});
+var bookmarks=safeLS('nawa_bm',{});
+var mistakesList=safeLS('nawa_mistakes',[]);
+var tasks=safeLS('nawa_tasks',[]);
+var localStats=safeLS('nawa_stats',{"total":0,"correct":0,"sessions":0});
 var quizQs=[],quizIdx=0,quizAnswers=[],quizAnswered=false;
 var quizMode='practice',quizNq=10,wrongAnswers=[];
 var examTimer=null,examTimeLeft=0,selTimer=10;
@@ -414,7 +400,6 @@ async function api(method,path,body){
 
 // ── INIT ──
 window.addEventListener('load',async function(){
-  console.log('[NAWA] window.load fired');
   try{
     var tk=localStorage.getItem('nawa_tk');
     if(tk){TOKEN=tk;var r=await api('GET','/auth/v1/user');if(r.ok&&r.data&&r.data.id){currentUser=r.data;try{await loadProfile();}catch(e){}showApp();goto('home');return;}
@@ -423,8 +408,7 @@ window.addEventListener('load',async function(){
   showLanding();
 });
 
-function showLanding(){
-  console.log('[NAWA] showLanding called');g('landing').style.display='block';g('app').style.display='none';}
+function showLanding(){g('landing').style.display='block';g('app').style.display='none';}
 function showApp(){g('landing').style.display='none';g('app').style.display='block';}
 function openUpgradeModal(){g('upgrade-modal').classList.add('open');}
 function closeUpgradeModal(){g('upgrade-modal').classList.remove('open');}
@@ -446,8 +430,7 @@ function updateProfileUI(){
 }
 
 // ── AUTH ──
-function openAuthModal(tab){
-  console.log('[NAWA] openAuthModal called with tab:', tab);g('auth-modal').classList.add('open');switchAuthTab(tab||'reg');}
+function openAuthModal(tab){g('auth-modal').classList.add('open');switchAuthTab(tab||'reg');}
 function closeAuthModal(){g('auth-modal').classList.remove('open');g('auth-msg-area').innerHTML='';}
 function switchAuthTab(t){g('tab-reg').classList.toggle('on',t==='reg');g('tab-login').classList.toggle('on',t==='login');g('auth-msg-area').innerHTML='';if(t==='reg')buildRegForm();else buildLoginForm();}
 function setAuthMsg(txt,ok){g('auth-msg-area').innerHTML='<div class="auth-msg '+(ok?'ok':'err')+'">'+txt+'</div>';}
@@ -948,12 +931,7 @@ g(‘chg-pw’).addEventListener(‘click’,async function(){var np=prompt(‘N
 function uploadAvatar(e){var file=e.target.files[0];if(!file||file.size>2*1024*1024){alert(‘Max 2MB’);return;}var reader=new FileReader();reader.onload=async function(ev){var b64=ev.target.result;await api(‘PATCH’,’/rest/v1/profiles?id=eq.’+currentUser.id,{avatar_url:b64});if(userProfile)userProfile.avatar_url=b64;var pav=g(‘pav’);if(pav)pav.innerHTML=’<img src="'+b64+'">’;updateProfileUI();};reader.readAsDataURL(file);}
 
 // ── DOM READY ──
-document.addEventListener(‘DOMContentLoaded’,function(){
-console.log(’[NAWA] DOMContentLoaded fired’);
-
-// Visual confirmation JS is running
-var vt = document.getElementById(‘nav-signin-btn’);
-if(vt){ vt.style.outline = ‘2px solid #10B981’; setTimeout(function(){ vt.style.outline = ‘’; }, 2000); }
+function _initApp(){
 g(‘nav-signin-btn’).addEventListener(‘click’,function(){openAuthModal(‘login’);});
 g(‘nav-signup-btn’).addEventListener(‘click’,function(){openAuthModal(‘reg’);});
 g(‘hero-start-btn’).addEventListener(‘click’,function(){openAuthModal(‘reg’);});
@@ -980,8 +958,9 @@ g(‘q-back’).addEventListener(‘click’,prevQ);
 g(‘q-submit’).addEventListener(‘click’,showResult);
 g(‘q-fav’).addEventListener(‘click’,toggleFav);
 g(‘q-bm’).addEventListener(‘click’,toggleBM);
-console.log(’[NAWA] All listeners attached OK’);
-});
+}
+// Call immediately - script is at bottom of body so DOM is ready
+_initApp();
 </script>
 
 </body>
