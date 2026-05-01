@@ -256,7 +256,7 @@ body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--navy);ov
 <div id="landing">
   <nav class="l-nav">
     <div class="l-logo"><svg width="28" height="28" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="#4AA8E8" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="rgba(255,255,255,.3)" stroke-width="2" fill="none"/></svg><span class="l-logo-text">Nawa</span></div>
-    <div class="l-nav-btns"><button class="btn-ghost" id="nav-signin-btn" onclick="openAuthModal('login')">Sign In</button><button class="btn-sky" id="nav-signup-btn" onclick="openAuthModal('reg')">Sign Up</button></div>
+    <div class="l-nav-btns"><button class="btn-ghost" id="nav-signin-btn">Sign In</button><button class="btn-sky" id="nav-signup-btn">Sign Up</button></div>
   </nav>
   <div class="hero">
     <div class="hero-bg"></div><div class="hero-grid"></div>
@@ -265,8 +265,8 @@ body{font-family:'Outfit',sans-serif;background:var(--navy);color:var(--navy);ov
       <h1 class="hero-title">The Nucleus of<span>Medical Excellence</span></h1>
       <p class="hero-tagline">Root Deep. Reach Far.</p>
       <p class="hero-sub">Master medicine through smart MCQs organized by module, subject, and lecture. Track your progress and rise to the top.</p>
-      <button class="btn-hero" id="hero-start-btn" onclick="openAuthModal('reg')">Start Now &rarr;</button>
-      <p class="hero-signin">Already have an account? <span id="hero-signin-link" onclick="openAuthModal('login')">Sign in</span></p>
+      <button class="btn-hero" id="hero-start-btn">Start Now &rarr;</button>
+      <p class="hero-signin">Already have an account? <span id="hero-signin-link">Sign in</span></p>
       <div class="hero-stats">
         <div><div class="stat-n">344+</div><div class="stat-l">Questions</div></div>
         <div><div class="stat-n">28</div><div class="stat-l">Lectures</div></div>
@@ -461,10 +461,17 @@ function buildRegForm(){
   '<label class="lbl">Password *</label><div class="pw-wrap"><input class="pw-inp" type="password" id="r-pw" placeholder="Min 6 characters"><button class="pw-eye" type="button" id="r-eye1">&#128065;</button></div>'+
   '<label class="lbl">Confirm Password *</label><div class="pw-wrap"><input class="pw-inp" type="password" id="r-pw2" placeholder="Repeat password"><button class="pw-eye" type="button" id="r-eye2">&#128065;</button></div>'+
   '<button class="auth-submit" id="reg-btn">Create Account &rarr;</button><span class="auth-link" id="go-login">Already have an account? Sign in</span>';
-  g('r-eye1').addEventListener('click',function(){tgEye('r-pw',this);});
-  g('r-eye2').addEventListener('click',function(){tgEye('r-pw2',this);});
-  g('reg-btn').addEventListener('click',doReg);
-  g('go-login').addEventListener('click',function(){switchAuthTab('login');});
+  // Use setTimeout to ensure innerHTML is fully rendered
+  setTimeout(function(){
+    var e1=document.getElementById('r-eye1');
+    var e2=document.getElementById('r-eye2');
+    var rb=document.getElementById('reg-btn');
+    var gl=document.getElementById('go-login');
+    if(e1)e1.addEventListener('click',function(){tgEye('r-pw',this);});
+    if(e2)e2.addEventListener('click',function(){tgEye('r-pw2',this);});
+    if(rb)rb.addEventListener('click',doReg);
+    if(gl)gl.addEventListener('click',function(){switchAuthTab('login');});
+  },10);
 }
 
 function buildLoginForm(){
@@ -472,10 +479,16 @@ function buildLoginForm(){
   f.innerHTML='<label class="lbl">Email</label><input class="inp" type="email" id="l-email" placeholder="your@email.com">'+
   '<label class="lbl">Password</label><div class="pw-wrap"><input class="pw-inp" type="password" id="l-pw" placeholder="Your password"><button class="pw-eye" type="button" id="l-eye">&#128065;</button></div>'+
   '<button class="auth-submit" id="login-btn">Sign In &rarr;</button><span class="auth-link" id="go-reg">No account? Create free account</span>';
-  g('l-eye').addEventListener('click',function(){tgEye('l-pw',this);});
-  g('login-btn').addEventListener('click',doLogin);
-  g('l-pw').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
-  g('go-reg').addEventListener('click',function(){switchAuthTab('reg');});
+  setTimeout(function(){
+    var le=document.getElementById('l-eye');
+    var lb=document.getElementById('login-btn');
+    var lp=document.getElementById('l-pw');
+    var gr=document.getElementById('go-reg');
+    if(le)le.addEventListener('click',function(){tgEye('l-pw',this);});
+    if(lb)lb.addEventListener('click',doLogin);
+    if(lp)lp.addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+    if(gr)gr.addEventListener('click',function(){switchAuthTab('reg');});
+  },10);
 }
 
 function tgEye(id,btn){var el=g(id);if(!el)return;el.type=el.type==='password'?'text':'password';btn.innerHTML=el.type==='password'?'&#128065;':'&#128584;';}
