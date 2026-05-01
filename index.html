@@ -431,12 +431,10 @@ function updateProfileUI(){
 
 // ── AUTH ──
 function openAuthModal(tab){
-  var modal = document.getElementById('auth-modal');
-  if(!modal){ alert('NO MODAL'); return; }
-  // Ultra simple show
-  modal.style.cssText = 'display:flex!important;position:fixed!important;inset:0!important;z-index:99999!important;background:rgba(0,0,0,0.95)!important;align-items:center!important;justify-content:center!important;';
-  alert('Modal shown? Check screen');
-  try{ switchAuthTab(tab||'reg'); }catch(e){ alert('Tab error: '+e.message); }
+  var modal=document.getElementById('auth-modal');
+  if(!modal)return;
+  modal.classList.add('open');
+  switchAuthTab(tab||'reg');
 }
 function closeAuthModal(){g('auth-modal').classList.remove('open');g('auth-msg-area').innerHTML='';}
 function switchAuthTab(t){
