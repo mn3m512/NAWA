@@ -432,17 +432,11 @@ function updateProfileUI(){
 // ── AUTH ──
 function openAuthModal(tab){
   var modal = document.getElementById('auth-modal');
-  if(!modal){ alert('ERROR: no modal'); return; }
-  // Force show with inline style as well
-  modal.style.display = 'flex';
-  modal.style.position = 'fixed';
-  modal.style.inset = '0';
-  modal.style.zIndex = '9999';
-  modal.style.background = 'rgba(0,0,0,0.9)';
-  modal.style.alignItems = 'center';
-  modal.style.justifyContent = 'center';
-  modal.classList.add('open');
-  try{ switchAuthTab(tab||'reg'); }catch(e){ alert('switchAuthTab error: '+e.message); }
+  if(!modal){ alert('NO MODAL'); return; }
+  // Ultra simple show
+  modal.style.cssText = 'display:flex!important;position:fixed!important;inset:0!important;z-index:99999!important;background:rgba(0,0,0,0.95)!important;align-items:center!important;justify-content:center!important;';
+  alert('Modal shown? Check screen');
+  try{ switchAuthTab(tab||'reg'); }catch(e){ alert('Tab error: '+e.message); }
 }
 function closeAuthModal(){g('auth-modal').classList.remove('open');g('auth-msg-area').innerHTML='';}
 function switchAuthTab(t){
