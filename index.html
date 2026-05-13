@@ -318,7 +318,7 @@ body{font-family:'Outfit',sans-serif;background:#0A1628;color:#0A1628;overflow-x
 </div>
 
 <div id="app">
-  <nav class="d-nav">
+  <nav class="d-nav" id="d-nav-el">
     <div class="d-logo" id="d-logo"><svg width="24" height="24" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="46" fill="rgba(255,255,255,.08)"/><path d="M4 50L20 50L23 54L28 22L33 50L38 50L42 58L50 50L58 42L62 50L67 50L72 68L77 50L96 50" stroke="#4AA8E8" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="50" cy="50" r="46" stroke="rgba(255,255,255,.3)" stroke-width="2" fill="none"/></svg><span class="d-logo-t">Nawa</span></div>
     <div class="d-nav-r">
       <button class="icon-btn menu-btn" id="menu-btn">&#9776;</button>
@@ -402,8 +402,25 @@ window.addEventListener('load',function(){
   }
 });
 
-function showLanding(){g('landing').style.display='block';g('app').style.display='none';g('app').style.pointerEvents='none'}
-function showApp(){g('landing').style.display='none';g('app').style.display='block';g('app').style.pointerEvents=''}
+function showLanding(){
+  g('landing').style.display='block';
+  g('app').style.display='none';
+  // Hide fixed elements that might block landing page
+  var dnav=document.getElementById('d-nav-el');
+  var sb=document.getElementById('sidebar');
+  var sbov=document.getElementById('sb-ov');
+  if(dnav)dnav.style.display='none';
+  if(sb)sb.style.display='none';
+  if(sbov)sbov.style.display='none';
+}
+function showApp(){
+  g('landing').style.display='none';
+  g('app').style.display='block';
+  var dnav=document.getElementById('d-nav-el');
+  var sb=document.getElementById('sidebar');
+  if(dnav)dnav.style.display='';
+  if(sb)sb.style.display='';
+}
 function showToast(msg){var t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.style.opacity='0';setTimeout(function(){if(t.parentNode)t.parentNode.removeChild(t)},400)},2500)}
 
 function loadProfile(){
@@ -551,12 +568,12 @@ function closeSB(){g('sidebar').classList.remove('open');g('sb-ov').classList.re
 var MODS={'1':[
   {code:'MED101',name:'Normal Body Structure',sub:'Anatomy & Physiology',ico:'\uD83E\uDDB4',color:'linear-gradient(135deg,#0D3B7A,#1560BD)',qs:0},
   {code:'MED102',name:'Introduction to Disease',sub:'Pathology Basics',ico:'\uD83D\uDD2C',color:'linear-gradient(135deg,#5A0D7A,#8B5CF6)',qs:0},
-  {code:'MED103',name:'Basic Of Infections',sub:'Microbiology · Immunology · Parasitology',ico:'\uD83E\uDDA0',color:'linear-gradient(135deg,#0D7A4A,#10B981)',qs:344},
+  {code:'MED103',name:'Basic Of Infections',sub:'Microbiology - Immunology - Parasitology',ico:'\uD83E\uDDA0',color:'linear-gradient(135deg,#0D7A4A,#10B981)',qs:344},
   {code:'MED104',name:'Psychology',sub:'Mental Health Basics',ico:'\uD83E\uDDE0',color:'linear-gradient(135deg,#7A4A0D,#F59E0B)',qs:0},
   {code:'MED105',name:'Blood System',sub:'Hematology',ico:'\uD83E\uDE78',color:'linear-gradient(135deg,#7A0D0D,#EF4444)',qs:0},
   {code:'MED106',name:'Musculoskeletal',sub:'Anatomy & Orthopedics',ico:'\uD83D\uDCAA',color:'linear-gradient(135deg,#1A4A1A,#10B981)',qs:0}
 ],'4':[
-  {code:'MED430',name:'Medicine',sub:'GIT · Endocrine · Hematology',ico:'\uD83E\uDEBA',color:'linear-gradient(135deg,#0D3B7A,#1560BD)',qs:0},
+  {code:'MED430',name:'Medicine',sub:'GIT - Endocrine - Hematology',ico:'\uD83E\uDEBA',color:'linear-gradient(135deg,#0D3B7A,#1560BD)',qs:0},
   {code:'MED431',name:'Cardiopulmonary',sub:'Cardiology & Pulmonology',ico:'\u2764\uFE0F',color:'linear-gradient(135deg,#7A0D0D,#EF4444)',qs:0},
   {code:'MED433',name:'Pediatrics',sub:'Child Health',ico:'\uD83D\uDC76',color:'linear-gradient(135deg,#0A4A2A,#10B981)',qs:0},
   {code:'MED436',name:'Neuropsychiatry',sub:'Neurology & Psychiatry',ico:'\uD83E\uDDE0',color:'linear-gradient(135deg,#3A1A6A,#8B5CF6)',qs:0}
@@ -999,7 +1016,7 @@ api(‘PUT’,’/auth/v1/user’,{password:np}).then(function(r){alert(r.ok?’
 }
 function uploadAvatar(e){var file=e.target.files[0];if(!file||file.size>2*1024*1024){alert(‘Max 2MB’);return}var reader=new FileReader();reader.onload=function(ev){var b64=ev.target.result;api(‘PATCH’,’/rest/v1/profiles?id=eq.’+currentUser.id,{avatar_url:b64}).then(function(){if(userProfile)userProfile.avatar_url=b64;var pav=g(‘pav’);if(pav)pav.innerHTML=’<img src="'+b64+'">’;updateProfileUI()})};reader.readAsDataURL(file)}
 
-// ── BIND ALL EVENTS ──
+// BIND ALL EVENTS
 setTimeout(function(){
 g(‘nav-signin-btn’).addEventListener(‘click’,function(){openAuthModal(‘login’)});
 g(‘nav-signup-btn’).addEventListener(‘click’,function(){openAuthModal(‘reg’)});
